@@ -75,6 +75,7 @@
   .masthead-desc { margin-top: 10px !important; font-size: 14px !important; }
   .panel { background: var(--mist); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 26px 0 30px; }
   .panel-label { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--seagrass); margin-bottom: 6px; }
+  .panel-label .sms-cta { letter-spacing: normal; text-transform: none; font-weight: 400; }
   #metar-input { width: 100%; min-height: 120px; resize: vertical; background: var(--white); color: var(--monstera); border: 1px solid var(--card-bd); border-radius: 8px; padding: 16px 18px; font-family: var(--mono); font-size: 16px; line-height: 1.6; letter-spacing: 0.01em; }
   #metar-input::placeholder { color: #8fbcb5; }
   #metar-input:focus { outline: none; border-color: var(--seagrass); box-shadow: 0 0 0 3px rgba(49,161,172,0.25); }
@@ -133,7 +134,7 @@
   </header>
   <section class="panel">
     <div class="wrap">
-      <label class="panel-label" for="metar-input">Enter METAR</label>
+      <label class="panel-label" for="metar-input">Enter METAR <a class="sms-cta" href="sms:358782?body=METAR%20KAUS">(Get METAR via text)</a></label>
       <p class="metar-source-hint">Paste a complete METAR into the text box, then select Decode METAR.</p>
       <textarea id="metar-input" spellcheck="false" placeholder="METAR KAUS 281353Z AUTO 19011G21KT 160V210 M1/4SM R17L/2400FT +TSRA BR SCT015 BKN030CB OVC050 23/22 A2984 RMK AO2 SLP102 T02330222 ="></textarea>
       <ul class="metar-source-hint">
