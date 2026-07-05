@@ -6,7 +6,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%23236a66'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
 <title>PilotDECODER: Free METAR Decoder for Pilots</title>
 <meta name="description" content="PilotDECODER is a free METAR decoder for student and private pilots. Paste a raw METAR and get a plain-English breakdown of wind, visibility, clouds, temperature, and altimeter." />
-<meta name="keywords" content="PilotDECODER, Zane Wubbena, what is a METAR, pilotdecoder.com, METAR, METAR decoder, METAR translator, decode METAR, read METAR, plain English METAR, aviation weather, aviation weather decoder, aviation weather report, aerodrome weather, pilot weather, student pilot, private pilot, ground school, flight training, preflight weather briefing, wind visibility ceiling altimeter, TAF" />
+<meta name="keywords" content="PilotDECODER, pilotdecoder.com, METAR, METAR decoder, Zane Wubbena, What is a METAR, METAR translator, decode METAR, read METAR, plain English METAR, aviation weather, aviation weather decoder, aviation weather report, aerodrome weather, pilot weather, student pilot, private pilot, ground school, flight training, preflight weather briefing, wind visibility ceiling altimeter, TAF" />
 <meta name="author" content="Zane Wubbena" />
 <meta name="robots" content="index, follow" />
 <meta property="og:type" content="website" />
@@ -75,7 +75,7 @@
     --focus-ring: rgba(15,100,156,0.28); --btn-shadow: rgba(13,110,172,0.26);
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; }
   html { background: var(--surface); }
   body { font-family: var(--sans); color: var(--ink); background: var(--surface); line-height: 1.55; -webkit-font-smoothing: antialiased; }
   .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
@@ -146,9 +146,9 @@
   .decode-table td.plain .viz summary { font-family: var(--mono); font-size: 11.5px; color: var(--mid); cursor: pointer; letter-spacing: 0.04em; }
   .decode-table td.plain .viz summary:hover { text-decoration: underline; }
   .viz-body { padding: 8px 0 0; }
-  .viz-body svg.rose { width: 260px; max-width: 100%; height: auto; display: block; }
-  .viz-body .rose-cap { width: 260px; max-width: 100%; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--ink); line-height: 1.5; margin-top: 4px; }
-  .viz-body svg.tscale { width: 238px; max-width: 100%; height: auto; display: block; }
+  .viz-body svg.rose { width: 100%; max-width: 260px; height: auto; display: block; }
+  .viz-body .rose-cap { width: 100%; max-width: 260px; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--ink); line-height: 1.5; margin-top: 4px; }
+  .viz-body svg.tscale { width: 100%; max-width: 238px; height: auto; display: block; }
   .decode-table td.plain .note-line li { display: list-item; margin: 1px 0; }
   @media (max-width: 560px) { .decode-table th:nth-child(1), .decode-table th:nth-child(2), .decode-table td.element, .decode-table td.token { width: auto; white-space: normal; } .decode-table td.element, .decode-table td.token { font-size: 12px; } }
   @media (prefers-reduced-motion: reduce) { .decode-table tbody tr { opacity: 1; animation: none; } #decode-btn { transition: none; } }
