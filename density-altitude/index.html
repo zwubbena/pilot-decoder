@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PilotDECODER: Density Altitude Calculator for Pilots</title>
+<meta name="description" content="Free density altitude calculator that shows every step of the hand calculation — pressure altitude, standard temperature, and the 120 ft/°C rule — plus a live chart marking your result." />
+<script> try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){} </script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%23236a66'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<style>
+  :root {
+    --white:    #ffffff;
+    --wash:     #f4fbf9;
+    --accent:   #9fe3d8;
+    --mid: #31a1ac;
+    --brand: #236a66;
+    --brand-deep: #1b524f;
+    --ink:      #123330;
+    --ink-soft: #4d6f6a;
+    --rule:     #cfe9e3;
+    --card-bd:  #c9e6e0;
+    --ifr:  #e23b3b;
+    --placeholder: #a1a8ae;
+    --input-ink: #474d54;
+    --focus-ring: rgba(49,161,172,0.25);
+    --btn-shadow: rgba(35,106,102,0.26);
+    --surface: #ffffff;
+    --err-bg: #fdeced;
+    --err-fg: #8f2222;
+    --brand-ink: var(--brand);
+    color-scheme: light;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, Menlo, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  [data-theme="blue"] {
+    --wash: #f4fafe; --accent: #a3d8f7; --mid: #0f649c; --brand: #0d6eac; --brand-deep: #0a5787;
+    --ink: #0b2c44; --ink-soft: #45688a; --rule: #cfe7f7; --card-bd: #c6e2f5; --ifr: #d2232a;
+    --focus-ring: rgba(15,100,156,0.28); --btn-shadow: rgba(13,110,172,0.26);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 0; overflow-x: hidden; font-family: var(--sans); color: var(--ink); background: var(--surface); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- topbar ---------- */
+  .topbar { background: var(--brand); height: 48px; }
+  .topbar .wrap { display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: inline-block; line-height: 48px; font-family: var(--mono); font-weight: 700; font-size: 19px; letter-spacing: 0.03em; color: var(--white); text-decoration: none; }
+  .brand span { color: var(--accent); }
+  #theme-btn { box-sizing: border-box; position: relative; width: 36px; height: 20px; border-radius: 999px; background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.5); cursor: pointer; padding: 0; }
+  #theme-btn:hover { background: rgba(255,255,255,0.32); }
+  #theme-btn .knob { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--white); transition: transform .15s ease; }
+  [data-theme="blue"] #theme-btn .knob { transform: translateX(16px); }
+
+  /* ---------- masthead ---------- */
+  .masthead { background: var(--surface); color: var(--ink); border-bottom: 3px solid transparent; border-image: linear-gradient(90deg, var(--mid), var(--accent)) 1; padding: 44px 0 20px; }
+  .eyebrow { font-family: var(--mono); font-size: 14px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--mid); margin: 0 0 14px; }
+  .masthead p { margin: 0; max-width: 56ch; color: var(--ink-soft); font-size: 16px; }
+  .masthead-desc { margin-top: 10px !important; font-size: 14px !important; }
+
+  /* ---------- input panel ---------- */
+  .panel { background: var(--wash); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 26px 0 30px; }
+  .panel-label { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); margin-bottom: 6px; }
+  .field-grid { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 4px; }
+  .field { flex: 1 1 180px; min-width: 170px; }
+  .field label { display: flex; align-items: flex-end; min-height: 30px; line-height: 1.25; font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); margin-bottom: 6px; }
+  .field input { width: 100%; background: var(--surface); color: var(--input-ink); border: 1px solid var(--card-bd); border-radius: 8px; padding: 10px 14px; font-family: var(--mono); font-size: 16px; line-height: 1.5; }
+  .field input::placeholder { color: var(--placeholder); }
+  .field input:focus { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
+  .field .hint { margin: 6px 0 0; font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+  .field .hint a { color: var(--mid); text-decoration: underline; text-underline-offset: 3px; }
+  .field .hint a:hover { color: var(--brand); }
+  .metar-source-hint { margin: 14px 0 0; font-size: 13.5px; color: var(--ink-soft); font-family: var(--sans); }
+  .metar-source-hint a { color: var(--mid); text-decoration: underline; text-underline-offset: 3px; }
+  .metar-source-hint a:hover { color: var(--brand); }
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 16px; }
+  .link-btn { background: none; border: none; color: var(--ink-soft); font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; padding: 6px 2px; }
+  .link-btn:hover { color: var(--brand); }
+  .range-warn { margin: 12px 0 0; font-size: 12.5px; color: var(--err-fg); background: var(--err-bg); border-radius: 6px; padding: 8px 12px; display: none; }
+  .range-warn.show { display: block; }
+
+  /* ---------- steps ---------- */
+  main { padding: 8px 0 0; }
+  .step { margin: 30px 0 0; }
+  .step h3 { font-family: var(--mono); font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand); margin: 0 0 6px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+  .calc-head { font-family: var(--mono); font-size: 14px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--brand); margin: 44px 0 0; padding-bottom: 10px; border-bottom: 3px solid transparent; border-image: linear-gradient(90deg, var(--mid), var(--accent)) 1; }
+  .gen-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); margin: 14px 0 6px; }
+  .gen-formula { font-family: var(--mono); font-size: 14.5px; background: var(--wash); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 14px; color: var(--ink); overflow-x: auto; }
+  .calc-chain { font-family: var(--mono); font-size: 14px; line-height: 2.0; margin: 12px 0 0; color: var(--ink); overflow-x: auto; }
+  .calc-chain .val { color: var(--brand); font-weight: 700; }
+  .calc-chain .final { font-weight: 700; }
+  .calc-chain .final .boxed { display: inline-block; border: 1.5px solid var(--brand); border-radius: 4px; padding: 1px 10px; color: var(--brand); }
+  .note-line { margin: 10px 0 0; padding-left: 20px; list-style: disc outside; font-size: 12.5px; font-style: italic; color: var(--ink-soft); line-height: 1.5; }
+  .note-line li { display: list-item; margin: 1px 0; }
+
+  /* ---------- result banner ---------- */
+  .result-banner { margin: 34px 0 0; background: var(--wash); border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 8px; padding: 18px 20px; }
+  .result-banner .rb-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid); margin: 0 0 4px; }
+  .result-banner .rb-big { font-family: var(--mono); font-weight: 700; font-size: 30px; color: var(--brand); margin: 0; line-height: 1.2; }
+  .result-banner .rb-exact { margin: 6px 0 0; font-size: 13px; color: var(--ink-soft); font-family: var(--mono); }
+  .result-banner .rb-read { margin: 10px 0 0; font-size: 14.5px; color: var(--ink); max-width: 62ch; }
+  .result-banner .rb-stats { display: flex; align-items: flex-end; column-gap: 18px; row-gap: 6px; flex-wrap: wrap; }
+  .result-banner .rb-fe { color: var(--ink); }
+  .result-banner .rb-arrow { font-size: 24px; line-height: 1.5; color: var(--ink-soft); }
+
+  /* ---------- chart ---------- */
+  .chart-sec { margin: 0; }
+  .chart-frame { margin-top: 18px; border: 1px solid var(--rule); border-radius: 8px; padding: 14px 10px 8px; background: var(--surface); overflow-x: hidden; }
+  #da-chart { width: 100%; max-width: 720px; height: auto; display: block; margin: 0 auto; }
+  #da-chart text { font-family: var(--mono); }
+  #da-chart .grid { stroke: var(--rule); stroke-width: 1; }
+  #da-chart .grid-zero { stroke: var(--ink); stroke-width: 1; }
+  #da-chart .axis { stroke: var(--ink); stroke-width: 1.2; }
+  #da-chart .tick-label { fill: var(--ink); font-size: 11.5px; }
+  #da-chart .tick-label-f { fill: var(--ink); font-size: 10px; opacity: 0.75; }
+  #da-chart .axis-title { fill: var(--ink); font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em; }
+  #da-chart .pa-line { stroke: var(--ink); stroke-width: 1.1; opacity: 0.75; fill: none; }
+  #da-chart .pa-label { fill: var(--ink); font-size: 10.5px; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; }
+  #da-chart .isa-line { stroke: var(--ink); stroke-width: 1.3; stroke-dasharray: 6 4; fill: none; }
+  #da-chart .isa-label { fill: var(--ink); font-size: 10.5px; font-style: italic; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; }
+  #da-chart .mk-pa { stroke: var(--ifr); stroke-width: 1.4; stroke-dasharray: 5 4; opacity: 0.85; fill: none; }
+  #da-chart .mk-line { stroke: var(--ifr); stroke-width: 2; fill: none; }
+  #da-chart .mk-line.clamped { stroke-dasharray: 4 4; }
+  #da-chart .mk-dot { fill: var(--ifr); stroke: var(--surface); stroke-width: 1.5; }
+  #da-chart .mk-arrow { fill: var(--ifr); }
+  #da-chart .mk-pill { fill: var(--ifr); }
+  #da-chart .mk-pill-text { fill: var(--white); font-size: 11.5px; font-weight: 700; }
+  .chart-note { margin: 10px 0 0; padding-left: 20px; list-style: disc outside; font-size: 12.5px; font-style: italic; color: var(--ink-soft); line-height: 1.5; }
+  .chart-note li { display: list-item; margin: 1px 0; }
+  .summary-list { margin: 12px 0 0; padding: 0; list-style: none; }
+  .summary-list li { position: relative; padding: 7px 0 7px 22px; font-size: 15.5px; }
+  .summary-list li::before { content: ""; position: absolute; left: 2px; top: 15px; width: 7px; height: 7px; border-radius: 50%; background: var(--mid); }
+  .howto-cap { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); margin: 18px 0 0; }
+
+  /* ---------- footer ---------- */
+  footer { background: var(--wash); border-top: 1px solid var(--rule); padding: 28px 0 0; font-size: 13px; color: var(--ink-soft); margin-top: 48px; }
+  footer a { color: var(--mid); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .source { margin: 0 0 12px; font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
+  .source-list { margin: 4px 0 12px; padding-left: 20px; list-style: disc outside; }
+  .source-list li { margin: 2px 0; }
+  .disclaimer { margin: 0 0 14px; font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
+  .copyright { margin-top: 24px; background: var(--brand); color: var(--white); padding: 14px 0; font-size: 13px; }
+  .copyright a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
+  .copyright a:hover { color: var(--accent); }
+
+  @media (max-width: 560px) {
+    .calc-chain { font-size: 12.5px; }
+    .gen-formula { font-size: 13px; }
+    .result-banner .rb-big { font-size: 24px; }
+    .calc-head { font-size: 12.5px; letter-spacing: 0.16em; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #theme-btn .knob { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap"><a class="brand" href="/">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme (current: green)" title="Color theme"><span class="knob"></span></button></div>
+  </header>
+
+  <header class="masthead">
+    <div class="wrap">
+      <h1 class="eyebrow"><strong>Density Altitude Calculator</strong></h1>
+      <p class="masthead-desc">Density altitude is the altitude the airplane <i>thinks</i> it is at: pressure altitude corrected for nonstandard temperature. This tool works the problem the way you would by hand: three steps, every line of arithmetic shown, then your result plotted on the density altitude chart.</p>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="wrap">
+      <span class="panel-label">Enter the three inputs</span>
+      <div class="field-grid">
+        <div class="field">
+          <label for="in-fe">Field Elevation (FE) &mdash; ft</label>
+          <input id="in-fe" type="number" step="any" inputmode="decimal" spellcheck="false" value="542" placeholder="e.g. 542" />
+          <p class="hint">From the <a href="https://adip.faa.gov/agis/public/#/public" target="_blank" rel="noopener">FAA Airport Data and Information Portal (ADIP)</a> &mdash; the one input not in the METAR.</p>
+        </div>
+        <div class="field">
+          <label for="in-as">Altimeter Setting (AS) &mdash; inHg</label>
+          <input id="in-as" type="number" step="0.01" inputmode="decimal" spellcheck="false" value="29.98" placeholder="e.g. 29.98" />
+          <p class="hint">The METAR <b>A</b> group: <span style="font-family:var(--mono)">A2998</span> = 29.98 inches of mercury (inHg).</p>
+        </div>
+        <div class="field">
+          <label for="in-oat">Outside Air Temp (OAT) &mdash; &deg;C</label>
+          <input id="in-oat" type="number" step="any" inputmode="decimal" spellcheck="false" value="37" placeholder="e.g. 37" />
+          <p class="hint">First number of the METAR temperature/dew point group: <span style="font-family:var(--mono)">37/21</span> = 37&nbsp;&deg;C.</p>
+        </div>
+      </div>
+      <p class="metar-source-hint">Pull the current METAR for any airport at <a href="https://aviationweather.gov/" target="_blank" rel="noopener">aviationweather.gov</a>, or paste it into the <a href="/metar/">METAR decoder</a> first if you want it translated.</p>
+      <div class="controls">
+        <button id="sample-btn" class="link-btn" type="button">Load KAUS sample</button>
+        <button id="clear-btn" class="link-btn" type="button">Reset</button>
+      </div>
+      <p id="range-warn" class="range-warn"></p>
+    </div>
+  </section>
+
+  <main class="wrap" aria-live="polite">
+
+    <div class="result-banner" id="result-banner">
+      <div class="rb-stats">
+        <div class="rb-stat">
+          <p class="rb-label">Field Elevation</p>
+          <p class="rb-big rb-fe" id="rb-fe">&mdash;</p>
+        </div>
+        <div class="rb-arrow" aria-hidden="true">&rarr;</div>
+        <div class="rb-stat">
+          <p class="rb-label">Density Altitude</p>
+          <p class="rb-big" id="rb-big">&mdash;</p>
+        </div>
+      </div>
+      <p class="rb-exact" id="rb-exact"></p>
+      <p class="rb-read" id="rb-read"></p>
+    </div>
+
+    <section class="chart-sec">
+      <h2 class="calc-head">Density Altitude Chart</h2>
+      <div class="chart-frame">
+        <svg id="da-chart" viewBox="0 0 640 500" role="img" aria-label="Density altitude chart"><title>Density altitude chart</title></svg>
+      </div>
+      <p class="howto-cap">How to read it</p>
+      <ul class="summary-list">
+        <li>Enter at the bottom at your outside air temperature and rise to your pressure-altitude diagonal (the red dashed diagonal is <i>your exact</i> PA, interpolated between the printed lines).</li>
+        <li>From that intersection, read straight across to the left axis. That is your density altitude. The two solid marker lines trace this exact path.</li>
+        <li>The steep dashed line is standard temperature (ISA): whenever your point sits right of it, the air is warmer than standard and DA exceeds PA.</li>
+      </ul>
+      <ul class="chart-note">
+        <li>The chart is drawn from the same 120&nbsp;ft/&deg;C rule as the steps below, so the graphical answer and the arithmetic always agree. The printed FAA chart uses the full standard-atmosphere model and can differ by roughly 100&ndash;200 feet. But on test day, work the printed chart as procedure, then let the mental math confirm it.</li>
+        <li>Everything on this page assumes dry air. On humid days (dew point 20&nbsp;&deg;C or higher), true density altitude runs a few hundred feet higher than any dry-air method shows.</li>
+      </ul>
+    </section>
+
+    <h2 class="calc-head">How to Calculate Density Altitude</h2>
+
+    <section class="step" id="step1">
+      <h3>Step 1 &mdash; Pressure Altitude (PA)</h3>
+      <p class="gen-label">General formula</p>
+      <div class="gen-formula">PA = FE + (29.92 &minus; AS) &times; 1,000</div>
+      <div class="calc-chain" id="chain1"></div>
+      <ul class="note-line"><li>Every 0.01 inches of mercury = 10 feet. A setting <i>above</i> 29.92 pushes PA <i>below</i> field elevation, and vice versa.</li></ul>
+    </section>
+
+    <section class="step" id="step2">
+      <h3>Step 2 &mdash; Standard Temperature &mdash; International Standard Atmosphere (ISA)</h3>
+      <p class="gen-label">General formula</p>
+      <div class="gen-formula">ISA Temp = 15 &minus; 2 &times; (PA &divide; 1,000)</div>
+      <div class="calc-chain" id="chain2"></div>
+      <ul class="note-line"><li>15&nbsp;&deg;C at sea level, cooling 2&nbsp;&deg;C per 1,000 feet.</li></ul>
+    </section>
+
+    <section class="step" id="step3">
+      <h3>Step 3 &mdash; Density Altitude (DA)</h3>
+      <p class="gen-label">General formula</p>
+      <div class="gen-formula">DA = PA + 120 &times; (OAT &minus; ISA Temp)</div>
+      <div class="calc-chain" id="chain3"></div>
+      <ul class="note-line"><li>120 feet per &deg;C above standard; subtract 120 per degree below it.</li></ul>
+    </section>
+
+
+
+  </main>
+
+  <footer><div class="wrap"><div class="source"><b>References:</b>
+<ul class="source-list">
+<li>Density altitude and the standard atmosphere: <a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak" target="_blank" rel="noopener">Federal Aviation Administration (FAA) Pilot's Handbook of Aeronautical Knowledge (PHAK), Chapter 4, Principles of Flight</a></li>
+<li>Altimeter setting and outside air temperature: current METAR at <a href="https://aviationweather.gov/" target="_blank" rel="noopener">aviationweather.gov, Aviation Weather Center (National Weather Service)</a></li>
+<li>Field elevation: <a href="https://adip.faa.gov/agis/public/#/public" target="_blank" rel="noopener">FAA Airport Data and Information Portal (ADIP)</a></li>
+</ul>
+</div>
+<p class="disclaimer"><b>Disclaimer:</b> Educational only. This page uses rules of thumb (accurate to roughly &plusmn;100&ndash;200 feet) and assumes dry air. Not an official source; do not use for flight planning or operational decisions. The Pilot in Command remains solely responsible for performance calculations using the Pilot's Operating Handbook.</p></div><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
+
+<script>
+"use strict";
+/*CALC-BEGIN*/
+var NBSP = "\u00A0", MINUS = "\u2212";
+function fmt(n, maxDec) {
+  if (!isFinite(n)) return "\u2014";
+  if (maxDec === undefined) maxDec = 3;
+  var s = Math.abs(n).toLocaleString("en-US", { maximumFractionDigits: maxDec });
+  return (n < 0 ? MINUS : "") + s;
+}
+/* wrap: parenthesize negative terms the way the handwritten sheet does */
+function wrap(n, maxDec) {
+  return n < 0 ? "(" + fmt(n, maxDec) + ")" : fmt(n, maxDec);
+}
+function computeDA(FE, AS, OAT) {
+  var diff = 29.92 - AS;              /* inHg off standard        */
+  var corr = diff * 1000;             /* feet of correction       */
+  var PA   = FE + corr;               /* pressure altitude        */
+  var kilo = PA / 1000;               /* thousands of feet        */
+  var cool = 2 * kilo;                /* degrees of standard cool */
+  var ISA  = 15 - cool;               /* standard temperature     */
+  var dev  = OAT - ISA;               /* degrees off standard     */
+  var add  = 120 * dev;               /* feet of correction       */
+  var DA   = PA + add;                /* density altitude         */
+  return { FE: FE, AS: AS, OAT: OAT, diff: diff, corr: corr, PA: PA,
+           kilo: kilo, cool: cool, ISA: ISA, dev: dev, add: add, DA: DA,
+           DA10: Math.round(DA / 10) * 10 };
+}
+/*CALC-END*/
+
+function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+function v(s) { return '<span class="val">' + s + "</span>"; }
+function line(html) { return "<div>" + html + "</div>"; }
+
+function renderChains(r) {
+  var c1 = document.getElementById("chain1"),
+      c2 = document.getElementById("chain2"),
+      c3 = document.getElementById("chain3");
+  var X = " \u00D7 ", D = " \u00F7 ", EQ = " = ", PL = " + ", MI = " " + MINUS + " ";
+
+  /* ---- step 1 ---- */
+  c1.innerHTML =
+    line("PA" + EQ + v(fmt(r.FE, 2)) + PL + "(29.92" + MI + v(fmt(r.AS, 2)) + ")" + X + "1,000") +
+    line("PA" + EQ + fmt(r.FE, 2) + PL + wrap(r.diff, 3) + X + "1,000") +
+    line("PA" + EQ + fmt(r.FE, 2) + PL + wrap(r.corr, 2)) +
+    line('<span class="final">PA' + EQ + '<span class="boxed">' + fmt(r.PA, 2) + NBSP + "ft</span></span>");
+
+  /* ---- step 2 ---- */
+  c2.innerHTML =
+    line("ISA Temp" + EQ + "15" + MI + "2" + X + "(" + v(fmt(r.PA, 2)) + D + "1,000)") +
+    line("ISA Temp" + EQ + "15" + MI + "2" + X + wrap(r.kilo, 3)) +
+    line("ISA Temp" + EQ + "15" + MI + wrap(r.cool, 3)) +
+    line('<span class="final">ISA Temp' + EQ + '<span class="boxed">' + fmt(r.ISA, 3) + NBSP + "\u00B0C</span></span>");
+
+  /* ---- step 3 ---- */
+  c3.innerHTML =
+    line("DA" + EQ + v(fmt(r.PA, 2)) + PL + "120" + X + "(" + v(fmt(r.OAT, 2)) + MI + (r.ISA < 0 ? "(" : "") + v(fmt(r.ISA, 3)) + (r.ISA < 0 ? ")" : "") + ")") +
+    line("DA" + EQ + fmt(r.PA, 2) + PL + "120" + X + wrap(r.dev, 3)) +
+    line("DA" + EQ + fmt(r.PA, 2) + PL + wrap(r.add, 2)) +
+    line('<span class="final">DA' + EQ + '<span class="boxed">' + fmt(r.DA, 2) + NBSP + "ft</span>" + NBSP + "\u2248" + NBSP + fmt(r.DA10, 0) + NBSP + "ft</span>");
+}
+
+function renderBanner(r) {
+  var fe  = document.getElementById("rb-fe"),
+      big = document.getElementById("rb-big"),
+      ex  = document.getElementById("rb-exact"),
+      rd  = document.getElementById("rb-read");
+  fe.innerHTML = fmt(r.FE, 0) + NBSP + "ft";
+  big.innerHTML = "\u2248" + NBSP + fmt(r.DA10, 0) + NBSP + "ft";
+  ex.textContent = "Exact by this method: " + fmt(r.DA, 2) + " ft (callout rounded to the nearest 10 feet).";
+  var gap = r.DA - r.FE;
+  if (Math.abs(gap) < 50) {
+    rd.textContent = "Essentially standard conditions: the airplane performs right at its book field-elevation numbers.";
+  } else if (gap > 0) {
+    rd.textContent = "Although the field elevation is " + fmt(r.FE, 0) +
+      " ft, the airplane performs as if it were taking off from an airport at " +
+      fmt(r.DA10, 0) + " ft. Expect a longer takeoff roll and a shallower climb.";
+  } else {
+    rd.textContent = "Density altitude sits below the " + fmt(r.FE, 0) +
+      "-ft field elevation: the airplane performs as if it were at " + fmt(r.DA10, 0) +
+      " ft. Cold, dense air is a performance bonus.";
+  }
+}
+
+/*GEO-BEGIN*/
+var CH = { W: 640, H: 500, L: 66, R: 14, T: 24, B: 74,
+           tMin: -20, tMax: 45, dMin: -2000, dMax: 16000 };
+function gx(t) { return CH.L + (t - CH.tMin) / (CH.tMax - CH.tMin) * (CH.W - CH.L - CH.R); }
+function gy(d) { return CH.T + (CH.dMax - d) / (CH.dMax - CH.dMin) * (CH.H - CH.T - CH.B); }
+/* DA along a pressure-altitude diagonal: DA(t) = 1.24*PA + 120*t - 1800 */
+function paDA(pa, t) { return 1.24 * pa + 120 * t - 1800; }
+/* visible OAT span of a PA diagonal inside the plot box */
+function paSpan(pa) {
+  var lo = Math.max(CH.tMin, (CH.dMin + 1800 - 1.24 * pa) / 120);
+  var hi = Math.min(CH.tMax, (CH.dMax + 1800 - 1.24 * pa) / 120);
+  return hi > lo ? [lo, hi] : null;
+}
+/*GEO-END*/
+
+var SVGNS = "http://www.w3.org/2000/svg";
+function el(name, attrs, text) {
+  var e = document.createElementNS(SVGNS, name);
+  for (var k in attrs) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+var markerGroup = null;
+function buildChart() {
+  var svg = document.getElementById("da-chart");
+  var pb = CH.H - CH.B, pl = CH.L, pr = CH.W - CH.R, pt = CH.T;
+
+  /* horizontal gridlines each 1,000 ft; labels each 2,000 */
+  for (var d = CH.dMin; d <= CH.dMax; d += 1000) {
+    svg.appendChild(el("line", { x1: pl, y1: gy(d), x2: pr, y2: gy(d),
+      "class": d === 0 ? "grid-zero" : "grid" }));
+    if (d % 2000 === 0) {
+      svg.appendChild(el("text", { x: pl - 7, y: gy(d) + 4, "text-anchor": "end",
+        "class": "tick-label" }, d.toLocaleString("en-US")));
+    }
+  }
+  /* vertical gridlines each 5 C; C labels each 5, F labels each 10 */
+  for (var t = CH.tMin; t <= CH.tMax; t += 5) {
+    svg.appendChild(el("line", { x1: gx(t), y1: pt, x2: gx(t), y2: pb, "class": "grid" }));
+    svg.appendChild(el("text", { x: gx(t), y: pb + 16, "text-anchor": "middle",
+      "class": "tick-label" }, String(t)));
+    if (t % 10 === 0) {
+      svg.appendChild(el("text", { x: gx(t), y: pb + 30, "text-anchor": "middle",
+        "class": "tick-label-f" }, String(t * 9 / 5 + 32)));
+    }
+  }
+  /* unit tags for the two temperature rows */
+  svg.appendChild(el("text", { x: pl - 10, y: pb + 16, "text-anchor": "end", "class": "tick-label" }, "\u00B0C"));
+  svg.appendChild(el("text", { x: pl - 10, y: pb + 30, "text-anchor": "end", "class": "tick-label-f" }, "\u00B0F"));
+
+  /* axes */
+  svg.appendChild(el("line", { x1: pl, y1: pt, x2: pl, y2: pb, "class": "axis" }));
+  svg.appendChild(el("line", { x1: pl, y1: pb, x2: pr, y2: pb, "class": "axis" }));
+
+  /* axis titles */
+  svg.appendChild(el("text", { x: (pl + pr) / 2, y: CH.H - 26, "text-anchor": "middle",
+    "class": "axis-title" }, "OUTSIDE AIR TEMPERATURE (OAT)"));
+  var yt = el("text", { x: 0, y: 0, "text-anchor": "middle", "class": "axis-title",
+    transform: "translate(14," + (pt + pb) / 2 + ") rotate(-90)" }, "DENSITY ALTITUDE \u2014 FEET");
+  svg.appendChild(yt);
+
+  /* rotation angle shared by all diagonals (screen coords) */
+  var pxPerC = (pr - pl) / (CH.tMax - CH.tMin);
+  var pxPerFt = (pb - pt) / (CH.dMax - CH.dMin);
+  var ang = -Math.atan2(120 * pxPerFt, pxPerC) * 180 / Math.PI;
+
+  /* pressure-altitude diagonals, sea level to 14,000 ft */
+  for (var pa = 0; pa <= 14000; pa += 1000) {
+    var span = paSpan(pa);
+    if (!span) continue;
+    var x1 = gx(span[0]), y1 = gy(paDA(pa, span[0])),
+        x2 = gx(span[1]), y2 = gy(paDA(pa, span[1]));
+    svg.appendChild(el("line", { x1: x1, y1: y1, x2: x2, y2: y2, "class": "pa-line" }));
+    /* label near the line's upper (right/top) end, rotated with the line */
+    var lt = span[1] - (span[1] - span[0]) * 0.055;
+    var lx = gx(lt), ly = gy(paDA(pa, lt)) - 5;
+    var txt = pa === 0 ? "S.L." : pa.toLocaleString("en-US");
+    svg.appendChild(el("text", { x: lx, y: ly, "text-anchor": "end", "class": "pa-label",
+      transform: "rotate(" + ang.toFixed(2) + " " + lx + " " + ly + ")" }, txt));
+  }
+  /* one-time caption for the diagonal family, on the sea-level line's lower end */
+  var s0 = paSpan(0);
+  if (s0) {
+    var ct = s0[0] + (s0[1] - s0[0]) * 0.30;
+    var cx = gx(ct), cy = gy(paDA(0, ct)) - 6;
+    svg.appendChild(el("text", { x: cx, y: cy, "text-anchor": "middle", "class": "pa-label",
+      transform: "rotate(" + ang.toFixed(2) + " " + cx + " " + cy + ")" },
+      "\u2190 pressure altitude (ft)"));
+  }
+
+  /* ISA reference line: DA = (15 - OAT) * 500 */
+  var iLo = Math.max(CH.tMin, 15 - CH.dMax / 500),
+      iHi = Math.min(CH.tMax, 15 - CH.dMin / 500);
+  var ix1 = gx(iLo), iy1 = gy((15 - iLo) * 500),
+      ix2 = gx(iHi), iy2 = gy((15 - iHi) * 500);
+  svg.appendChild(el("line", { x1: ix1, y1: iy1, x2: ix2, y2: iy2, "class": "isa-line" }));
+  var iAng = Math.atan2(iy1 - iy2, ix1 - ix2) * 180 / Math.PI + 180;
+  var imt = iLo + (iHi - iLo) * 0.42;
+  var imx = gx(imt), imy = gy((15 - imt) * 500) - 6;
+  svg.appendChild(el("text", { x: imx, y: imy, "text-anchor": "middle", "class": "isa-label",
+    transform: "rotate(" + iAng.toFixed(2) + " " + imx + " " + imy + ")" },
+    "standard temperature (ISA)"));
+
+  markerGroup = el("g", { id: "marker" });
+  svg.appendChild(markerGroup);
+}
+
+function updateMarker(r) {
+  if (!markerGroup) return;
+  while (markerGroup.firstChild) markerGroup.removeChild(markerGroup.firstChild);
+  var svg = document.getElementById("da-chart");
+
+  var clamped = r.OAT < CH.tMin || r.OAT > CH.tMax || r.DA < CH.dMin || r.DA > CH.dMax ||
+                r.PA < -2000 || r.PA > 16000;
+  var tC = Math.min(Math.max(r.OAT, CH.tMin), CH.tMax);
+  var dC = Math.min(Math.max(r.DA, CH.dMin), CH.dMax);
+  var mx = gx(tC), my = gy(dC);
+  var pb = CH.H - CH.B, pl = CH.L;
+
+  /* your exact pressure-altitude diagonal, dashed */
+  var span = paSpan(r.PA);
+  if (span) {
+    markerGroup.appendChild(el("line", {
+      x1: gx(span[0]), y1: gy(paDA(r.PA, span[0])),
+      x2: gx(span[1]), y2: gy(paDA(r.PA, span[1])), "class": "mk-pa" }));
+  }
+  var lineClass = "mk-line" + (clamped ? " clamped" : "");
+  markerGroup.appendChild(el("line", { x1: mx, y1: pb, x2: mx, y2: my, "class": lineClass }));
+  markerGroup.appendChild(el("line", { x1: mx, y1: my, x2: pl + 8, y2: my, "class": lineClass }));
+  markerGroup.appendChild(el("polygon", { points: pl + "," + my + " " + (pl + 10) + "," + (my - 5) +
+    " " + (pl + 10) + "," + (my + 5), "class": "mk-arrow" }));
+  markerGroup.appendChild(el("circle", { cx: mx, cy: my, r: 4.5, "class": "mk-dot" }));
+
+  /* DA pill on the left axis */
+  var daTxt = "\u2248 " + fmt(r.DA10, 0) + " ft";
+  var wpx = daTxt.length * 6.9 + 14;
+  var py = Math.min(Math.max(my - 10, CH.T), pb - 20);
+  markerGroup.appendChild(el("rect", { x: pl + 14, y: py, width: wpx, height: 20, rx: 4, "class": "mk-pill" }));
+  markerGroup.appendChild(el("text", { x: pl + 14 + wpx / 2, y: py + 14, "text-anchor": "middle",
+    "class": "mk-pill-text" }, daTxt));
+
+  /* OAT pill on the bottom axis */
+  var oTxt = fmt(r.OAT, 1) + " \u00B0C";
+  var owpx = oTxt.length * 6.9 + 14;
+  var opx = Math.min(Math.max(mx - owpx / 2, pl + 2), CH.W - CH.R - owpx - 2);
+  markerGroup.appendChild(el("rect", { x: opx, y: pb - 24, width: owpx, height: 20, rx: 4, "class": "mk-pill" }));
+  markerGroup.appendChild(el("text", { x: opx + owpx / 2, y: pb - 10, "text-anchor": "middle",
+    "class": "mk-pill-text" }, oTxt));
+
+  svg.setAttribute("aria-label", "Density altitude chart: at " + fmt(r.OAT, 1) +
+    " degrees Celsius and pressure altitude " + fmt(r.PA, 0) +
+    " feet, density altitude is about " + fmt(r.DA10, 0) + " feet" +
+    (clamped ? " (point plotted at the chart edge; value is off-scale)" : ""));
+}
+
+function readInputs() {
+  var FE = parseFloat(document.getElementById("in-fe").value);
+  var AS = parseFloat(document.getElementById("in-as").value);
+  var OAT = parseFloat(document.getElementById("in-oat").value);
+  /* blank fields participate as 0 so every equation always renders */
+  return computeDA(isFinite(FE) ? FE : 0, isFinite(AS) ? AS : 0, isFinite(OAT) ? OAT : 0);
+}
+
+function checkRanges(r) {
+  var w = document.getElementById("range-warn");
+  var typedAS = document.getElementById("in-as").value.trim() !== "";
+  var typedOAT = document.getElementById("in-oat").value.trim() !== "";
+  var typedFE = document.getElementById("in-fe").value.trim() !== "";
+  var msgs = [];
+  if (typedAS && (r.AS < 27.5 || r.AS > 31.5)) msgs.push("altimeter settings are normally between about 28 and 31 inHg");
+  if (typedOAT && (r.OAT < -40 || r.OAT > 55)) msgs.push("outside air temperatures are normally between \u221240 and 55 \u00B0C");
+  if (typedFE && (r.FE < -1500 || r.FE > 15000)) msgs.push("field elevations are normally between \u22121,500 and 15,000 ft");
+  if (msgs.length) {
+    w.textContent = "Heads up \u2014 " + msgs.join("; ") + ". The math below still runs on exactly what you typed.";
+    w.className = "range-warn show";
+  } else {
+    w.className = "range-warn";
+  }
+}
+
+function recalc() {
+  var r = readInputs();
+  renderChains(r);
+  renderBanner(r);
+  updateMarker(r);
+  checkRanges(r);
+}
+
+["in-fe", "in-as", "in-oat"].forEach(function (id) {
+  document.getElementById(id).addEventListener("input", recalc);
+});
+document.getElementById("sample-btn").addEventListener("click", function () {
+  document.getElementById("in-fe").value = "542";
+  document.getElementById("in-as").value = "29.98";
+  document.getElementById("in-oat").value = "37";
+  recalc();
+});
+document.getElementById("clear-btn").addEventListener("click", function () {
+  document.getElementById("in-fe").value = "";
+  document.getElementById("in-as").value = "";
+  document.getElementById("in-oat").value = "";
+  recalc();
+  document.getElementById("in-fe").focus();
+});
+
+buildChart();
+recalc();
+
+document.getElementById("yr").textContent = new Date().getFullYear();
+(function(){
+  var FAV={green:"%23236a66",blue:"%230d6eac"};
+  var ORDER=["green","blue"];
+  var btn=document.getElementById("theme-btn");
+  function stored(){try{var s=localStorage.getItem("pd-theme");if(s==="green"||s==="blue")return s;}catch(e){}return null;}
+  var cur=stored()||"green";
+  function apply(t){
+    cur=t;
+    if(t==="green"){document.documentElement.removeAttribute("data-theme");}
+    else{document.documentElement.setAttribute("data-theme",t);}
+    if(btn)btn.setAttribute("aria-label","Switch color theme (current: "+t+")");
+    var fav=document.querySelector('link[rel="icon"]');
+    if(fav){for(var k in FAV){fav.href=fav.href.replace(FAV[k],FAV[t]);}}
+  }
+  apply(cur);
+  if(btn)btn.addEventListener("click",function(){
+    var next=ORDER[(ORDER.indexOf(cur)+1)%ORDER.length];
+    apply(next);
+    try{localStorage.setItem("pd-theme",next);}catch(e){}
+  });
+})();
+</script>
+</body>
+</html>
