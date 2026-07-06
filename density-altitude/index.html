@@ -336,6 +336,12 @@ function renderBanner(r) {
       big = document.getElementById("rb-big"),
       ex  = document.getElementById("rb-exact"),
       rd  = document.getElementById("rb-read");
+  if (r.allBlank) {
+    fe.innerHTML = "\u2014"; big.innerHTML = "\u2014";
+    ex.textContent = "";
+    rd.textContent = "Enter your three inputs above to see the result.";
+    return;
+  }
   fe.innerHTML = fmt(r.FE, 0) + NBSP + "ft";
   big.innerHTML = "\u2248" + NBSP + fmt(r.DA10, 0) + NBSP + "ft";
   ex.textContent = "Exact by this method: " + fmt(r.DA, 2) + " ft (callout rounded to the nearest 10 feet).";
@@ -465,6 +471,10 @@ function updateMarker(r) {
   if (!markerGroup) return;
   while (markerGroup.firstChild) markerGroup.removeChild(markerGroup.firstChild);
   var svg = document.getElementById("da-chart");
+  if (r.allBlank) {
+    svg.setAttribute("aria-label", "Density altitude chart; no values entered yet");
+    return;
+  }
 
   var clamped = r.OAT < CH.tMin || r.OAT > CH.tMax || r.DA < CH.dMin || r.DA > CH.dMax ||
                 r.PA < -2000 || r.PA > 16000;
@@ -510,11 +520,14 @@ function updateMarker(r) {
 }
 
 function readInputs() {
-  var FE = parseFloat(document.getElementById("in-fe").value);
-  var AS = parseFloat(document.getElementById("in-as").value);
-  var OAT = parseFloat(document.getElementById("in-oat").value);
+  var rawFE = document.getElementById("in-fe").value.trim();
+  var rawAS = document.getElementById("in-as").value.trim();
+  var rawOAT = document.getElementById("in-oat").value.trim();
+  var FE = parseFloat(rawFE), AS = parseFloat(rawAS), OAT = parseFloat(rawOAT);
   /* blank fields participate as 0 so every equation always renders */
-  return computeDA(isFinite(FE) ? FE : 0, isFinite(AS) ? AS : 0, isFinite(OAT) ? OAT : 0);
+  var r = computeDA(isFinite(FE) ? FE : 0, isFinite(AS) ? AS : 0, isFinite(OAT) ? OAT : 0);
+  r.allBlank = rawFE === "" && rawAS === "" && rawOAT === "";
+  return r;
 }
 
 function checkRanges(r) {
@@ -587,5 +600,3 @@ document.getElementById("yr").textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
-
-<!-- density altitude calculator -->
