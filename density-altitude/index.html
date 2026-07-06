@@ -83,6 +83,7 @@
   .step { margin: 30px 0 0; }
   .step h3 { font-family: var(--mono); font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand); margin: 0 0 6px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
   .calc-head { font-family: var(--mono); font-size: 14px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--brand); margin: 44px 0 0; padding-bottom: 10px; border-bottom: 3px solid transparent; border-image: linear-gradient(90deg, var(--mid), var(--accent)) 1; }
+  .step-why { margin: 12px 0 0; font-size: 14px; color: var(--ink); max-width: 70ch; line-height: 1.6; }
   .gen-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); margin: 14px 0 6px; }
   .gen-formula { font-family: var(--mono); font-size: 14.5px; background: var(--wash); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 14px; color: var(--ink); overflow-x: auto; }
   .calc-chain { font-family: var(--mono); font-size: 14px; line-height: 2.0; margin: 12px 0 0; color: var(--ink); overflow-x: auto; }
@@ -234,6 +235,7 @@
 
     <section class="step" id="step1">
       <h3>Step 1 &mdash; Pressure Altitude (PA)</h3>
+      <p class="step-why">This step measures how far today&#39;s pressure sits from the standard 29.92 inches of mercury, converts that difference into feet, and moves the field elevation by that amount. The result is the altitude the atmosphere&#39;s pressure says the airport is at today.</p>
       <p class="gen-label">General formula</p>
       <div class="gen-formula">PA = FE + (29.92 &minus; AS) &times; 1,000</div>
       <div class="calc-chain" id="chain1"></div>
@@ -242,6 +244,7 @@
 
     <section class="step" id="step2">
       <h3>Step 2 &mdash; Standard Temperature &mdash; International Standard Atmosphere (ISA)</h3>
+      <p class="step-why">On a standard day the air is 15&nbsp;&deg;C at sea level and cools about 2&nbsp;&deg;C for every 1,000 feet of climb. This step finds what the temperature would be at your pressure altitude on that standard day, which becomes the baseline for the final step.</p>
       <p class="gen-label">General formula</p>
       <div class="gen-formula">ISA Temp = 15 &minus; 2 &times; (PA &divide; 1,000)</div>
       <div class="calc-chain" id="chain2"></div>
@@ -250,6 +253,7 @@
 
     <section class="step" id="step3">
       <h3>Step 3 &mdash; Density Altitude (DA)</h3>
+      <p class="step-why">This step compares the actual temperature with that standard baseline. Every degree warmer than standard thins the air enough to add about 120 feet of apparent altitude, so the difference is multiplied by 120 and added to pressure altitude. The result is the altitude the airplane thinks it is at.</p>
       <p class="gen-label">General formula</p>
       <div class="gen-formula">DA = PA + 120 &times; (OAT &minus; ISA Temp)</div>
       <div class="calc-chain" id="chain3"></div>
