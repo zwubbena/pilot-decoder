@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PilotDECODER: Virtual Wind Tunnel for Student Pilots</title>
+<meta name="description" content="An interactive 2D wind tunnel for student pilots. Watch air flow over a NACA airfoil, change the angle of attack, and see lift, drag, buffet, and stall happen in real time." />
+<meta name="keywords" content="virtual wind tunnel, wind tunnel simulator, airfoil simulator, NACA 2412, angle of attack, critical angle of attack, stall, buffet, lift coefficient, lift curve, Bernoulli, aerodynamics for pilots, private pilot, ground school, student pilot, flight training, PilotDECODER" />
+<meta name="author" content="Zane Wubbena" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://pilotdecoder.com/windtunnel/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pilotdecoder.com/windtunnel/" />
+<meta property="og:site_name" content="PilotDECODER" />
+<meta property="og:title" content="PilotDECODER: Virtual Wind Tunnel for Student Pilots" />
+<meta property="og:description" content="Watch air flow over a wing in your browser. Change the angle of attack on a NACA airfoil and see lift, drag, buffet, and stall develop live." />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="PilotDECODER: Virtual Wind Tunnel for Student Pilots" />
+<meta name="twitter:description" content="Interactive 2D wind tunnel: angle of attack, lift, drag, buffet, and stall — live in your browser." />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PilotDECODER",
+  "alternateName": "Virtual Wind Tunnel",
+  "url": "https://pilotdecoder.com/windtunnel/",
+  "description": "Interactive 2D wind tunnel: change the angle of attack on a NACA airfoil and watch lift, drag, buffet, and stall develop in real time.",
+  "applicationCategory": "Aviation education utility",
+  "operatingSystem": "Any (web browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": {
+    "@type": "Person",
+    "name": "Zane Wubbena",
+    "url": "https://zanewubbena.com/",
+    "sameAs": [
+      "https://txstate.academia.edu/ZaneWubbena",
+      "https://scholar.google.com/citations?user=qr2mU1oAAAAJ&hl=en",
+      "https://www.researchgate.net/profile/Zane-Wubbena"
+    ]
+  }
+}
+</script>
+<script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="../assets/site.css?v=7" />
+<style>
+  /* ============ PAGE-SPECIFIC: virtual wind tunnel ============ */
+  /* Shared tokens, chrome, buttons, cards come from /assets/site.css.
+     The two canvases are "instruments": they intentionally keep a dark,
+     theme-independent palette so the flow colors stay readable.
+     Layout: a "workbench" — on wide screens the controls sit in a sticky
+     sidebar beside the tunnel so you can adjust and watch at the same
+     time; on small screens the tunnel + AoA slider stick to the top of
+     the screen while the remaining controls scroll beneath. */
+  :root{
+    --amber:#f5b83d;          /* HUD caution + canvas accents (instrument-internal) */
+    --lift:#4ade80;
+    --drag:#fb923c;
+    --resultant:#e879f9;
+    --stall:#ef4444;
+    --inst-bg:#06191c;        /* instrument window background */
+    --inst-line:#244049;
+    --inst-muted:#84a9ae;
+  }
+  main { padding: 8px 0 0; }
+
+  /* This page runs wider than the site's 880px default so the control
+     sidebar can sit beside the tunnel. Widen the chrome (.wrap) to the
+     same 1100px so the topbar, title, tunnel, and footer share one
+     left edge instead of stair-stepping. */
+  .wrap { max-width: 1100px; }
+
+  /* ---------- workbench grid ---------- */
+  .workbench { max-width: 1100px; width: 100%; margin: 0 auto; padding: 0 20px; }
+  @media (min-width: 940px) {
+    .workbench { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+    .stage { grid-column: 1; grid-row: 1; }
+    .side { grid-column: 2; grid-row: 1 / span 2; position: sticky; top: 14px; }
+    .graph-area { grid-column: 1; grid-row: 2; }
+    .learn { grid-column: 1; grid-row: 3; }
+  }
+
+  /* ---------- stage: tunnel + AoA + readouts ---------- */
+  .stage { margin-top: 10px; }
+  .tunnel { position: relative; border: 1px solid var(--card-bd); border-radius: 12px; overflow: hidden; background: var(--inst-bg); }
+  .tunnel canvas { display: block; width: 100%; height: auto; }
+  .hud { position: absolute; inset: 0; pointer-events: none; font-family: var(--mono); }
+  .annunciators { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+  .ann { font-size: 11px; font-weight: 600; letter-spacing: .14em; padding: 5px 10px; border-radius: 5px; border: 1px solid #2b2417; color: #5a4a20; background: rgba(10,10,10,.45); transition: opacity .15s; }
+  .ann.caution.on { color: #181104; background: var(--amber); border-color: var(--amber); box-shadow: 0 0 14px rgba(245,184,61,.55); }
+  .ann.warn.on { color: #fff; background: var(--stall); border-color: var(--stall); box-shadow: 0 0 16px rgba(239,68,68,.6); animation: flash .5s steps(2) infinite; }
+  @keyframes flash { 50% { opacity: .35; } }
+  .paused-tag { position: absolute; top: 10px; left: 10px; font-size: 11px; letter-spacing: .18em; color: var(--amber); background: rgba(7,17,20,.72); border: 1px solid rgba(63,97,106,.6); border-radius: 5px; padding: 5px 9px; display: none; }
+  .toast { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); background: rgba(9,19,22,.92); border: 1px solid var(--inst-line); border-radius: 8px; padding: 8px 14px; font-size: 13px; color: #daf1f3; font-family: var(--sans); display: none; max-width: 90%; }
+
+  /* the one control you use most, right under the picture it changes */
+  .aoa-row { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+  .aoa-row label { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--mid); white-space: nowrap; }
+  .aoa-row input[type="range"] { flex: 1; height: 30px; margin: 0; }
+  .aoa-row output { font-family: var(--mono); font-size: 16px; font-weight: 700; color: var(--brand); min-width: 66px; text-align: right; }
+
+  .readbar { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 0; font-family: var(--mono); }
+  .chip { background: var(--surface); border: 1px solid var(--card-bd); border-radius: 6px; padding: 5px 9px; font-size: 12px; }
+  .chip b { font-weight: 700; color: var(--brand); font-size: 13px; }
+  .chip .lbl { color: var(--ink-soft); letter-spacing: .08em; font-size: 10px; display: block; line-height: 1.2; }
+
+  /* on small screens the stage pins to the top while controls scroll */
+  @media (max-width: 939px) {
+    .stage { position: sticky; top: 0; z-index: 20; background: var(--surface); padding: 8px 0 10px; margin-top: 0; border-bottom: 1px solid var(--rule); }
+    .side { margin-top: 14px; }
+    .graph-area { margin-top: 14px; }
+  }
+
+  /* ---------- controls card ---------- */
+  .wt-card { background: var(--surface); border: 1px solid var(--card-bd); border-radius: 10px; padding: 14px 16px; }
+  .wt-card h2 { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--brand); margin: 0 0 12px; }
+  .ctl { margin-bottom: 14px; }
+  .ctl:last-child { margin-bottom: 0; }
+  .ctl .row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .ctl label { font-size: 13px; color: var(--ink); }
+  .ctl .sub { color: var(--ink-soft); font-size: 11px; }
+  .ctl output { font-family: var(--mono); font-size: 13px; color: var(--brand); font-weight: 700; }
+  .ctl input[type="range"] { width: 100%; height: 22px; }
+  .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+  .presets { display: flex; gap: 6px; flex-wrap: wrap; }
+  #nacaInput { width: 6.5ch; background: var(--surface); color: var(--input-ink); border: 1px solid var(--card-bd); border-radius: 6px; font-family: var(--mono); font-size: 15px; font-weight: 600; text-align: center; padding: 4px 6px; letter-spacing: .08em; }
+  #nacaInput:focus { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
+  .naca-box { display: flex; align-items: center; gap: 8px; }
+  .naca-box .naca-err { font-family: var(--mono); font-size: 11px; color: var(--ifr); display: none; }
+  .naca-box.bad .naca-err { display: inline; }
+  .naca-box.bad input { border-color: var(--ifr); }
+  .keys { margin-top: 12px; border-top: 1px dashed var(--rule); padding-top: 10px; font-family: var(--mono); font-size: 11px; color: var(--ink-soft); line-height: 1.9; }
+  .keys kbd { color: var(--ink); background: var(--wash); border: 1px solid var(--rule); border-radius: 4px; padding: 1px 5px; font-family: inherit; }
+
+  /* ---------- graph card ---------- */
+  .graph-area canvas { display: block; width: 100%; height: auto; border-radius: 8px; background: var(--inst-bg); border: 1px solid var(--card-bd); }
+  .graph-stats { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-family: var(--mono); font-size: 13px; }
+  .graph-stats span { color: var(--ink-soft); }
+  .graph-stats b { color: var(--brand); font-weight: 700; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; color: var(--ink-soft); }
+  .legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
+
+  /* ---------- learn section ---------- */
+  .learn { margin: 0 0 20px; }
+  .learn > .calc-head { margin-top: 10px; } /* shared style assumes prose pages; tighter in the workbench */
+  .learn .block-head { margin-top: 26px; }
+  .learn p { max-width: 70ch; color: var(--ink); margin: 0 0 12px; }
+  footer { margin-top: 30px; }
+
+  @media (prefers-reduced-motion: reduce) { .ann.warn.on { animation: none; } }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap"><a class="brand" href="../index.html">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme (current: teal)" title="Color theme"><span class="knob"></span></button></div>
+  </header>
+
+  <header class="masthead">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">Virtual Wind Tunnel</span></nav>
+      <h1 class="eyebrow"><strong>Virtual Wind Tunnel</strong></h1>
+      <p class="masthead-desc">A two-dimensional wind tunnel running live in your browser. Air flows left to right past a NACA airfoil: raise the angle of attack and watch the flow speed up over the top, the lift and drag build, the buffet set in, and the stall break &mdash; the same physics your instructor keeps talking about, made visible.</p>
+    </div>
+  </header>
+
+  <main>
+  <div class="workbench">
+
+    <div class="stage">
+      <div class="tunnel" id="tunnel">
+        <canvas id="flow" width="960" height="420" aria-label="Live wind tunnel flow visualization around the airfoil"></canvas>
+        <div class="hud">
+          <div class="paused-tag" id="pausedTag">PAUSED</div>
+          <div class="annunciators">
+            <div class="ann caution" id="annCaution">HIGH AOA</div>
+            <div class="ann warn" id="annStall">STALL</div>
+          </div>
+          <div class="toast" id="toast"></div>
+        </div>
+      </div>
+      <div class="aoa-row">
+        <label for="aoa">Angle of attack</label>
+        <input type="range" id="aoa" min="-30" max="30" step="0.5" value="6">
+        <output id="aoaOut">+6.0&deg;</output>
+      </div>
+      <div class="readbar" aria-label="Live readouts">
+        <div class="chip"><span class="lbl">AOA</span><b id="roAoa">+6.0&deg;</b></div>
+        <div class="chip"><span class="lbl">CL</span><b id="roCl">&mdash;</b></div>
+        <div class="chip"><span class="lbl">CD</span><b id="roCd">&mdash;</b></div>
+        <div class="chip"><span class="lbl">L/D</span><b id="roLd">&mdash;</b></div>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="wt-card">
+        <h2>Tunnel Controls</h2>
+
+        <div class="ctl">
+          <div class="row"><label for="nacaInput">NACA airfoil code</label></div>
+          <div class="naca-box" id="nacaBox">
+            <input id="nacaInput" value="2412" maxlength="4" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="NACA 4-digit airfoil code">
+            <span class="naca-err">4 digits</span>
+          </div>
+        </div>
+
+        <div class="ctl">
+          <div class="row"><label>Airfoil presets</label></div>
+          <div class="presets">
+            <button class="btn-secondary btn-sm" data-naca="2412" title="Cessna 172 wing">2412 &#183; C172</button>
+            <button class="btn-secondary btn-sm" data-naca="0012" title="Symmetric — tails &amp; aerobatic wings">0012 &#183; SYM</button>
+            <button class="btn-secondary btn-sm" data-naca="4415" title="High-camber, high-lift">4415 &#183; STOL</button>
+            <button class="btn-secondary btn-sm" data-naca="6409" title="Thin, heavily cambered">6409 &#183; GLIDE</button>
+          </div>
+        </div>
+
+        <div class="ctl">
+          <div class="row"><label for="speed">Tunnel speed</label><output id="speedOut">100%</output></div>
+          <input type="range" id="speed" min="40" max="220" step="5" value="100">
+        </div>
+
+        <div class="ctl">
+          <div class="row"><label for="visc">Air viscosity <span class="sub">(stability)</span></label><output id="viscOut">0.014</output></div>
+          <input type="range" id="visc" min="0.010" max="0.045" step="0.001" value="0.014">
+        </div>
+
+        <div class="ctl">
+          <div class="row"><label for="view">Field view</label></div>
+          <select id="view" class="select">
+            <option value="speed" selected>Airspeed (color = how fast)</option>
+            <option value="pressure">Pressure (blue = low, red = high)</option>
+            <option value="curl">Vorticity (swirl)</option>
+          </select>
+        </div>
+
+        <div class="ctl btnrow">
+          <button id="btnPause" class="btn-secondary" aria-pressed="false">&#9208; Pause</button>
+          <button id="btnReset" class="btn-secondary">&#8634; Reset flow</button>
+          <button id="btnSweep" class="btn-secondary" aria-pressed="false">&#128200; Trace lift curve</button>
+          <button id="btnParticles" class="btn-secondary active" aria-pressed="true">&#10035; Particles</button>
+          <button id="btnWind" class="btn-secondary" title="Ambient wind sound" aria-pressed="false">&#128263; Wind</button>
+          <button id="btnHorn" class="btn-secondary" title="Stall warning horn" aria-pressed="false">&#128263; Horn</button>
+        </div>
+
+        <div class="keys">
+          <kbd>&uarr;</kbd>/<kbd>&darr;</kbd> angle of attack &nbsp; <kbd>Space</kbd> pause<br>
+          <kbd>R</kbd> reset flow &nbsp; <kbd>T</kbd> trace curve &nbsp; <kbd>P</kbd> particles &nbsp; <kbd>W</kbd> wind
+        </div>
+      </div>
+    </aside>
+
+    <div class="graph-area wt-card">
+      <h2>Lift Curve &mdash; C<sub>L</sub> vs Angle of Attack</h2>
+      <canvas id="graph" width="760" height="340" aria-label="Graph of lift coefficient versus angle of attack"></canvas>
+      <div class="graph-stats">
+        <span>Buffet / separation onset: <b id="stSepA">&mdash;</b></span>
+        <span>C<sub>L</sub> there: <b id="stSepCl">&mdash;</b></span>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--lift)"></i>Lift</span>
+        <span><i style="background:var(--drag)"></i>Drag</span>
+        <span><i style="background:var(--resultant)"></i>Resultant</span>
+        <span><i style="background:#3d6b52"></i>Measured C<sub>L</sub> (band = buffet)</span>
+        <span><i style="background:#3f616a;height:2px;border-bottom:2px dashed #3f616a;background:none"></i>Thin-airfoil theory (2&pi;&alpha;)</span>
+      </div>
+    </div>
+
+  <section class="learn">
+    <h2 class="calc-head">What You&#39;re Looking At</h2>
+    <p style="margin-top:14px">This is a two-dimensional wind tunnel running live in your browser. Air flows from left to right past a wing cross-section (an airfoil). The color shows how fast the air is moving &mdash; deep blue is slow or stagnant air, green is about free-stream speed, and orange/red is faster than the tunnel speed. The white streaks are individual parcels of air being carried along by the flow.</p>
+    <p>Notice that at a positive angle of attack the air over the <em>top</em> of the wing speeds up (warm colors) while the air beneath slows down. Switch the field view to <strong>Pressure</strong> and you&#39;ll see the companion effect: fast air over the top is at lower pressure, slower air below is at higher pressure. That pressure difference, summed over the whole surface, is lift &mdash; and it&#39;s exactly equal to the downward push the wing gives the air (watch the wake get deflected downward). Bernoulli&#39;s principle and Newton&#39;s third law aren&#39;t competing explanations; they&#39;re two views of the same flow. (And no &mdash; the air over the top doesn&#39;t speed up because it &ldquo;has to meet up&rdquo; with the air underneath. It actually arrives at the trailing edge <em>earlier</em>. The equal-transit-time story you may have heard is a myth.)</p>
+
+    <h3 class="block-head">Reading the NACA code</h3>
+    <p>The four digits describe the shape. For <code>2412</code>: maximum camber of <strong>2%</strong> of the chord, located <strong>40%</strong> back from the leading edge, with a maximum thickness of <strong>12%</strong> of the chord. The Cessna 172 you may be training in uses the NACA 2412 at the wing root. Try <code>0012</code> &mdash; zero camber, perfectly symmetric, like most tail surfaces &mdash; and notice it makes no lift at 0&deg; angle of attack, while the cambered 2412 still does.</p>
+
+    <h3 class="block-head">The critical angle of attack</h3>
+    <p>Slowly raise the angle of attack and watch the lift coefficient climb &mdash; until the smooth flow over the top can no longer stay attached. It separates: the wake breaks into large shed vortices, the lift starts jumping around violently (watch the C<sub>L</sub> readout shake and the green band on the graph widen), and the red annunciator lights. That unsteadiness is buffet &mdash; the same aerodynamic shaking you feel in the airframe just before and during a real stall, and the reason the amber caution comes on first. Switch on the &#127788; Wind sound and you can hear it too: the airflow noise turns ragged and a low rumble builds before the stall light ever comes on &mdash; exactly the cue your instructor wants you to catch in the airplane. In full-scale, three-dimensional air, this separation is also what makes average lift break downward at the critical angle; in a 2D tunnel at low Reynolds number the shed vortices keep generating chaotic lift, so you&#39;ll see the buffet band explode more dramatically than the mean line drops.</p>
+    <div class="callout">
+      <p><strong>The checkride point:</strong> a wing always stalls at the same critical angle of attack &mdash; regardless of airspeed, attitude, or weight. You can stall a wing pointed at the ground with the throttle wide open. Airspeed is only a stand-in; angle of attack is the real variable, and this tunnel lets you fly it directly.</p>
+    </div>
+    <p>Use <strong>Trace lift curve</strong> to have the tunnel sweep the angle of attack automatically and draw the whole C<sub>L</sub>&ndash;&alpha; curve, with the buffet band showing exactly where attached flow gives way to separation. Compare the linear range with the dashed thin-airfoil theory line (slope 2&pi; per radian): real, viscous air runs shallower than the ideal, then quits flying smoothly altogether.</p>
+
+    <h3 class="block-head">Honest limits of this model</h3>
+    <p>This is a lattice-Boltzmann fluid simulation at a very low Reynolds number &mdash; on the order of a thousand, versus roughly five <em>million</em> for a Cessna 172 wing in cruise. In air this viscous, camber does less, drag numbers run high, and the stall shows up as heavy buffet and vortex shedding rather than the crisp lift break in your textbook (a full-scale wing typically reaches critical angle of attack around 16&ndash;18&deg;). The flow patterns, the pressure picture, and the shape of the linear lift range are qualitatively right and genuinely instructive; the exact numbers are not for flight planning. It&#39;s also strictly 2D &mdash; no wingtip vortices, no induced drag from finite span.</p>
+    <p>Inspired by <a href="https://github.com/crgimenes/airfoil" rel="noopener">crgimenes&#39; desktop wind tunnel</a>; simulation method after the classic lattice-Boltzmann demonstrations of Daniel Schroeder. Built for PilotDECODER.</p>
+  </section>
+
+  </div>
+  </main>
+
+  <footer><div class="wrap"><div class="source"><b>References:</b>
+<ul class="source-list">
+<li>Angle of attack, stalls, and the lift equation: <a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak" target="_blank" rel="noopener">FAA Pilot's Handbook of Aeronautical Knowledge (PHAK), Chapters 4&ndash;5</a></li>
+<li>Simulation method: lattice-Boltzmann fluid dynamics, after Daniel Schroeder's classic demonstrations; airfoil concept inspired by <a href="https://github.com/crgimenes/airfoil" target="_blank" rel="noopener">crgimenes/airfoil</a></li>
+</ul>
+</div>
+<p class="disclaimer"><b>Disclaimer:</b> Educational only. This is a low-Reynolds-number 2D simulation: flow patterns are qualitatively right, but the numbers are not aircraft performance data. Not for flight planning or operational decisions. The Pilot in Command remains solely responsible for flight safety.</p></div><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
+<script>
+"use strict";
+/* =====================================================================
+   PilotDECODER Virtual Wind Tunnel
+   2D lattice-Boltzmann (D2Q9) flow solver + NACA 4-digit airfoils.
+   Physics core is DOM-free so it can be unit-tested headlessly.
+   ===================================================================== */
+
+/* ---------- NACA 4-digit airfoil geometry ---------- */
+function nacaPolygon(code, nPts) {
+  // Returns closed polygon points [{x,y}] in chord units, x:0..1, y up.
+  var M = parseInt(code[0], 10) / 100;      // max camber
+  var P = parseInt(code[1], 10) / 10;       // camber position
+  var T = parseInt(code.slice(2), 10) / 100;// thickness
+  var upper = [], lower = [];
+  for (var i = 0; i <= nPts; i++) {
+    // cosine spacing packs points near leading edge
+    var beta = Math.PI * i / nPts;
+    var x = 0.5 * (1 - Math.cos(beta));
+    var yt = 5 * T * (0.2969 * Math.sqrt(x) - 0.1260 * x - 0.3516 * x * x
+             + 0.2843 * x * x * x - 0.1036 * x * x * x * x); // closed TE
+    var yc = 0, dyc = 0;
+    if (M > 0 && P > 0) {
+      if (x < P) { yc = M / (P * P) * (2 * P * x - x * x); dyc = 2 * M / (P * P) * (P - x); }
+      else { yc = M / ((1 - P) * (1 - P)) * (1 - 2 * P + 2 * P * x - x * x); dyc = 2 * M / ((1 - P) * (1 - P)) * (P - x); }
+    }
+    var th = Math.atan(dyc);
+    upper.push({ x: x - yt * Math.sin(th), y: yc + yt * Math.cos(th) });
+    lower.push({ x: x + yt * Math.sin(th), y: yc - yt * Math.cos(th) });
+  }
+  // walk LE->TE along upper, TE->LE along lower
+  var poly = upper.slice();
+  for (var j = lower.length - 1; j >= 0; j--) poly.push(lower[j]);
+  return poly;
+}
+
+function pointInPoly(px, py, poly) {
+  var inside = false;
+  for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    var xi = poly[i].x, yi = poly[i].y, xj = poly[j].x, yj = poly[j].y;
+    if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi)) inside = !inside;
+  }
+  return inside;
+}
+
+/* ---------- Lattice-Boltzmann simulation ---------- */
+function createSim(opts) {
+  var xdim = opts.xdim, ydim = opts.ydim;
+  var n = xdim * ydim;
+  var four9 = 4 / 9, one9 = 1 / 9, one36 = 1 / 36;
+
+  // Distribution functions. Grid index y increases DOWN the screen.
+  // "N" here means +y in array terms (i.e., downward on screen); it only
+  // matters that we stay consistent. Screen-up force = -Fy.
+  var n0 = new Float32Array(n), nN = new Float32Array(n), nS = new Float32Array(n),
+      nE = new Float32Array(n), nW = new Float32Array(n),
+      nNE = new Float32Array(n), nSE = new Float32Array(n),
+      nNW = new Float32Array(n), nSW = new Float32Array(n);
+  var rho = new Float32Array(n), ux = new Float32Array(n), uy = new Float32Array(n);
+  var barrier = new Uint8Array(n);
+
+  var state = {
+    u0: opts.u0 || 0.1,
+    visc: opts.visc || 0.014,
+    aoa: (opts.aoa !== undefined) ? opts.aoa : 6,
+    naca: opts.naca || "2412",
+    chord: Math.round(xdim * 0.34),
+    cx: Math.round(xdim * 0.30),        // quarter-chord x (grid)
+    cy: Math.round(ydim * 0.5),         // quarter-chord y (grid)
+    Fx: 0, Fy: 0,                       // smoothed force on body (grid frame)
+    stepsSinceChange: 0,
+    steps: 0
+  };
+
+  function setEquil(i, newux, newuy, newrho) {
+    var ux3 = 3 * newux, uy3 = 3 * newuy;
+    var ux2 = newux * newux, uy2 = newuy * newuy;
+    var uxuy2 = 2 * newux * newuy;
+    var u2 = ux2 + uy2, u215 = 1.5 * u2;
+    n0[i]  = four9 * newrho * (1 - u215);
+    nE[i]  = one9 * newrho * (1 + ux3 + 4.5 * ux2 - u215);
+    nW[i]  = one9 * newrho * (1 - ux3 + 4.5 * ux2 - u215);
+    nN[i]  = one9 * newrho * (1 + uy3 + 4.5 * uy2 - u215);
+    nS[i]  = one9 * newrho * (1 - uy3 + 4.5 * uy2 - u215);
+    nNE[i] = one36 * newrho * (1 + ux3 + uy3 + 4.5 * (u2 + uxuy2) - u215);
+    nSE[i] = one36 * newrho * (1 + ux3 - uy3 + 4.5 * (u2 - uxuy2) - u215);
+    nNW[i] = one36 * newrho * (1 - ux3 + uy3 + 4.5 * (u2 - uxuy2) - u215);
+    nSW[i] = one36 * newrho * (1 - ux3 - uy3 + 4.5 * (u2 + uxuy2) - u215);
+    rho[i] = newrho; ux[i] = newux; uy[i] = newuy;
+  }
+
+  function initFluid() {
+    for (var i = 0; i < n; i++) {
+      if (barrier[i]) { zeroCell(i); continue; }
+      setEquil(i, state.u0, 0, 1);
+    }
+    state.Fx = 0; state.Fy = 0; state.stepsSinceChange = 0;
+  }
+
+  function zeroCell(i) {
+    n0[i]=0;nN[i]=0;nS[i]=0;nE[i]=0;nW[i]=0;nNE[i]=0;nSE[i]=0;nNW[i]=0;nSW[i]=0;
+    rho[i]=1;ux[i]=0;uy[i]=0;
+  }
+
+  function rebuildBarrier() {
+    // Rasterize the NACA polygon, rotated by -aoa about the quarter chord.
+    // Chord axis runs +x; positive aoa pitches the nose UP on screen (-y).
+    var poly = nacaPolygon(state.naca, 64);
+    var a = state.aoa * Math.PI / 180;
+    var cosA = Math.cos(a), sinA = Math.sin(a);
+    var c = state.chord;
+    var pts = new Array(poly.length);
+    var minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9;
+    for (var k = 0; k < poly.length; k++) {
+      // chord coords: origin at quarter chord (x=0.25), y up
+      var px = (poly[k].x - 0.25) * c;
+      var py = poly[k].y * c;
+      // rotate nose-up by aoa (CW in y-up math coords: LE rises, TE drops),
+      // then flip y for grid coordinates
+      var rx = px * cosA + py * sinA;
+      var ry = -px * sinA + py * cosA;
+      var gx = state.cx + rx;
+      var gy = state.cy - ry; // grid y down
+      pts[k] = { x: gx, y: gy };
+      if (gx < minx) minx = gx; if (gx > maxx) maxx = gx;
+      if (gy < miny) miny = gy; if (gy > maxy) maxy = gy;
+    }
+    var x0 = Math.max(2, Math.floor(minx) - 1), x1 = Math.min(xdim - 3, Math.ceil(maxx) + 1);
+    var y0 = Math.max(2, Math.floor(miny) - 1), y1 = Math.min(ydim - 3, Math.ceil(maxy) + 1);
+    var newBar = new Uint8Array(n);
+    for (var y = y0; y <= y1; y++) {
+      for (var x = x0; x <= x1; x++) {
+        if (pointInPoly(x + 0.5, y + 0.5, pts)) newBar[x + y * xdim] = 1;
+      }
+    }
+    // reconcile with old barrier so the flow keeps running through changes
+    for (var i = 0; i < n; i++) {
+      if (newBar[i] && !barrier[i]) {           // fluid -> solid
+        zeroCell(i);
+      } else if (!newBar[i] && barrier[i]) {    // solid -> fluid: seed sensibly
+        var xx = i % xdim, yy = (i / xdim) | 0;
+        var seeded = false;
+        var nb = [i - 1, i + 1, i - xdim, i + xdim];
+        for (var b = 0; b < 4; b++) {
+          var j = nb[b];
+          if (j >= 0 && j < n && !barrier[j] && !newBar[j]) {
+            setEquil(i, ux[j], uy[j], rho[j]); seeded = true; break;
+          }
+        }
+        if (!seeded) setEquil(i, 0, 0, 1);
+      }
+    }
+    barrier = newBar;
+    state.outline = pts;
+    state.stepsSinceChange = 0;
+  }
+
+  function collide() {
+    var visc = state.visc;
+    var omega = 1 / (3 * visc + 0.5);
+    for (var y = 1; y < ydim - 1; y++) {
+      var row = y * xdim;
+      for (var x = 1; x < xdim - 1; x++) {
+        var i = x + row;
+        if (barrier[i]) continue;
+        var thisrho = n0[i] + nN[i] + nS[i] + nE[i] + nW[i] + nNW[i] + nNE[i] + nSW[i] + nSE[i];
+        var thisux = (nE[i] + nNE[i] + nSE[i] - nW[i] - nNW[i] - nSW[i]) / thisrho;
+        var thisuy = (nN[i] + nNE[i] + nNW[i] - nS[i] - nSE[i] - nSW[i]) / thisrho;
+        rho[i] = thisrho; ux[i] = thisux; uy[i] = thisuy;
+        var ux3 = 3 * thisux, uy3 = 3 * thisuy;
+        var ux2 = thisux * thisux, uy2 = thisuy * thisuy;
+        var uxuy2 = 2 * thisux * thisuy;
+        var u2 = ux2 + uy2, u215 = 1.5 * u2;
+        n0[i]  += omega * (four9 * thisrho * (1 - u215) - n0[i]);
+        nE[i]  += omega * (one9 * thisrho * (1 + ux3 + 4.5 * ux2 - u215) - nE[i]);
+        nW[i]  += omega * (one9 * thisrho * (1 - ux3 + 4.5 * ux2 - u215) - nW[i]);
+        nN[i]  += omega * (one9 * thisrho * (1 + uy3 + 4.5 * uy2 - u215) - nN[i]);
+        nS[i]  += omega * (one9 * thisrho * (1 - uy3 + 4.5 * uy2 - u215) - nS[i]);
+        nNE[i] += omega * (one36 * thisrho * (1 + ux3 + uy3 + 4.5 * (u2 + uxuy2) - u215) - nNE[i]);
+        nSE[i] += omega * (one36 * thisrho * (1 + ux3 - uy3 + 4.5 * (u2 - uxuy2) - u215) - nSE[i]);
+        nNW[i] += omega * (one36 * thisrho * (1 - ux3 + uy3 + 4.5 * (u2 - uxuy2) - u215) - nNW[i]);
+        nSW[i] += omega * (one36 * thisrho * (1 - ux3 - uy3 + 4.5 * (u2 + uxuy2) - u215) - nSW[i]);
+      }
+    }
+    // outlet: copy x-direction distributions at right edge
+    var last = xdim - 1;
+    for (var yy = 0; yy < ydim; yy++) {
+      var iR = last + yy * xdim, iR1 = last - 1 + yy * xdim;
+      nW[iR] = nW[iR1]; nNW[iR] = nNW[iR1]; nSW[iR] = nSW[iR1];
+    }
+  }
+
+  function stream() {
+    var x, y;
+    for (y = ydim - 2; y > 0; y--)          // N and NW: from top-right going down? (Schroeder order)
+      for (x = 1; x < xdim - 1; x++) {
+        nN[x + y * xdim]  = nN[x + (y - 1) * xdim];
+        nNW[x + y * xdim] = nNW[x + 1 + (y - 1) * xdim];
+      }
+    for (y = ydim - 2; y > 0; y--)
+      for (x = xdim - 2; x > 0; x--) {
+        nE[x + y * xdim]  = nE[x - 1 + y * xdim];
+        nNE[x + y * xdim] = nNE[x - 1 + (y - 1) * xdim];
+      }
+    for (y = 1; y < ydim - 1; y++)
+      for (x = xdim - 2; x > 0; x--) {
+        nS[x + y * xdim]  = nS[x + (y + 1) * xdim];
+        nSE[x + y * xdim] = nSE[x - 1 + (y + 1) * xdim];
+      }
+    for (y = 1; y < ydim - 1; y++)
+      for (x = 1; x < xdim - 1; x++) {
+        nW[x + y * xdim]  = nW[x + 1 + y * xdim];
+        nSW[x + y * xdim] = nSW[x + 1 + (y + 1) * xdim];
+      }
+    // bounce-back at barriers, accumulating momentum exchange (force on body)
+    var fx = 0, fy = 0;
+    for (y = 1; y < ydim - 1; y++) {
+      var row = y * xdim;
+      for (x = 1; x < xdim - 1; x++) {
+        var i = x + row;
+        if (!barrier[i]) continue;
+        fx += nE[i] + nNE[i] + nSE[i] - nW[i] - nNW[i] - nSW[i];
+        fy += nN[i] + nNE[i] + nNW[i] - nS[i] - nSE[i] - nSW[i];
+        nE[i + 1]           = nW[i];
+        nW[i - 1]           = nE[i];
+        nN[i + xdim]        = nS[i];
+        nS[i - xdim]        = nN[i];
+        nNE[i + 1 + xdim]   = nSW[i];
+        nNW[i - 1 + xdim]   = nSE[i];
+        nSE[i + 1 - xdim]   = nNW[i];
+        nSW[i - 1 - xdim]   = nNE[i];
+        nE[i]=0;nW[i]=0;nN[i]=0;nS[i]=0;nNE[i]=0;nNW[i]=0;nSE[i]=0;nSW[i]=0;
+      }
+    }
+    // exponential smoothing of forces (factor 2 from momentum exchange folded into calib)
+    var a = 0.015;
+    state.Fx += a * (2 * fx - state.Fx);
+    state.Fy += a * (2 * fy - state.Fy);
+  }
+
+  function setBoundaries() {
+    // inlet (left) and top/bottom at free-stream equilibrium
+    var u0 = state.u0;
+    for (var x = 0; x < xdim; x++) {
+      setEquil(x, u0, 0, 1);
+      setEquil(x + (ydim - 1) * xdim, u0, 0, 1);
+    }
+    for (var y = 1; y < ydim - 1; y++) {
+      setEquil(y * xdim, u0, 0, 1);
+    }
+  }
+
+  function step() {
+    setBoundaries();
+    collide();
+    stream();
+    state.steps++; state.stepsSinceChange++;
+  }
+
+  function forces() {
+    // Lift is screen-up = -Fy (grid y points down). Drag is +x.
+    var q = 0.5 * 1.0 * state.u0 * state.u0 * state.chord;
+    return {
+      cl: -state.Fy / q,
+      cd: state.Fx / q
+    };
+  }
+
+  function isFinite_() {
+    // spot-check a diagonal of cells for NaN blowup
+    for (var k = 0; k < 12; k++) {
+      var x = 2 + ((xdim - 4) * k / 11) | 0;
+      var y = 2 + ((ydim - 4) * k / 11) | 0;
+      var i = x + y * xdim;
+      if (!isFinite(rho[i]) || !isFinite(ux[i])) return false;
+    }
+    return true;
+  }
+
+  var sim = {
+    xdim: xdim, ydim: ydim, state: state,
+    rho: rho, ux: ux, uy: uy, barrier: function(){ return barrier; },
+    step: step,
+    forces: forces,
+    ok: isFinite_,
+    resetFlow: function () { initFluid(); },
+    setAoa: function (a) { state.aoa = a; rebuildBarrier(); },
+    setNaca: function (c) { state.naca = c; rebuildBarrier(); },
+    setSpeed: function (u) { state.u0 = u; },
+    setVisc: function (v) { state.visc = v; }
+  };
+
+  rebuildBarrier();
+  initFluid();
+  return sim;
+}
+
+/* =====================================================================
+   Everything below is DOM / rendering, skipped in headless tests.
+   ===================================================================== */
+if (typeof document !== "undefined" && document.getElementById) (function () {
+
+  var small = Math.min(window.innerWidth || 1024, window.screen ? window.screen.width : 1024) < 640;
+  var XD = small ? 240 : 320;
+  var YD = small ? 106 : 140;
+  var sim = createSim({ xdim: XD, ydim: YD, u0: 0.1, visc: 0.014, aoa: 6, naca: "2412" });
+
+  var flowCanvas = document.getElementById("flow");
+  flowCanvas.width = XD * 3; flowCanvas.height = YD * 3;
+  var fctx = flowCanvas.getContext("2d");
+  var off = document.createElement("canvas");
+  off.width = XD; off.height = YD;
+  var octx = off.getContext("2d");
+  var img = octx.createImageData(XD, YD);
+  var px = img.data;
+
+  var graphCanvas = document.getElementById("graph");
+  var gctx = graphCanvas.getContext("2d");
+
+  /* ---------- color lookup tables ---------- */
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function makeLUT(stops) {
+    // stops: [[t, r,g,b], ...] t in 0..1
+    var N = 512, lut = new Uint8Array(N * 3);
+    for (var i = 0; i < N; i++) {
+      var t = i / (N - 1), s = 0;
+      while (s < stops.length - 2 && t > stops[s + 1][0]) s++;
+      var a = stops[s], b = stops[s + 1];
+      var f = (t - a[0]) / Math.max(1e-9, b[0] - a[0]);
+      f = Math.min(1, Math.max(0, f));
+      lut[i * 3]     = lerp(a[1], b[1], f) | 0;
+      lut[i * 3 + 1] = lerp(a[2], b[2], f) | 0;
+      lut[i * 3 + 2] = lerp(a[3], b[3], f) | 0;
+    }
+    return lut;
+  }
+  var lutSpeed = makeLUT([
+    [0.00,  8, 18, 48],    // dead air: deep navy
+    [0.22, 18, 60,140],
+    [0.40, 30,160,190],    // below free stream: teal
+    [0.55, 60,200,140],    // ~free stream: green
+    [0.70,190,215, 70],    // faster: yellow
+    [0.85,240,150, 40],
+    [1.00,235, 60, 35]     // much faster: red
+  ]);
+  var lutDiv = makeLUT([   // diverging, for pressure & curl
+    [0.00, 30, 60,220],
+    [0.30, 40,140,200],
+    [0.50, 24, 30, 44],    // neutral = background-ish
+    [0.70,220,150, 40],
+    [1.00,235, 60, 35]
+  ]);
+
+  /* ---------- particles ---------- */
+  var NP = small ? 1200 : 2400;
+  var pxs = new Float32Array(NP), pys = new Float32Array(NP);
+  function seedParticle(k, anywhere) {
+    pxs[k] = anywhere ? Math.random() * (XD - 2) + 1 : Math.random() * 3 + 1;
+    pys[k] = Math.random() * (YD - 2) + 1;
+  }
+  for (var k0 = 0; k0 < NP; k0++) seedParticle(k0, true);
+
+  /* ---------- lift curve storage ---------- */
+  var BIN0 = -30, BIN1 = 30, BSTEP = 0.5;
+  var NB = Math.round((BIN1 - BIN0) / BSTEP) + 1;
+  var clMean = new Float32Array(NB); clMean.fill(NaN);
+  var clSd = new Float32Array(NB); clSd.fill(NaN);
+  var sepA = NaN, sepCl = NaN;         // buffet / separation onset
+  var SD_CAUTION = 0.07, SD_STALL = 0.17, SD_EXIT = 0.12;
+
+  // rolling buffer of recent CL samples (one per animation frame)
+  var ROLL = 90;
+  var rollBuf = new Float32Array(ROLL), rollN = 0, rollI = 0;
+  function rollPush(v) { rollBuf[rollI] = v; rollI = (rollI + 1) % ROLL; if (rollN < ROLL) rollN++; }
+  function rollStats() {
+    if (rollN < 30) return null;
+    var s = 0, i;
+    for (i = 0; i < rollN; i++) s += rollBuf[i];
+    var mean = s / rollN, v = 0;
+    for (i = 0; i < rollN; i++) { var d = rollBuf[i] - mean; v += d * d; }
+    return { mean: mean, sd: Math.sqrt(v / rollN) };
+  }
+  function rollReset() { rollN = 0; rollI = 0; }
+
+  function clearCurve() {
+    clMean.fill(NaN); clSd.fill(NaN); sepA = NaN; sepCl = NaN; rollReset();
+  }
+  function updateSeparationOnset() {
+    sepA = NaN; sepCl = NaN;
+    for (var b = 0; b < NB; b++) {
+      if (!isNaN(clSd[b]) && clSd[b] > SD_STALL && clMean[b] > 0.3) {
+        sepA = BIN0 + b * BSTEP; sepCl = clMean[b]; break;
+      }
+    }
+  }
+
+  /* ---------- ui state ---------- */
+  var running = true, showParticles = true, viewMode = "speed";
+  var stepsPerFrame = small ? 7 : 10;
+  var rateBoost = 1, curSteps = stepsPerFrame;
+  function press(btn, on) {
+    btn.classList.toggle("active", !!on);
+    if (btn.setAttribute) btn.setAttribute("aria-pressed", on ? "true" : "false");
+  }
+  var sweep = null; // {a, dir}
+  var hornOn = false, audioCtx = null, hornOsc = null, hornGain = null;
+  var stalled = false, caution = false;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var el = {
+    aoa: $("aoa"), aoaOut: $("aoaOut"), speed: $("speed"), speedOut: $("speedOut"),
+    visc: $("visc"), viscOut: $("viscOut"), view: $("view"),
+    btnPause: $("btnPause"), btnReset: $("btnReset"), btnSweep: $("btnSweep"),
+    btnParticles: $("btnParticles"), btnHorn: $("btnHorn"), btnWind: $("btnWind"),
+    naca: $("nacaInput"), nacaBox: $("nacaBox"),
+    roAoa: $("roAoa"), roCl: $("roCl"), roCd: $("roCd"), roLd: $("roLd"),
+    annC: $("annCaution"), annS: $("annStall"),
+    pausedTag: $("pausedTag"), toast: $("toast"),
+    stSepA: $("stSepA"), stSepCl: $("stSepCl")
+  };
+
+  function fmtA(a) { return (a >= 0 ? "+" : "") + a.toFixed(1) + "°"; }
+
+  function setAoa(a, fromSweep) {
+    a = Math.max(-30, Math.min(30, Math.round(a * 2) / 2));
+    sim.setAoa(a);
+    rollReset();
+    el.aoa.value = a;
+    el.aoaOut.textContent = fmtA(a);
+    el.roAoa.textContent = fmtA(a);
+    if (!fromSweep) stopSweep();
+  }
+
+  function toast(msg, ms) {
+    el.toast.textContent = msg;
+    el.toast.style.display = "block";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { el.toast.style.display = "none"; }, ms || 2600);
+  }
+
+  /* ---------- stall horn (WebAudio) ---------- */
+  function ensureCtx() {
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+      catch (e) { return null; }
+    }
+    if (audioCtx.state === "suspended") { try { audioCtx.resume(); } catch (e) {} }
+    return audioCtx;
+  }
+
+  function hornStart() {
+    if (!hornOn) return;
+    if (!ensureCtx()) return;
+    if (hornOsc) return;
+    hornOsc = audioCtx.createOscillator();
+    hornGain = audioCtx.createGain();
+    hornOsc.type = "square";
+    hornOsc.frequency.value = 620;
+    hornGain.gain.value = 0.035;
+    hornOsc.connect(hornGain); hornGain.connect(audioCtx.destination);
+    hornOsc.start();
+  }
+  function hornStop() {
+    if (hornOsc) { try { hornOsc.stop(); } catch (e) {} hornOsc.disconnect(); hornOsc = null; }
+  }
+
+  /* ---------- ambient wind sound ----------
+     Broadband noise shaped by tunnel speed; the live buffet signal (the same
+     rolling CL statistics that drive the annunciators) adds a low rumble and
+     shakes the level, so separation is audible before the stall light. */
+  var windOn = false, windNodes = null;
+  function windStart() {
+    var ctx = ensureCtx();
+    if (!ctx || windNodes) return;
+    var len = ctx.sampleRate * 2, buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    var src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+    var lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 700; lp.Q.value = 0.7;
+    var bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 110; bp.Q.value = 1.6;
+    var windG = ctx.createGain(); windG.gain.value = 0;
+    var rumbleG = ctx.createGain(); rumbleG.gain.value = 0;
+    var master = ctx.createGain(); master.gain.value = 0.9;
+    src.connect(lp); lp.connect(windG); windG.connect(master);
+    src.connect(bp); bp.connect(rumbleG); rumbleG.connect(master);
+    master.connect(ctx.destination);
+    src.start();
+    windNodes = { src: src, lp: lp, bp: bp, windG: windG, rumbleG: rumbleG, master: master };
+  }
+  function windStop() {
+    if (!windNodes) return;
+    try { windNodes.src.stop(); } catch (e) {}
+    try { windNodes.master.disconnect(); } catch (e) {}
+    windNodes = null;
+  }
+  function windUpdate(cl, mean, sd) {
+    if (!windNodes || !audioCtx) return;
+    var t = audioCtx.currentTime;
+    var spd = (parseInt(el.speed.value, 10) || 100) / 100;    // 0.4 .. 2.2
+    var run = running ? 1 : 0;
+    var g = run * Math.min(0.34, 0.05 + 0.055 * spd * spd);   // ~dynamic pressure
+    var cut = 350 + 900 * spd;                                 // brighter when faster
+    var rough = Math.min(1, sd / 0.25);                        // buffet 0..1
+    var dev = isFinite(cl) && isFinite(mean)
+      ? Math.max(-0.5, Math.min(0.5, (cl - mean) * 2.2)) : 0;  // live shake
+    windNodes.windG.gain.setTargetAtTime(g * (1 + dev * rough), t, 0.04);
+    windNodes.lp.frequency.setTargetAtTime(cut, t, 0.12);
+    windNodes.rumbleG.gain.setTargetAtTime(run * rough * 0.5, t, 0.09);
+    windNodes.bp.frequency.setTargetAtTime(90 + 60 * rough, t, 0.2);
+  }
+
+  /* ---------- sweep mode ---------- */
+  var SETTLE = 340; // sim steps per 0.5° during a sweep
+  function startSweep() {
+    clearCurve();
+    sweep = { a: -6, wait: 0, samples: [] };
+    setAoa(-6, true);
+    sim.resetFlow();
+    press(el.btnSweep, true);
+    toast("Sweeping angle of attack −6° → +24°… (about half a minute)", 3600);
+  }
+  function stopSweep() {
+    if (sweep) { sweep = null; press(el.btnSweep, false); }
+  }
+  function sweepTick() {
+    if (!sweep) return;
+    sweep.wait += curSteps;
+    if (sweep.wait > SETTLE * 0.45) {
+      var f = sim.forces();
+      if (isFinite(f.cl)) sweep.samples.push(f.cl);
+    }
+    if (sweep.wait >= SETTLE) {
+      recordBin(sweep.samples);
+      sweep.samples.length = 0;
+      sweep.wait = 0;
+      sweep.a += 0.5;
+      if (sweep.a > 24) {
+        stopSweep(); setAoa(8, true);
+        toast(isFinite(sepA)
+          ? "Lift curve complete. The flow separated (buffet) around α ≈ " + fmtA(sepA) + " — this tunnel's critical angle of attack."
+          : "Lift curve complete.", 5200);
+        return;
+      }
+      setAoa(sweep.a, true);
+    }
+  }
+
+  function recordBin(samples) {
+    var a = sim.state.aoa;
+    var b = Math.round((a - BIN0) / BSTEP);
+    if (b < 0 || b >= NB) return;
+    var mean, sd;
+    if (samples && samples.length >= 8) {
+      var s = 0, i;
+      for (i = 0; i < samples.length; i++) s += samples[i];
+      mean = s / samples.length;
+      var v = 0;
+      for (i = 0; i < samples.length; i++) { var d = samples[i] - mean; v += d * d; }
+      sd = Math.sqrt(v / samples.length);
+    } else {
+      var rs = rollStats();
+      if (!rs) return;
+      mean = rs.mean; sd = rs.sd;
+    }
+    if (!isFinite(mean)) return;
+    clMean[b] = mean; clSd[b] = sd;
+    updateSeparationOnset();
+  }
+
+  /* ---------- render: flow field ---------- */
+  function drawField() {
+    var XDl = XD, YDl = YD;
+    var rho = sim.rho, ux = sim.ux, uy = sim.uy, bar = sim.barrier();
+    var u0 = sim.state.u0;
+    var i, x, y, ci;
+    if (viewMode === "speed") {
+      var inv = 0.55 / u0;
+      for (i = 0; i < XDl * YDl; i++) {
+        if (bar[i]) { px[i*4]=13;px[i*4+1]=16;px[i*4+2]=22;px[i*4+3]=255; continue; }
+        var s = Math.sqrt(ux[i]*ux[i] + uy[i]*uy[i]) * inv;
+        ci = (Math.min(0.999, s) * 511) | 0;
+        px[i*4]   = lutSpeed[ci*3];
+        px[i*4+1] = lutSpeed[ci*3+1];
+        px[i*4+2] = lutSpeed[ci*3+2];
+        px[i*4+3] = 255;
+      }
+    } else if (viewMode === "pressure") {
+      var kP = 9;
+      for (i = 0; i < XDl * YDl; i++) {
+        if (bar[i]) { px[i*4]=13;px[i*4+1]=16;px[i*4+2]=22;px[i*4+3]=255; continue; }
+        var p = 0.5 + (rho[i] - 1) * kP;
+        ci = (Math.min(0.999, Math.max(0, p)) * 511) | 0;
+        px[i*4]   = lutDiv[ci*3];
+        px[i*4+1] = lutDiv[ci*3+1];
+        px[i*4+2] = lutDiv[ci*3+2];
+        px[i*4+3] = 255;
+      }
+    } else { // curl
+      var kC = 6;
+      for (y = 1; y < YDl - 1; y++) {
+        for (x = 1; x < XDl - 1; x++) {
+          i = x + y * XDl;
+          if (bar[i]) { px[i*4]=13;px[i*4+1]=16;px[i*4+2]=22;px[i*4+3]=255; continue; }
+          var c = (uy[i + 1] - uy[i - 1]) - (ux[i + XDl] - ux[i - XDl]);
+          var v = 0.5 + c * kC / sim.state.u0 * 0.5;
+          ci = (Math.min(0.999, Math.max(0, v)) * 511) | 0;
+          px[i*4]   = lutDiv[ci*3];
+          px[i*4+1] = lutDiv[ci*3+1];
+          px[i*4+2] = lutDiv[ci*3+2];
+          px[i*4+3] = 255;
+        }
+      }
+    }
+    octx.putImageData(img, 0, 0);
+    fctx.imageSmoothingEnabled = true;
+    fctx.drawImage(off, 0, 0, flowCanvas.width, flowCanvas.height);
+  }
+
+  /* ---------- render: particles ---------- */
+  function moveAndDrawParticles() {
+    var sc = flowCanvas.width / XD;
+    var mv = curSteps * 0.9;
+    fctx.strokeStyle = "rgba(255,255,255,0.55)";
+    fctx.lineWidth = 1.1;
+    fctx.beginPath();
+    var bar = sim.barrier();
+    for (var k = 0; k < NP; k++) {
+      var x = pxs[k], y = pys[k];
+      var xi = x | 0, yi = y | 0;
+      if (xi < 1 || xi >= XD - 1 || yi < 1 || yi >= YD - 1) { seedParticle(k, false); continue; }
+      var i = xi + yi * XD;
+      if (bar[i]) { seedParticle(k, false); continue; }
+      var vx = sim.ux[i], vy = sim.uy[i];
+      var nx = x + vx * mv, ny = y + vy * mv;
+      if (running) {
+        fctx.moveTo(x * sc, y * sc);
+        fctx.lineTo((x + vx * mv * 1.8) * sc, (y + vy * mv * 1.8) * sc);
+        pxs[k] = nx; pys[k] = ny;
+      } else {
+        fctx.moveTo(x * sc, y * sc);
+        fctx.lineTo((x + vx * mv * 1.8) * sc, (y + vy * mv * 1.8) * sc);
+      }
+    }
+    fctx.stroke();
+  }
+
+  /* ---------- render: airfoil + force vectors ---------- */
+  function arrow(x0, y0, x1, y1, color, w) {
+    var dx = x1 - x0, dy = y1 - y0;
+    var len = Math.hypot(dx, dy);
+    if (len < 4) return;
+    var ang = Math.atan2(dy, dx);
+    fctx.strokeStyle = color; fctx.fillStyle = color; fctx.lineWidth = w;
+    fctx.beginPath(); fctx.moveTo(x0, y0); fctx.lineTo(x1, y1); fctx.stroke();
+    var ah = Math.min(12, 5 + len * 0.06);
+    fctx.beginPath();
+    fctx.moveTo(x1, y1);
+    fctx.lineTo(x1 - ah * Math.cos(ang - 0.42), y1 - ah * Math.sin(ang - 0.42));
+    fctx.lineTo(x1 - ah * Math.cos(ang + 0.42), y1 - ah * Math.sin(ang + 0.42));
+    fctx.closePath(); fctx.fill();
+  }
+
+  function drawFoilAndVectors() {
+    var sc = flowCanvas.width / XD;
+    var pts = sim.state.outline;
+    // outline
+    fctx.beginPath();
+    for (var k = 0; k < pts.length; k++) {
+      var X = pts[k].x * sc, Y = pts[k].y * sc;
+      if (k === 0) fctx.moveTo(X, Y); else fctx.lineTo(X, Y);
+    }
+    fctx.closePath();
+    fctx.fillStyle = "#0b1518";
+    fctx.fill();
+    fctx.strokeStyle = "rgba(218,241,243,0.9)";
+    fctx.lineWidth = 1.5;
+    fctx.stroke();
+
+    // vectors from the quarter chord
+    var f = sim.forces();
+    if (!isFinite(f.cl)) return;
+    var ox = sim.state.cx * sc, oy = sim.state.cy * sc;
+    var K = flowCanvas.height * 0.30; // pixels per unit CL
+    var Ly = -f.cl * K;               // up on screen for positive lift
+    var Dx = f.cd * K;
+    // keep the arrows on-canvas at deep-stall force levels: scale the whole
+    // triple by one factor so the lift:drag geometry stays honest
+    var head = Ly < 0 ? oy - flowCanvas.height * 0.06
+                      : (flowCanvas.height - oy) - flowCanvas.height * 0.06;
+    var mag = Math.abs(Ly);
+    if (mag > head && mag > 0) { var kf = head / mag; Ly *= kf; Dx *= kf; }
+    fctx.save();
+    fctx.globalAlpha = 0.95;
+    arrow(ox, oy, ox, oy + Ly, getCss("--lift"), 2.5);
+    arrow(ox, oy, ox + Dx, oy, getCss("--drag"), 2.5);
+    arrow(ox, oy, ox + Dx, oy + Ly, getCss("--resultant"), 2);
+    fctx.restore();
+  }
+
+  var cssCache = {};
+  function getCss(name) {
+    if (!cssCache[name]) cssCache[name] = getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#fff";
+    return cssCache[name];
+  }
+
+  /* ---------- render: lift-curve graph ---------- */
+  function drawGraph() {
+    var W = graphCanvas.width, H = graphCanvas.height;
+    gctx.clearRect(0, 0, W, H);
+    var padL = 44, padR = 14, padT = 12, padB = 30;
+    var gw = W - padL - padR, gh = H - padT - padB;
+    var aMin = -30, aMax = 30, cMin = -1.8, cMax = 2.6;
+    function gx(a) { return padL + (a - aMin) / (aMax - aMin) * gw; }
+    function gy(c) { return padT + (cMax - c) / (cMax - cMin) * gh; }
+
+    // grid
+    gctx.strokeStyle = "#1a3036"; gctx.lineWidth = 1; gctx.beginPath();
+    for (var a = aMin; a <= aMax; a += 5) { gctx.moveTo(gx(a), padT); gctx.lineTo(gx(a), padT + gh); }
+    for (var c = -1.5; c <= 2.5; c += 0.5) { gctx.moveTo(padL, gy(c)); gctx.lineTo(padL + gw, gy(c)); }
+    gctx.stroke();
+    // axes at 0
+    gctx.strokeStyle = "#325058"; gctx.beginPath();
+    gctx.moveTo(gx(0), padT); gctx.lineTo(gx(0), padT + gh);
+    gctx.moveTo(padL, gy(0)); gctx.lineTo(padL + gw, gy(0));
+    gctx.stroke();
+    // labels
+    gctx.fillStyle = "#84a9ae"; gctx.font = "11px Menlo, Consolas, monospace";
+    gctx.textAlign = "center";
+    for (var a2 = aMin; a2 <= aMax; a2 += 5) gctx.fillText((a2 > 0 ? "+" : "") + a2 + "°", gx(a2), H - 12);
+    gctx.textAlign = "right";
+    for (var c2 = -1.5; c2 <= 2.5; c2 += 0.5) gctx.fillText(c2.toFixed(1), padL - 6, gy(c2) + 4);
+
+    // thin-airfoil theory: CL = 2π(α − α₀), α₀ from camber ≈ −(camber line zero-lift)
+    // quick estimate: α₀ ≈ −(M% + …). Use −1.15° per % camber near mid-chord as a teaching guide.
+    var Mc = parseInt(sim.state.naca[0], 10);
+    var a0 = -1.1 * Mc;
+    gctx.strokeStyle = "#3f616a"; gctx.setLineDash([5, 5]); gctx.lineWidth = 1.2;
+    gctx.beginPath();
+    var first = true;
+    for (var at = aMin; at <= aMax; at += 0.5) {
+      var clT = 2 * Math.PI * (at - a0) * Math.PI / 180;
+      if (clT < cMin || clT > cMax) { first = true; continue; }
+      var X = gx(at), Y = gy(clT);
+      if (first) { gctx.moveTo(X, Y); first = false; } else gctx.lineTo(X, Y);
+    }
+    gctx.stroke(); gctx.setLineDash([]);
+
+    // measured curve: buffet band (mean ± sd) then mean line
+    function clampC(v) { return Math.max(cMin, Math.min(cMax, v)); }
+    var runs = [], cur = null;
+    for (var b = 0; b < NB; b++) {
+      if (isNaN(clMean[b])) { cur = null; continue; }
+      if (!cur) { cur = []; runs.push(cur); }
+      cur.push(b);
+    }
+    gctx.fillStyle = "rgba(57,212,126,0.14)";
+    runs.forEach(function (r) {
+      if (r.length < 2) return;
+      gctx.beginPath();
+      r.forEach(function (b2, i2) {
+        var X = gx(BIN0 + b2 * BSTEP), Y = gy(clampC(clMean[b2] + clSd[b2]));
+        if (i2 === 0) gctx.moveTo(X, Y); else gctx.lineTo(X, Y);
+      });
+      for (var i3 = r.length - 1; i3 >= 0; i3--) {
+        var b3 = r[i3];
+        gctx.lineTo(gx(BIN0 + b3 * BSTEP), gy(clampC(clMean[b3] - clSd[b3])));
+      }
+      gctx.closePath(); gctx.fill();
+    });
+    gctx.strokeStyle = "#39d47e"; gctx.lineWidth = 2;
+    gctx.beginPath();
+    runs.forEach(function (r) {
+      r.forEach(function (b2, i2) {
+        var X = gx(BIN0 + b2 * BSTEP), Y = gy(clampC(clMean[b2]));
+        if (i2 === 0) gctx.moveTo(X, Y); else gctx.lineTo(X, Y);
+      });
+    });
+    gctx.stroke();
+
+    // live marker
+    var f = sim.forces();
+    if (isFinite(f.cl)) {
+      var Xm = gx(sim.state.aoa), Ym = gy(Math.max(cMin, Math.min(cMax, f.cl)));
+      gctx.fillStyle = "#f5b83d";
+      gctx.beginPath(); gctx.arc(Xm, Ym, 4.5, 0, Math.PI * 2); gctx.fill();
+      gctx.strokeStyle = "rgba(245,184,61,0.35)";
+      gctx.beginPath(); gctx.moveTo(Xm, padT); gctx.lineTo(Xm, padT + gh); gctx.stroke();
+    }
+
+    // shade the separated region beyond buffet onset
+    if (isFinite(sepA)) {
+      gctx.fillStyle = "rgba(239,68,68,0.07)";
+      gctx.fillRect(gx(sepA), padT, padL + gw - gx(sepA), gh);
+      gctx.fillStyle = "rgba(239,120,120,0.8)";
+      gctx.font = "10px Menlo, Consolas, monospace";
+      gctx.textAlign = "left";
+      gctx.fillText("SEPARATED", gx(sepA) + 5, padT + 12);
+    }
+  }
+
+  /* ---------- annunciators / readouts ---------- */
+  function updateStatus() {
+    var f = sim.forces();
+    var a = sim.state.aoa;
+    var settled = sim.state.stepsSinceChange > 200;
+    if (running && isFinite(f.cl)) rollPush(f.cl);
+    var rs = settled ? rollStats() : null;
+
+    if (settled && isFinite(f.cl)) {
+      el.roCl.textContent = f.cl.toFixed(2);
+      el.roCd.textContent = Math.max(0, f.cd).toFixed(2);
+      el.roLd.textContent = (f.cd > 0.02) ? (f.cl / f.cd).toFixed(1) : "—";
+      if (!sweep && sim.state.stepsSinceChange > 600) recordBin(null);
+    } else {
+      el.roCl.textContent = el.roCd.textContent = el.roLd.textContent = "…";
+    }
+
+    // Buffet-based stall logic (with hysteresis). Separated flow at high AoA
+    // makes lift violently unsteady — that fluctuation is the tell.
+    var sd = rs ? rs.sd : 0;
+    windUpdate(f.cl, rs ? rs.mean : f.cl, sd);
+    var newStall = stalled;
+    if (settled && a > 8 && sd > SD_STALL) newStall = true;
+    else if (sd < SD_EXIT || a <= 8 || !settled) newStall = false;
+    var newCaution = !newStall && settled && a > 6 &&
+      (sd > SD_CAUTION || (isFinite(sepA) && a >= sepA - 2));
+
+    if (newStall !== stalled) {
+      stalled = newStall;
+      el.annS.classList.toggle("on", stalled);
+      if (stalled) hornStart(); else hornStop();
+    }
+    if (caution !== newCaution) {
+      caution = newCaution;
+      el.annC.classList.toggle("on", caution);
+    }
+
+    if (isFinite(sepA)) {
+      el.stSepA.textContent = "α ≈ " + fmtA(sepA);
+      el.stSepCl.textContent = sepCl.toFixed(2);
+    } else {
+      el.stSepA.textContent = "—";
+      el.stSepCl.textContent = "—";
+    }
+  }
+
+  /* ---------- main loop ---------- */
+  var lastPerf = 0, slowFrames = 0;
+  function frame(t) {
+    if (running) {
+      curSteps = Math.max(1, Math.round(stepsPerFrame * rateBoost));
+      for (var s = 0; s < curSteps; s++) sim.step();
+      sweepTick();
+      if ((sim.state.steps & 255) === 0 && !sim.ok()) {
+        sim.resetFlow();
+        rollReset();
+        toast("Flow exceeded the simulation's stable range — tunnel reset. Try a bit more viscosity or lower speed.", 4200);
+      }
+    }
+    drawField();
+    if (showParticles) moveAndDrawParticles();
+    drawFoilAndVectors();
+    drawGraph();
+    updateStatus();
+
+    // adaptive performance
+    if (lastPerf) {
+      var dt = t - lastPerf;
+      if (dt > 45) { if (++slowFrames > 20 && stepsPerFrame > 4) { stepsPerFrame--; slowFrames = 0; } }
+      else if (dt < 22 && stepsPerFrame < 12) { if (--slowFrames < -40) { stepsPerFrame++; slowFrames = 0; } }
+    }
+    lastPerf = t;
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------- wiring ---------- */
+  el.aoa.addEventListener("input", function () { setAoa(parseFloat(this.value)); });
+el.speed.addEventListener("input", function () {
+    var pct = parseInt(this.value, 10);
+    el.speedOut.textContent = pct + "%" + (pct > 100 ? " · " + (pct / 100).toFixed(1) + "× rate" : "");
+    // Physical inflow is capped at the lattice-stable limit; beyond 100%
+    // the slider raises simulation rate instead, so flow genuinely moves faster.
+    sim.setSpeed(0.1 * Math.min(pct, 100) / 100);
+    rateBoost = Math.max(1, pct / 100);
+  });
+  el.visc.addEventListener("input", function () {
+    var v = parseFloat(this.value);
+    el.viscOut.textContent = v.toFixed(3);
+    sim.setVisc(v);
+  });
+  el.view.addEventListener("change", function () { viewMode = this.value; });
+
+  el.btnPause.addEventListener("click", togglePause);
+  function togglePause() {
+    running = !running;
+    press(el.btnPause, !running);
+    el.btnPause.textContent = running ? "⏸ Pause" : "▶ Run";
+    el.pausedTag.style.display = running ? "none" : "block";
+    if (!running) hornStop(); else if (stalled) hornStart();
+  }
+  el.btnReset.addEventListener("click", function () { sim.resetFlow(); rollReset(); });
+  el.btnSweep.addEventListener("click", function () { if (sweep) stopSweep(); else startSweep(); });
+  el.btnParticles.addEventListener("click", function () {
+    showParticles = !showParticles;
+    press(this, showParticles);
+  });
+  el.btnWind.addEventListener("click", function () {
+    windOn = !windOn;
+    this.textContent = windOn ? "🌬 Wind" : "🔇 Wind";
+    press(this, windOn);
+    if (windOn) windStart(); else windStop();
+  });
+  el.btnHorn.addEventListener("click", function () {
+    hornOn = !hornOn;
+    this.textContent = hornOn ? "🔊 Horn" : "🔇 Horn";
+    press(this, hornOn);
+    if (hornOn && stalled && running) hornStart(); else hornStop();
+  });
+
+  document.querySelectorAll(".presets button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      el.naca.value = this.dataset.naca;
+      applyNaca(this.dataset.naca);
+    });
+  });
+
+  el.naca.addEventListener("change", function () { applyNaca(this.value); });
+  el.naca.addEventListener("input", function () {
+    if (/^\d{4}$/.test(this.value)) applyNaca(this.value);
+  });
+  function applyNaca(v) {
+    if (!/^\d{4}$/.test(v)) { el.nacaBox.classList.add("bad"); return; }
+    var t = parseInt(v.slice(2), 10);
+    if (t < 6 || t > 30) { el.nacaBox.classList.add("bad"); toast("Thickness (last two digits) should be 06–30 for a resolvable shape."); return; }
+    el.nacaBox.classList.remove("bad");
+    if (v !== sim.state.naca) {
+      sim.setNaca(v);
+      clearCurve();
+      document.title = "NACA " + v + " — Virtual Wind Tunnel — PilotDECODER";
+    }
+  }
+
+  window.addEventListener("keydown", function (e) {
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "SELECT")) return;
+    var a = sim.state.aoa;
+    if (e.key === "ArrowUp") { setAoa(a + 0.5); e.preventDefault(); }
+    else if (e.key === "ArrowDown") { setAoa(a - 0.5); e.preventDefault(); }
+    else if (e.key === " ") { togglePause(); e.preventDefault(); }
+    else if (e.key === "r" || e.key === "R") { sim.resetFlow(); rollReset(); }
+    else if (e.key === "t" || e.key === "T") { if (sweep) stopSweep(); else startSweep(); }
+    else if (e.key === "p" || e.key === "P") { el.btnParticles.click(); }
+    else if (e.key === "w" || e.key === "W") { el.btnWind.click(); }
+  });
+
+  setAoa(sim.state.aoa, true);
+  requestAnimationFrame(frame);
+})();
+</script>
+<script src="../assets/site.js?v=1"></script>
+</body>
+</html>

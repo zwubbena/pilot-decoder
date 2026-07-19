@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%23236a66'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
 <title>PilotDECODER: Free METAR Decoder for Pilots</title>
 <meta name="description" content="PilotDECODER is a free METAR decoder for student and private pilots. Paste a raw METAR and get a plain-English breakdown of wind, visibility, clouds, temperature, and altimeter." />
 <meta name="keywords" content="PilotDECODER, pilotdecoder.com, Zane Wubbena, what's a METAR, what is a METAR, METAR, METAR decoder, METAR translator, decode METAR, read METAR, plain English METAR, aviation weather, aviation weather decoder, aviation weather report, aerodrome weather, pilot weather, student pilot, private pilot, ground school, flight training, preflight weather briefing, wind visibility ceiling altimeter, TAF" />
@@ -43,74 +43,17 @@
 }
 </script>
 <script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
+<link rel="stylesheet" href="../assets/site.css?v=7" />
 <style>
-  /* ============ SITE NAV ============ */
-  :root {
-    --white:    #ffffff;
-    --wash:     #f4fbf9;
-    --accent:   #9fe3d8;
-    --mid: #31a1ac;
-    --brand: #236a66;
-    --brand-deep: #1b524f;
-    --ink:      #123330;
-    --ink-soft: #4d6f6a;
-    --rule:     #cfe9e3;
-    --card-bd:  #c9e6e0;
-    --ifr:  #e23b3b;
-  --placeholder: #a1a8ae;
-  --input-ink: #474d54;
-  --focus-ring: rgba(49,161,172,0.25);
-  --btn-shadow: rgba(35,106,102,0.26);
-  --surface: #ffffff;
-  --err-bg: #fdeced;
-  --err-fg: #8f2222;
-  --brand-ink: var(--brand);
-  color-scheme: light;
-    --mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, Menlo, monospace;
-    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  }
-  html[data-theme="blue"] {
-    --wash: #f4fafe; --accent: #a3d8f7; --mid: #0f649c; --brand: #0d6eac; --brand-deep: #0a5787;
-    --ink: #0b2c44; --ink-soft: #45688a; --rule: #cfe7f7; --card-bd: #c6e2f5; --ifr: #d2232a;
-    --focus-ring: rgba(15,100,156,0.28); --btn-shadow: rgba(13,110,172,0.26);
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; overflow-x: hidden; }
-  html { background: var(--surface); }
-  body { font-family: var(--sans); color: var(--ink); background: var(--surface); line-height: 1.55; -webkit-font-smoothing: antialiased; }
-  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
-  /* Top bar */
-  .topbar { background: var(--brand); height: 48px; }
-  .brand { display: inline-block; line-height: 48px; font-family: var(--mono); font-weight: 700; font-size: 19px; letter-spacing: 0.03em; color: var(--white); text-decoration: none; }
-  .brand span { color: var(--accent); }
-  .topbar .wrap { display: flex; justify-content: space-between; align-items: center; }
-  #theme-btn { box-sizing: border-box; position: relative; width: 36px; height: 20px; border-radius: 999px; background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.5); cursor: pointer; padding: 0; }
-  #theme-btn:hover { background: rgba(255,255,255,0.32); }
-  #theme-btn .knob { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--white); transition: transform .15s ease; }
-  html[data-theme="blue"] #theme-btn .knob { transform: translateX(16px); }
-  /* ---------- Masthead ---------- */
-  .masthead { background: var(--surface); color: var(--ink); border-bottom: 3px solid transparent; border-image: linear-gradient(90deg, var(--mid), var(--accent)) 1; padding: 44px 0 20px; }
-  .eyebrow { font-family: var(--mono); font-size: 14px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--mid); margin: 0 0 14px; }
-  .masthead p { margin: 0; max-width: 56ch; color: var(--ink-soft); font-size: 16px; }
-  .masthead-desc { margin-top: 10px !important; font-size: 14px !important; }
-  .panel { background: var(--wash); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 26px 0 30px; }
-  .panel-label { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); margin-bottom: 6px; }
+  /* ============ PAGE-SPECIFIC: METAR decoder ============ */
+  /* Shared tokens, chrome, panel, fields, buttons come from /assets/site.css */
   .panel-label .sms-cta { letter-spacing: normal; text-transform: none; font-weight: 400; }
-  #metar-input { width: 100%; min-height: 120px; resize: vertical; background: var(--surface); color: var(--input-ink); border: 1px solid var(--card-bd); border-radius: 8px; padding: 16px 18px; font-family: var(--mono); font-size: 16px; line-height: 1.6; letter-spacing: 0.01em; }
-  #metar-input::placeholder { color: var(--placeholder); }
-  #metar-input:focus { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
-  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 16px; }
-  #decode-btn { font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--white); background: var(--brand); border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; transition: transform .06s ease, background .15s ease, box-shadow .15s ease; box-shadow: 0 6px 16px var(--btn-shadow); }
-  #decode-btn:hover { background: var(--brand-deep); }
-  #decode-btn:active { transform: translateY(1px); }
-  .link-btn { background: none; border: none; color: var(--ink-soft); font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; padding: 6px 2px; }
-  .link-btn:hover { color: var(--brand); }
+  .metar-source-hint { margin: 6px 0 0; }
   .output { padding: 8px 20px 16px; }
   .output:empty { padding: 0; }
-  .error-note { margin: 26px 0 0; padding: 14px 18px; border-left: 3px solid var(--ifr); background: var(--err-bg); color: var(--err-fg); font-size: 15px; border-radius: 0 6px 6px 0; }
   .decode-table { width: 100%; border-collapse: collapse; margin: 24px 0 8px; font-size: 15px; }
-  .decode-table caption { text-align: left; font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid); padding-bottom: 10px; }
-  .decode-table th { text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); border-bottom: 2px solid var(--brand); padding: 0 8px 8px 0; }
+  .decode-table caption { text-align: left; font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--brand); padding-bottom: 10px; }
+  .decode-table th { text-align: left; font-family: var(--sans); font-size: 12.5px; font-weight: 600; color: var(--ink-soft); border-bottom: 2px solid var(--brand); padding: 0 8px 8px 0; }
   .decode-table th:nth-child(1) { width: 162px; } .decode-table th:nth-child(2) { width: 96px; }
   .decode-table td { vertical-align: top; padding: 11px 8px 11px 0; border-bottom: 1px solid var(--rule); }
   .decode-table td.token { font-family: var(--mono); font-weight: 600; font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
@@ -119,25 +62,7 @@
   .decode-table tbody tr { opacity: 0; animation: rowIn .34s ease forwards; }
   @keyframes rowIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   .block { margin-top: 38px; }
-  .block h2 { font-family: var(--mono); font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand); margin: 0 0 6px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
   .block .lead { margin: 14px 0 12px; font-size: 16px; color: var(--ink); }
-  .summary-list { margin: 12px 0 0; padding: 0; list-style: none; }
-  .summary-list li { position: relative; padding: 7px 0 7px 22px; font-size: 15.5px; }
-  .summary-list li::before { content: ""; position: absolute; left: 2px; top: 15px; width: 7px; height: 7px; border-radius: 50%; background: var(--mid); }
-  .disclaimer { margin: 0 0 14px; font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
-  .copyright { margin-top: 24px; background: var(--brand); color: var(--white); padding: 14px 0; font-size: 13px; }
-  .copyright a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
-  .copyright a:hover { color: var(--accent); }
-  .source { margin: 0 0 12px; font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
-  .source-list { margin: 4px 0 12px; padding-left: 20px; list-style: disc outside; }
-  .source-list li { margin: 2px 0; }
-  code { font-family: var(--mono); font-size: 0.9em; background: var(--wash); color: var(--brand-ink); padding: 1px 6px; border-radius: 4px; }
-  .metar-source-hint { margin: 6px 0 0; font-size: 13.5px; color: var(--ink-soft); font-family: var(--sans); }
-  .metar-source-hint a { color: var(--mid); text-decoration: underline; text-underline-offset: 3px; }
-  .metar-source-hint a:hover { color: var(--brand); }
-  footer { background: var(--wash); border-top: 1px solid var(--rule); padding: 28px 0 0; font-size: 13px; color: var(--ink-soft); margin-top: 0; }
-  footer a { color: var(--mid); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
   .decode-table td.plain .formula { margin: 6px 0 0; padding-left: 20px; list-style: disc outside; font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft); line-height: 1.55; }
   .decode-table td.plain .formula li { display: list-item; margin: 1px 0; }
   .decode-table td.plain .note-line { margin: 7px 0 0; padding-left: 20px; list-style: disc outside; font-size: 12.5px; font-style: italic; color: var(--ink-soft); line-height: 1.5; }
@@ -151,31 +76,32 @@
   .viz-body svg.tscale { width: 100%; max-width: 238px; height: auto; display: block; }
   .decode-table td.plain .note-line li { display: list-item; margin: 1px 0; }
   @media (max-width: 560px) { .decode-table th:nth-child(1), .decode-table th:nth-child(2), .decode-table td.element, .decode-table td.token { width: auto; white-space: normal; } .decode-table td.element, .decode-table td.token { font-size: 12px; } }
-  @media (prefers-reduced-motion: reduce) { .decode-table tbody tr { opacity: 1; animation: none; } #decode-btn { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .decode-table tbody tr { opacity: 1; animation: none; } }
 </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="wrap"><a class="brand" href="/">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme (current: green)" title="Color theme"><span class="knob"></span></button></div>
+    <div class="wrap"><a class="brand" href="../index.html">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme (current: teal)" title="Color theme"><span class="knob"></span></button></div>
   </header>
   <header class="masthead">
     <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">METAR Decoder</span></nav>
       <h1 class="eyebrow"><strong>METAR Decoder</strong></h1>
       <p class="masthead-desc">A METAR (<b>MET</b>eorological <b>A</b>erodrome <b>R</b>eport) is an “aviation routine weather report” used by pilots to observe airport weather conditions. Use this tool to translate a coded METAR into plain English.</p>
     </div>
   </header>
   <section class="panel">
     <div class="wrap">
-      <label class="panel-label" for="metar-input">Enter METAR <a class="sms-cta" href="sms:358782?body=METAR%20KAUS">(Get METAR via text)</a></label>
+      <label class="panel-label" for="metar-input">Enter METAR <a class="sms-cta" href="sms:358782?body=METAR%20KGTU">(Get METAR via text)</a></label>
       <p class="metar-source-hint">Paste a complete METAR into the text box, then select Decode METAR. No METAR handy? Select Load sample to see it work.</p>
-      <textarea id="metar-input" spellcheck="false" placeholder="METAR KAUS 282053Z AUTO 19011G21KT 160V210 M1/4SM R17L/2400FT +TSRA BR SCT015 BKN030CB OVC050 23/22 A2984 RMK AO2 SLP102 T02330222 56021 ="></textarea>
+      <textarea id="metar-input" class="text-input" spellcheck="false" placeholder="METAR KAUS 282053Z AUTO 19011G21KT 160V210 M1/4SM R17L/2400FT +TSRA BR SCT015 BKN030CB OVC050 23/22 A2984 RMK AO2 SLP102 T02330222 56021 ="></textarea>
       <ul class="metar-source-hint">
-        <li>Text <code>M [Airport Code]</code> to <a href="sms:358782">358-782</a> (FLTSVC = Flight Service) to get latest METAR report (e.g., KAUS).</li>
+        <li>Text <code>M [Airport Code]</code> to <a href="sms:358782">358-782</a> (FLTSVC = Flight Service) to get latest METAR report (e.g., KGTU).</li>
         <li>Look up an airport&rsquo;s International Civil Aviation Organization (ICAO) code here: <a href="https://www.airnav.com/airports/" target="_blank" rel="noopener">airnav.com/airports</a>.</li>
         <li>Look up an airport&rsquo;s METAR here: <a href="https://aviationweather.gov/data/metar/" target="_blank" rel="noopener">aviationweather.gov</a>.</li>
       </ul>
       <div class="controls">
-        <button id="decode-btn" type="button">Decode METAR</button>
+        <button id="decode-btn" class="btn-primary" type="button">Decode METAR</button>
         <button id="sample-btn" class="link-btn" type="button">Load sample</button>
         <button id="clear-btn" class="link-btn" type="button">Reset</button>
       </div>
@@ -284,28 +210,7 @@ document.getElementById("decode-btn").addEventListener("click",runDecode);
 document.getElementById("sample-btn").addEventListener("click",function(){document.getElementById("metar-input").value=SAMPLE;runDecode();});
 document.getElementById("clear-btn").addEventListener("click",function(){document.getElementById("metar-input").value="";document.getElementById("output").innerHTML="";document.getElementById("metar-input").focus();});
 document.getElementById("metar-input").addEventListener("keydown",function(e){if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){e.preventDefault();runDecode();}});
-document.getElementById("yr").textContent=new Date().getFullYear();
-(function(){
-  var FAV={green:"%23236a66",blue:"%230d6eac"};
-  var ORDER=["green","blue"];
-  var btn=document.getElementById("theme-btn");
-  function stored(){try{var s=localStorage.getItem("pd-theme");if(s==="green"||s==="blue")return s;}catch(e){}return null;}
-  var cur=stored()||"green";
-  function apply(t){
-    cur=t;
-    if(t==="green"){document.documentElement.removeAttribute("data-theme");}
-    else{document.documentElement.setAttribute("data-theme",t);}
-    if(btn)btn.setAttribute("aria-label","Switch color theme (current: "+t+")");
-    var fav=document.querySelector('link[rel="icon"]');
-    if(fav){for(var k in FAV){fav.href=fav.href.replace(FAV[k],FAV[t]);}}
-  }
-  apply(cur);
-  if(btn)btn.addEventListener("click",function(){
-    var next=ORDER[(ORDER.indexOf(cur)+1)%ORDER.length];
-    apply(next);
-    try{localStorage.setItem("pd-theme",next);}catch(e){}
-  });
-})();
 </script>
+<script src="../assets/site.js?v=1"></script>
 </body>
 </html>
