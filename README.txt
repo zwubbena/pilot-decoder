@@ -20,8 +20,7 @@ Copy the block below into Claude Cowork as context before working on the site.
 │                               (underscore folder = not published by GitHub Pages)
 ├── metar/index.html          → METAR Decoder
 ├── density-altitude/index.html → Density Altitude Decoder
-├── windtunnel/index.html     → Wind Tunnel Decoder
-└── sectional/index.html      → The Sectional, Layer by Layer
+└── windtunnel/index.html     → Wind Tunnel Decoder
 ```
 No build step, no framework, no external dependencies (no CDN fonts/libraries).
 Each tool lives in its own folder as one `index.html`; the folder name is the
@@ -72,9 +71,6 @@ CustomEvent on `document` (listen for it if a page draws canvas/SVG in theme
 colors and needs a redraw). Handled entirely by `/assets/site.js`.
 
 **Intentional page-local palettes (do not "fix" these):**
-- `sectional/` scopes FAA chart symbology to the SVG (`#chart` defines its own
-  `--paper`, `--ink`, `--water`; `--aero-blue`/`--aero-magenta` on the page
-  root). The chart teaches real chart colors, so it stays theme-independent.
 - `windtunnel/` keeps its two canvases as dark "instruments" (`--inst-bg`,
   `--lift`, `--drag`, `--resultant`, `--stall`, `--amber`) so flow colors stay
   readable; the page around them is fully site-themed.
