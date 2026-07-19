@@ -3,38 +3,98 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PilotDECODER: Free Pilot Tools &#8212; METAR Decoder, Density Altitude, Wind Tunnel &amp; Sectional</title>
-<meta name="description" content="Free online pilot tools: decode any METAR into plain English, calculate density altitude step by step, watch air flow over a wing in a virtual wind tunnel, and learn the sectional chart layer by layer. For student pilots, flight instructors, and VFR flyers." />
-<meta name="keywords" content="METAR decoder, decode METAR, aviation weather, density altitude calculator, pressure altitude, E6B, flight computer, virtual wind tunnel, angle of attack, sectional chart explained, VFR sectional, FAA private pilot written test, ground school, student pilot tools, flight training, preflight planning, VFR" />
+<title>PilotDECODER: Free METAR Decoder &amp; Density Altitude Calculator</title>
+<meta name="description" content="Free online pilot tools: decode any METAR into plain English and calculate density altitude step by step, the way the FAA written test expects. For student pilots, flight instructors, and VFR flyers." />
+<meta name="keywords" content="METAR decoder, decode METAR, aviation weather, density altitude calculator, pressure altitude, E6B, flight computer, FAA private pilot written test, ground school, student pilot tools, flight training, preflight planning, VFR" />
 <link rel="canonical" href="https://pilotdecoder.com/" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://pilotdecoder.com/" />
 <meta property="og:site_name" content="PilotDECODER" />
-<meta property="og:title" content="PilotDECODER: Free Pilot Tools for Student Pilots &amp; VFR Flyers" />
-<meta property="og:description" content="Free online pilot tools: METAR decoder, density altitude calculator, virtual wind tunnel, and the sectional chart built up layer by layer." />
+<meta property="og:title" content="PilotDECODER: Free METAR Decoder &amp; Density Altitude Calculator" />
+<meta property="og:description" content="Free online pilot tools: decode any METAR into plain English and calculate density altitude step by step. For student pilots, flight instructors, and VFR flyers." />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","name":"PilotDECODER","url":"https://pilotdecoder.com/","description":"Free aviation tools for student pilots, flight instructors, and VFR flyers.","author":{"@type":"Person","name":"Zane Wubbena","url":"https://zanewubbena.com/"},"hasPart":[{"@type":"WebApplication","name":"METAR Decoder","url":"https://pilotdecoder.com/metar/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Decode any METAR (Meteorological Aerodrome Report) into plain English aviation weather."},{"@type":"WebApplication","name":"Density Altitude Calculator","url":"https://pilotdecoder.com/density-altitude/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Calculate density altitude from field elevation, altimeter setting, and temperature with every step of the math shown, plotted on the density altitude chart."},{"@type":"WebApplication","name":"Virtual Wind Tunnel","url":"https://pilotdecoder.com/windtunnel/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Interactive 2D wind tunnel: change the angle of attack on a NACA airfoil and watch lift, drag, buffet, and stall develop in real time."},{"@type":"WebApplication","name":"The Sectional, Layer by Layer","url":"https://pilotdecoder.com/sectional/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"The Austin sectional chart built up from blank paper one layer at a time: terrain, water, culture, obstacles, airports, navaids, and airspace."}]}
+{"@context":"https://schema.org","@type":"WebSite","name":"PilotDECODER","url":"https://pilotdecoder.com/","description":"Free aviation tools for student pilots, flight instructors, and VFR flyers.","author":{"@type":"Person","name":"Zane Wubbena","url":"https://zanewubbena.com/"},"hasPart":[{"@type":"WebApplication","name":"METAR Decoder","url":"https://pilotdecoder.com/metar/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Decode any METAR (Meteorological Aerodrome Report) into plain English aviation weather."},{"@type":"WebApplication","name":"Density Altitude Calculator","url":"https://pilotdecoder.com/density-altitude/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Calculate density altitude from field elevation, altimeter setting, and temperature with every step of the math shown, plotted on the density altitude chart."}]}
 </script>
-<script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
-<link rel="stylesheet" href="assets/site.css?v=7" />
+<script> try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){} </script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%23236a66'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
 <style>
-  /* ============ PAGE-SPECIFIC: homepage ============ */
-  /* Footer has no disclaimer here, so collapse the empty band above the copyright bar. */
-  footer { padding: 0; border-top: 0; }
-  .copyright { margin-top: 0; }
+  :root {
+    --white:    #ffffff;
+    --wash:     #f4fbf9;
+    --accent:   #9fe3d8;
+    --mid: #31a1ac;
+    --brand: #236a66;
+    --brand-deep: #1b524f;
+    --ink:      #123330;
+    --ink-soft: #4d6f6a;
+    --rule:     #cfe9e3;
+    --card-bd:  #c9e6e0;
+    --focus-ring: rgba(49,161,172,0.25);
+    --btn-shadow: rgba(35,106,102,0.26);
+    --surface: #ffffff;
+    color-scheme: light;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, Menlo, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  [data-theme="blue"] {
+    --wash: #f4fafe; --accent: #a3d8f7; --mid: #0f649c; --brand: #0d6eac; --brand-deep: #0a5787;
+    --ink: #0b2c44; --ink-soft: #45688a; --rule: #cfe7f7; --card-bd: #c6e2f5;
+    --focus-ring: rgba(15,100,156,0.28); --btn-shadow: rgba(13,110,172,0.26);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 0; overflow-x: hidden; font-family: var(--sans); color: var(--ink); background: var(--surface); line-height: 1.55; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; min-height: 100vh; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; width: 100%; }
+
+  .topbar { background: var(--brand); height: 48px; }
+  .topbar .wrap { display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: inline-block; line-height: 48px; font-family: var(--mono); font-weight: 700; font-size: 19px; letter-spacing: 0.03em; color: var(--white); text-decoration: none; }
+  .brand span { color: var(--accent); }
+  #theme-btn { box-sizing: border-box; position: relative; width: 36px; height: 20px; border-radius: 999px; background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.5); cursor: pointer; padding: 0; }
+  #theme-btn:hover { background: rgba(255,255,255,0.32); }
+  #theme-btn .knob { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--white); transition: transform .15s ease; }
+  [data-theme="blue"] #theme-btn .knob { transform: translateX(16px); }
+
+  .masthead { background: var(--surface); color: var(--ink); border-bottom: 3px solid transparent; border-image: linear-gradient(90deg, var(--mid), var(--accent)) 1; padding: 44px 0 20px; }
+
+  main { flex: 1 0 auto; padding: 8px 0 40px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .intro-note { margin: 0; font-size: 15px; color: var(--ink); max-width: 62ch; line-height: 1.6; }
+  .intro-note a { color: var(--mid); text-decoration: underline; text-underline-offset: 3px; }
+  .intro-note a:hover { color: var(--brand); }
+  .sec-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--mid); margin: 32px 0 0; }
+  .res-list { list-style: none; margin: 12px 0 0; padding: 0; }
+  .res-list li { padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 14px; line-height: 1.55; }
+  .res-list li:last-child { border-bottom: none; }
+  .res-list a { font-weight: 600; color: var(--brand); text-decoration: none; }
+  .res-list a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .res-desc { color: var(--ink-soft); }
+  .tool-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 14px; }
+  .tool-card { display: block; border: 1px solid var(--card-bd); border-radius: 10px; padding: 18px 20px; text-decoration: none; background: var(--surface); transition: border-color .15s ease, box-shadow .15s ease; }
+  .tool-card:hover { border-color: var(--mid); box-shadow: 0 6px 16px var(--btn-shadow); }
+  .tool-card:focus-visible { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
+  .tool-name { font-family: var(--mono); font-weight: 700; font-size: 16px; color: var(--brand); margin: 0 0 4px; }
+  .tool-desc { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+
+  footer { flex-shrink: 0; background: var(--wash); border-top: 1px solid var(--rule); padding: 28px 0 0; font-size: 13px; color: var(--ink-soft); margin-top: auto; }
+  .disclaimer { margin: 0 0 14px; font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
+  .copyright { margin-top: 24px; background: var(--brand); color: var(--white); padding: 14px 0; font-size: 13px; }
+  .copyright a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
+  .copyright a:hover { color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    #theme-btn .knob, .tool-card { transition: none; }
+  }
 </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="wrap"><a class="brand" href="index.html">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme (current: teal)" title="Color theme"><span class="knob"></span></button></div>
+    <div class="wrap"><a class="brand" href="/">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme (current: green)" title="Color theme"><span class="knob"></span></button></div>
   </header>
 
   <header class="masthead">
     <div class="wrap">
-      <nav class="crumbs" aria-label="Breadcrumb"><span aria-current="page">Home</span></nav>
-      <h1 class="eyebrow">Home</h1>
-      <p class="intro-note">PilotDECODER is my personal aviation learning tool. I&#39;m <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Dr. Zane Wubbena</a>, currently the Managing Director of Forecasting in School Finance at the Texas Education Agency. But I like airplanes, aviation, and learning.</p>
+      <h1 class="sr-only">PilotDECODER: Free Pilot Tools</h1>
+      <p class="intro-note">PilotDECODER is my personal aviation learning tool. Maybe it can be yours, too. I&#39;m <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Dr. Zane Wubbena</a>, currently the Managing Director of Forecasting in School Finance at the Texas Education Agency. But I like airplanes, aviation, and learning.</p>
     </div>
   </header>
 
@@ -42,29 +102,61 @@
     <div class="wrap">
       <h2 class="sec-label">Pilot Tools</h2>
       <ul class="tool-list">
-        <li><a class="tool-card" href="metar/index.html">
+        <li><a class="tool-card" href="/metar/">
           <p class="tool-name">METAR Decoder</p>
-          <p class="tool-desc">Any METAR (Meteorological Aerodrome Report), decoded into plain-English weather.</p>
+          <p class="tool-desc">Decode any METAR (Meteorological Aerodrome Report) into plain-English aviation weather, with wind rose and thermometer visualizations. Works for any airport worldwide.</p>
         </a></li>
-        <li><a class="tool-card" href="density-altitude/index.html">
+        <li><a class="tool-card" href="/density-altitude/">
           <p class="tool-name">Density Altitude Calculator</p>
-          <p class="tool-desc">Density altitude worked line by line, the way the FAA written test does it.</p>
-        </a></li>
-        <li><a class="tool-card" href="windtunnel/index.html">
-          <p class="tool-name">Virtual Wind Tunnel</p>
-          <p class="tool-desc">Watch air flow over a wing &#8212; change the angle of attack, see lift, drag, and stall live.</p>
-        </a></li>
-        <li><a class="tool-card" href="sectional/index.html">
-          <p class="tool-name">The Sectional, Layer by Layer</p>
-          <p class="tool-desc">The Austin sectional chart built up from blank paper, one layer at a time.</p>
+          <p class="tool-desc">Learn how to calculate density altitude from pressure altitude and temperature, with every line of arithmetic shown and your result plotted on the chart, the way the FAA written test works it.</p>
         </a></li>
       </ul>
 
+      <h2 class="sec-label">Resources</h2>
+      <ul class="res-list">
+        <li><a href="https://aviationweather.gov/" target="_blank" rel="noopener">Aviation Weather Center</a><span class="res-desc"> &#183; Current METARs, TAFs, and forecasts from the National Weather Service.</span></li>
+        <li><a href="https://www.1800wxbrief.com/" target="_blank" rel="noopener">1800WXBrief (Flight Service)</a><span class="res-desc"> &#183; Official weather briefings and flight plan filing from Leidos Flight Service.</span></li>
+        <li><a href="https://adip.faa.gov/agis/public/#/public" target="_blank" rel="noopener">FAA Airport Data and Information Portal (ADIP)</a><span class="res-desc"> &#183; Official field elevations, runways, and airport details.</span></li>
+        <li><a href="https://registry.faa.gov/aircraftinquiry/" target="_blank" rel="noopener">FAA N-Number Lookup</a><span class="res-desc"> &#183; Search the aircraft registry by registration number.</span></li>
+        <li><a href="https://www.faa.gov/training_testing/testing/supplements" target="_blank" rel="noopener">FAA Testing Supplement (FAA-CT-8080-2H)</a><span class="res-desc"> &#183; Every figure used on the knowledge test, including the density altitude chart.</span></li>
+        <li><a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak" target="_blank" rel="noopener">Pilot&#39;s Handbook of Aeronautical Knowledge (PHAK)</a><span class="res-desc"> &#183; The FAA&#39;s free ground school textbook.</span></li>
+        <li><a href="https://iacra.faa.gov/" target="_blank" rel="noopener">IACRA</a><span class="res-desc"> &#183; Integrated Airman Certification and Rating Application: student pilot and rating applications.</span></li>
+        <li><a href="https://medxpress.faa.gov/" target="_blank" rel="noopener">FAA MedXPress</a><span class="res-desc"> &#183; Online application for the FAA medical certificate.</span></li>
+        <li><a href="https://www.faa.gov/licenses_certificates/airmen_certification/basic_med" target="_blank" rel="noopener">FAA BasicMed</a><span class="res-desc"> &#183; Fly under BasicMed instead of a traditional medical certificate.</span></li>
+        <li><a href="https://faa.psiexams.com/faa/login" target="_blank" rel="noopener">PSI FAA Testing Portal</a><span class="res-desc"> &#183; Schedule the Private Pilot (PAR) knowledge test.</span></li>
+        <li><a href="https://www.fcc.gov/wireless/universal-licensing-system" target="_blank" rel="noopener">FCC Universal Licensing System</a><span class="res-desc"> &#183; Restricted Radiotelephone Operator Permit and other radio licenses.</span></li>
+        <li><a href="https://www.faasafety.gov/" target="_blank" rel="noopener">FAASafety.gov (WINGS)</a><span class="res-desc"> &#183; FAA safety courses and the WINGS pilot proficiency program.</span></li>
+        <li><a href="https://www.flightradar24.com/" target="_blank" rel="noopener">Flightradar24</a><span class="res-desc"> &#183; Live flight tracking worldwide.</span></li>
+      </ul>
     </div>
   </main>
 
-  <footer><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
+  <footer><div class="wrap"><p class="disclaimer"><b>Disclaimer:</b> Educational only. Not an official source; do not use for flight planning or operational decisions. The Pilot in Command remains solely responsible for flight safety and official verification.</p></div><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
 
-<script src="assets/site.js?v=1"></script>
+<script>
+"use strict";
+document.getElementById("yr").textContent = new Date().getFullYear();
+(function(){
+  var FAV={green:"%23236a66",blue:"%230d6eac"};
+  var ORDER=["green","blue"];
+  var btn=document.getElementById("theme-btn");
+  function stored(){try{var s=localStorage.getItem("pd-theme");if(s==="green"||s==="blue")return s;}catch(e){}return null;}
+  var cur=stored()||"green";
+  function apply(t){
+    cur=t;
+    if(t==="green"){document.documentElement.removeAttribute("data-theme");}
+    else{document.documentElement.setAttribute("data-theme",t);}
+    if(btn)btn.setAttribute("aria-label","Switch color theme (current: "+t+")");
+    var fav=document.querySelector('link[rel="icon"]');
+    if(fav){for(var k in FAV){fav.href=fav.href.replace(FAV[k],FAV[t]);}}
+  }
+  apply(cur);
+  if(btn)btn.addEventListener("click",function(){
+    var next=ORDER[(ORDER.indexOf(cur)+1)%ORDER.length];
+    apply(next);
+    try{localStorage.setItem("pd-theme",next);}catch(e){}
+  });
+})();
+</script>
 </body>
 </html>
