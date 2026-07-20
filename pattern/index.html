@@ -41,9 +41,14 @@
   }
 }
 </script>
+<script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="../assets/site.css?v=10" />
 <style>
-  :root{
+  /* ============ PAGE-SPECIFIC: pattern decoder ============ */
+  /* Site chrome comes from /assets/site.css. The animated "sheet" below
+     keeps its own sectional-poster palette, scoped to .sheet only. */
+  .sheet{
     --buff:#E0EACF;        /* light green terrain */
     --buff-2:#C3D4A8;      /* contour lines */
     --ink:#2E3560;         /* flag navy ink */
@@ -55,28 +60,19 @@
     --cond:"Avenir Next Condensed","AvenirNextCondensed-Medium","Arial Narrow","Helvetica Neue",Arial,sans-serif;
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{background:#F7F1E1;color-scheme:light}
-  html,body{height:100%}
-  body{margin:0;background:var(--paper)}
+  .sheet *{margin:0;padding:0}
   .sheet{
     background:var(--paper);
     color:var(--ink);
     font-family:var(--cond);
     display:flex;flex-direction:column;
-    max-width:760px;margin:0 auto;min-height:100vh;
-    border-left:1px solid var(--ink);border-right:1px solid var(--ink);
+    max-width:760px;margin:18px auto 0;
+    border:1px solid var(--ink);
   }
   /* the app's dark theme can override page backgrounds; every section paints its own */
-  header,.datablock,.controls,.entries,.wind,footer{background:var(--paper)}
-  header{padding:14px 16px 10px;border-bottom:2px solid var(--red)}
-  .homelink{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);text-decoration:none;margin-bottom:7px}
-  .homelink:hover{text-decoration:underline;text-underline-offset:2px}
-  .eyebrow{font-size:11px;letter-spacing:.22em;color:var(--red);text-transform:uppercase;font-weight:600}
-  h1{font-size:30px;line-height:1.05;letter-spacing:.04em;text-transform:uppercase;font-weight:700;margin-top:2px}
-  .subline{margin-top:4px;font-size:13px;letter-spacing:.05em;color:var(--ink-soft);text-transform:uppercase}
+  .datablock,.controls,.entries,.wind{background:var(--paper)}
   .stage{position:relative;background:var(--buff);border-bottom:1px solid var(--ink)}
-  canvas{display:block;width:100%;height:auto;background:#E0EACF}
+  .sheet canvas{display:block;width:100%;height:auto;background:#E0EACF}
   .hint{
     position:absolute;inset:0;display:none;align-items:center;justify-content:center;
     background:rgba(247,241,225,.72);font-size:15px;letter-spacing:.08em;
@@ -166,26 +162,27 @@
   .wind input[type=range]{flex:1;accent-color:var(--red)}
   .wind .val{font-family:var(--mono);font-size:13px;width:52px;text-align:right}
   .windout{margin-top:8px;font-family:var(--mono);font-size:13px;color:var(--blue);letter-spacing:.02em}
-  footer a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
-  footer{
-    padding:10px 16px 16px;line-height:1.7;font-size:11px;letter-spacing:.06em;color:var(--ink-soft);
-    text-transform:uppercase;border-top:1px dotted rgba(46,53,96,.4)
-  }
   @media (max-width:430px){
-    h1{font-size:24px}
     .cell .v{font-size:14px}
     .cell{padding:7px 2px 8px}
   }
 </style>
 </head>
 <body>
+  <header class="topbar">
+    <div class="wrap"><a class="brand" href="../index.html">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme (current: teal)" title="Color theme"><span class="knob"></span></button></div>
+  </header>
+
+  <header class="masthead">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">Pattern Decoder</span></nav>
+      <h1 class="eyebrow"><strong>Pattern Decoder</strong></h1>
+      <p class="masthead-desc">The VFR traffic pattern at Georgetown Executive (KGTU), animated: closed-traffic circuits, the standard entries, and the radio calls that go with them. Traffic Pattern Altitude 1,000 ft above ground per AC 90-66; tower closed, CTAF procedures. The wind sliders pick the runway &mdash; airplanes land into the wind.</p>
+    </div>
+  </header>
+
+  <main>
 <div class="sheet">
-<header>
-  <a class="homelink" href="../index.html">&larr; PilotDECODER · Home</a>
-  <div class="eyebrow">★&nbsp; VFR Traffic Pattern · Georgetown Exec (KGTU) &nbsp;★</div>
-  <h1>Pattern Decoder</h1>
-  <div class="subline">Runway <span id="hdrRwy">18</span> · into the wind · TPA 1,000 ft AGL · AC 90-66 · tower closed, CTAF procedures</div>
-</header>
 
 <div class="stage">
   <canvas id="cv" aria-label="Animated aircraft flying traffic pattern entries and circuits over a sectional-style chart"></canvas>
@@ -250,9 +247,16 @@
 
 <div class="fnote"><b>Why 1,000 ft?</b> There is no universal regulatory pattern altitude — the official Traffic Pattern Altitude (TPA) is whatever the FAA Chart Supplement publishes for the airport, and published values vary. Where none is published, AC 90-66 recommends 1,000 ft above ground level. At KGTU, with a field elevation of about 790 ft MSL, that puts the pattern near 1,790 ft on your altimeter.</div>
 
-<footer>Speeds reflect a typical C172 training profile (KIAS) · For ground study only · Not for navigation<br>
-References: <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_3.html" target="_blank" rel="noopener">FAA AIM Chapter 4, Section 3 — Airport Operations</a> · <a href="https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dafd/" target="_blank" rel="noopener">FAA Chart Supplement — published TPA &amp; KGTU airport data</a></footer>
 </div>
+  </main>
+
+  <footer><div class="wrap"><div class="source"><b>References:</b>
+<ul class="source-list">
+<li>Pattern procedures and radio phraseology: <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_3.html" target="_blank" rel="noopener">FAA AIM Chapter 4, Section 3, Airport Operations</a> and FAA Advisory Circular AC 90-66 (Non-Towered Airport Flight Operations)</li>
+<li>Published TPA, frequencies, and KGTU airport data: <a href="https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dafd/" target="_blank" rel="noopener">FAA Chart Supplement</a></li>
+</ul>
+</div>
+<p class="disclaimer"><b>Disclaimer:</b> Educational only. Speeds reflect a typical Cessna 172 training profile (KIAS); geography is schematic. Not an official source; not for navigation or operational decisions. The Pilot in Command remains solely responsible for flight safety and official verification.</p></div><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
 
 <script>
 (function(){
@@ -1046,7 +1050,6 @@ function applyRunway(){
   st.rwy=want; st.rsgn=want==="18"?1:-1;
   st.trail=[]; st.puffs=[];
   resize(); renderCalls();
-  var h=document.getElementById("hdrRwy"); if(h) h.textContent=want;
   if(st.booted) say(radioCall("wind shift, now using Runway "+st.rwy), "RWY "+st.rwy, null);
 }
 function windUi(){
@@ -1066,5 +1069,6 @@ if(reduced){setPlay(false);hint.classList.add("show");}
 requestAnimationFrame(frame);
 })();
 </script>
+<script src="../assets/site.js?v=1"></script>
 </body>
 </html>
