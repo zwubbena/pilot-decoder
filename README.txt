@@ -20,7 +20,9 @@ Copy the block below into Claude Cowork as context before working on the site.
 │                               (underscore folder = not published by GitHub Pages)
 ├── metar/index.html          → METAR Decoder
 ├── density-altitude/index.html → Density Altitude Decoder
-└── windtunnel/index.html     → Wind Tunnel Decoder
+├── windtunnel/index.html     → Wind Tunnel Decoder
+└── pattern/index.html        → Pattern Decoder (standalone art direction by design;
+                                carries its own styles like a sectional-chart poster)
 ```
 No build step, no framework, no external dependencies (no CDN fonts/libraries).
 Each tool lives in its own folder as one `index.html`; the folder name is the
