@@ -523,8 +523,11 @@ function drawObstacle(){
   ctx.beginPath(); ctx.moveTo(p[0]-6,p[1]); ctx.lineTo(p[0]+6,p[1]);
   ctx.moveTo(p[0],p[1]); ctx.lineTo(p[0],p[1]-13); ctx.stroke();
   ctx.beginPath(); ctx.arc(p[0],p[1]-15,1.8,0,7); ctx.fill();
-  ctx.font="10px "+MONO(); ctx.textAlign="center";
-  ctx.fillText("(432)",p[0],p[1]+13);
+  /* sectional obstacle notation: bold = tip altitude MSL, (parens) = height AGL */
+  ctx.font="700 10px "+MONO(); ctx.textAlign="center";
+  ctx.fillText("1221",p[0],p[1]+13);
+  ctx.font="10px "+MONO();
+  ctx.fillText("(432)",p[0],p[1]+24);
 }
 function starPath(cx,cy,r){
   ctx.beginPath();
