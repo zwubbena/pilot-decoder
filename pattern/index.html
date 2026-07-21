@@ -483,7 +483,7 @@ function resize(){
 window.addEventListener("resize",resize);
 
 function w2s(x,y){ return [CX+st.mirror*st.rsgn*x*SCALE, CY+st.rsgn*y*SCALE]; }   /* flight world: pattern, entries, aircraft */
-function w2sF(x,y){ return [CX+st.mirror*x*SCALE, CY+y*SCALE]; }                  /* fixed world: the airport itself */
+function w2sF(x,y){ return [CX+x*SCALE, CY+y*SCALE]; }                            /* fixed world: the airport itself (north up, never flips) */
 
 /* ---------- chart furniture ---------- */
 var INK="#2E3560", RED="#B22234", BLUE="#2B5FAD";
@@ -518,7 +518,7 @@ function contour(x0,y0,pts){
   ctx.stroke();
 }
 function drawObstacle(){
-  var p=w2sF(-165, 150); /* w2s mirrors x, so this always lands opposite the pattern */
+  var p=w2sF(-165, 150); /* west of the field, opposite the circuit */
   ctx.strokeStyle=BLUE; ctx.fillStyle=BLUE; ctx.lineWidth=1.6;
   ctx.beginPath(); ctx.moveTo(p[0]-6,p[1]); ctx.lineTo(p[0]+6,p[1]);
   ctx.moveTo(p[0],p[1]); ctx.lineTo(p[0],p[1]-13); ctx.stroke();
@@ -623,29 +623,46 @@ function drawEntryRoute(){
   (e.arrowF||[0.25,0.65]).forEach(function(f){ arrowAt(sampleOn(e.path,e.path.total*f),BLUE); });
 }
 
+/* Leg labels — ONE rule instead of per-runway offsets: each label sits just
+   OUTSIDE the racetrack at its leg's midpoint, pushed perpendicular to the
+   leg away from the pattern's center. Because the direction is derived from
+   the transformed geometry, labels land correctly for either runway. */
 var LEGLBL=[
-  {n:"UPWIND",s:290,dx:-16,anch:"end"},
-  {n:"CROSSWIND",s:480,dx:0,dy:28,anch:"center"},
-  {n:"DOWNWIND",s:800,dx:10,anch:"start"},
-  {n:"BASE LEG",s:1120,dx:0,dy:-19,anch:"center"},
-  {n:"FINAL\nAPPROACH",s:20,dx:-16,dy:-18,anch:"end"}
+  {n:"UPWIND",          s:302},
+  {n:"CROSSWIND",       s:480},
+  {n:"DOWNWIND",        s:800},
+  {n:"BASE LEG",        s:1120},
+  {n:"FINAL\nAPPROACH", s:(1225+(TOTAL-1225+90)/2)%TOTAL}  /* midpoint of the wrapped final leg */
 ];
 function drawLegLabels(cur){
   ctx.font="600 12px "+COND();
+  var c=w2s(D/2,0);                             /* pattern center on screen */
+  var lh=13, pad=17;
   LEGLBL.forEach(function(L){
     var q=sample(L.s), p=w2s(q.x,q.y);
-    var hf=st.mirror*st.rsgn;                 /* horizontal flip of the flight world */
-    var dx=(L.dx||0)*hf, dy=(L.dy||0)*st.rsgn;
-    var anch=L.anch==="center"?"center":(hf===1?L.anch:(L.anch==="end"?"start":"end"));
+    /* screen-space tangent of the leg, then the outward-facing normal */
+    var tx=st.mirror*st.rsgn*q.tx, ty=st.rsgn*q.ty;
+    var nx=-ty, ny=tx;
+    if((p[0]-c[0])*nx+(p[1]-c[1])*ny<0){ nx=-nx; ny=-ny; }
     var lines=L.n.split("\n");
     var wd=0; lines.forEach(function(ln){var w0=ctx.measureText(ln).width; if(w0>wd)wd=w0;});
-    var bx=p[0]+dx, by=p[1]+dy;
-    if(anch==="start"&&bx+wd>W-6) bx=W-6-wd;          /* never run off an edge */
+    var blockH=lh*(lines.length-1);
+    var bx=p[0]+nx*pad, by=p[1]+ny*pad, anch;
+    if(Math.abs(nx)>Math.abs(ny)){              /* beside a vertical leg */
+      anch=nx>0?"start":"end";
+      by+=-blockH/2+4;                          /* center the block on the leg */
+    }else{                                      /* above or below a horizontal leg */
+      anch="center";
+      by+= ny>0 ? 11 : -(blockH+4);
+    }
+    if(anch==="start"&&bx+wd>W-6) bx=W-6-wd;    /* never run off an edge */
     if(anch==="end"&&bx-wd<6) bx=6+wd;
     if(anch==="center"){ if(bx+wd/2>W-6) bx=W-6-wd/2; if(bx-wd/2<6) bx=6+wd/2; }
+    if(by-12<4) by=16;
+    if(by+blockH>H-8) by=H-8-blockH;
     ctx.textAlign=anch;
     var active=(cur===L.n.replace(/\n/g," "));
-    var lh=13, totH=16.5+(lines.length-1)*lh;   /* 4px pad above caps and below baseline */
+    var totH=16.5+blockH;
     if(active){
       var x0=anch==="center"?bx-wd/2-5:(anch==="start"?bx-5:bx-wd-5);
       ctx.fillStyle=RED; ctx.fillRect(x0,by-12.5,wd+10,totH);
