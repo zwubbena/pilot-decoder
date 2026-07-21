@@ -246,7 +246,7 @@
   <table class="logtable" aria-label="Radio call log"><tbody id="logBody"></tbody></table>
 </div>
 
-<div class="fnote"><b>Why 1,000 ft?</b> There is no universal regulatory pattern altitude — the official Traffic Pattern Altitude (TPA) is whatever the FAA Chart Supplement publishes for the airport, and published values vary. Where none is published, the FAA&#39;s Advisory Circular (<a href="https://www.faa.gov/documentlibrary/media/advisory_circular/ac_90-66c.pdf" target="_blank" rel="noopener">AC 90-66C</a>) recommends a traffic pattern altitude (TPA) of 1,000 feet above ground level (AGL). At KGTU, with a field elevation of about 790 ft MSL, that puts the pattern near 1,790 ft on your altimeter.</div>
+<div class="fnote"><b>Why 1,000 ft?</b> There is no universal regulatory pattern altitude — the official Traffic Pattern Altitude (TPA) is whatever the FAA Chart Supplement publishes for the airport, and published values vary. Where none is published, the FAA&#39;s Advisory Circular (<a href="https://www.faa.gov/documentlibrary/media/advisory_circular/ac_90-66c.pdf" target="_blank" rel="noopener">AC 90-66C</a>) recommends a traffic pattern altitude (TPA) of 1,000 feet above ground level (AGL). At KGTU, with a field elevation of 789.5 ft above mean sea level (MSL), that puts the pattern near 1,790 ft on your altimeter.</div>
 
 </div>
   </div>
@@ -518,7 +518,7 @@ function contour(x0,y0,pts){
   ctx.stroke();
 }
 function drawObstacle(){
-  var p=w2sF(-165, 150); /* west of the field, opposite the circuit */
+  var p=w2sF(-200, 172); /* west of the field, opposite the circuit — pushed out clear of the RWY 18 upwind label */
   ctx.strokeStyle=BLUE; ctx.fillStyle=BLUE; ctx.lineWidth=1.6;
   ctx.beginPath(); ctx.moveTo(p[0]-6,p[1]); ctx.lineTo(p[0]+6,p[1]);
   ctx.moveTo(p[0],p[1]); ctx.lineTo(p[0],p[1]-13); ctx.stroke();
@@ -647,13 +647,17 @@ function drawLegLabels(cur){
     var lines=L.n.split("\n");
     var wd=0; lines.forEach(function(ln){var w0=ctx.measureText(ln).width; if(w0>wd)wd=w0;});
     var blockH=lh*(lines.length-1);
-    var bx=p[0]+nx*pad, by=p[1]+ny*pad, anch;
+    var bx, by, anch;
     if(Math.abs(nx)>Math.abs(ny)){              /* beside a vertical leg */
+      /* on the runway line, clear the whole airport turf, not just the track */
+      var padH = Math.abs(q.x)<1 ? 48*SCALE+12 : pad;
+      bx=p[0]+nx*padH;
+      by=p[1]-blockH/2+4;                       /* center the block on the leg */
       anch=nx>0?"start":"end";
-      by+=-blockH/2+4;                          /* center the block on the leg */
     }else{                                      /* above or below a horizontal leg */
-      anch="center";
-      by+= ny>0 ? 11 : -(blockH+4);
+      bx=p[0]; anch="center";
+      /* same visual gap between track and text on either side */
+      by = ny>0 ? p[1]+pad+12 : p[1]-pad-3-blockH;
     }
     if(anch==="start"&&bx+wd>W-6) bx=W-6-wd;    /* never run off an edge */
     if(anch==="end"&&bx-wd<6) bx=6+wd;
