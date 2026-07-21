@@ -42,7 +42,7 @@
 </script>
 <script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
-<link rel="stylesheet" href="../assets/site.css?v=10" />
+<link rel="stylesheet" href="../assets/site.css?v=11" />
 <style>
   /* ============ PAGE-SPECIFIC: density altitude calculator ============ */
   /* Shared tokens, chrome, panel, fields, buttons come from /assets/site.css */
@@ -95,9 +95,12 @@
   .chart-note li { display: list-item; margin: 1px 0; }
   .howto-cap { font-family: var(--sans); font-size: 13px; font-weight: 700; color: var(--ink-soft); margin: 18px 0 0; }
 
-  footer { margin-top: 48px; }
-
   @media (max-width: 560px) {
+    /* the chart shrinks ~2x on phones; scale its text up to stay legible */
+    #da-chart .tick-label { font-size: 16px; }
+    #da-chart .tick-label-f { display: none; }
+    #da-chart .axis-title { font-size: 17px; }
+    #da-chart .pa-label, #da-chart .isa-label { font-size: 14px; }
     .calc-chain { font-size: 12.5px; }
     .gen-formula { font-size: 13px; }
     .result-banner .rb-big { font-size: 24px; }

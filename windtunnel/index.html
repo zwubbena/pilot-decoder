@@ -42,7 +42,7 @@
 </script>
 <script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
-<link rel="stylesheet" href="../assets/site.css?v=10" />
+<link rel="stylesheet" href="../assets/site.css?v=11" />
 <style>
   /* ============ PAGE-SPECIFIC: virtual wind tunnel ============ */
   /* Shared tokens, chrome, buttons, cards come from /assets/site.css.
@@ -83,12 +83,18 @@
   .tunnel-pause { position: absolute; top: 10px; left: 10px; z-index: 5; font-family: var(--sans); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 5px; border: 1px solid rgba(0,0,0,0.15); background: rgba(255,255,255,0.92); color: #333333; cursor: pointer; }
   .tunnel-pause:hover { background: #ffffff; }
   .tunnel-pause.active { background: var(--amber); border-color: var(--amber); color: #181104; }
+  /* the tunnel shrinks on phones; scale the overlays with it */
+  @media (max-width: 640px) {
+    .tunnel-pause { font-size: 10px; padding: 6px 9px; top: 6px; left: 6px; }
+    .annunciators { top: 6px; right: 6px; gap: 4px; }
+    .ann { font-size: 9px; padding: 3px 6px; letter-spacing: .1em; }
+  }
   .toast { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); background: rgba(9,19,22,.92); border: 1px solid var(--inst-line); border-radius: 8px; padding: 8px 14px; font-size: 13px; color: #daf1f3; font-family: var(--sans); display: none; max-width: 90%; }
 
   /* the one control you use most, right under the picture it changes */
   .aoa-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
   .aoa-row label { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--mid); white-space: nowrap; }
-  .aoa-row input[type="range"] { flex: 1; height: 30px; margin: 0; }
+  .aoa-row input[type="range"] { flex: 1; height: 30px; margin: 0; min-width: 140px; }
   .aoa-row output { font-family: var(--mono); font-size: 16px; font-weight: 700; color: var(--brand); min-width: 66px; text-align: right; }
 
   .readbar { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 0; font-family: var(--mono); }
@@ -118,11 +124,12 @@
   .ctl .sub { color: var(--ink-soft); font-size: 11px; }
   .ctl output { font-family: var(--mono); font-size: 13px; color: var(--brand); font-weight: 700; }
   .ctl input[type="range"] { width: 100%; height: 22px; }
-  .ctl select.select { padding: 6px 10px; font-size: 13px; font-family: var(--sans); border-radius: 6px; }
+  .ctl select.select { padding: 6px 10px; font-size: 16px; font-family: var(--sans); border-radius: 6px; }
+  @media (min-width: 700px) { .ctl select.select { font-size: 13px; } }
   .btnrow { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
   .btnrow .btn-secondary { padding: 5px 9px; font-size: 12.5px; }
   .presets { display: flex; gap: 6px; flex-wrap: wrap; }
-  #nacaInput { width: 6.5ch; background: var(--surface); color: var(--input-ink); border: 1px solid var(--card-bd); border-radius: 6px; font-family: var(--mono); font-size: 15px; font-weight: 600; text-align: center; padding: 4px 6px; letter-spacing: .08em; }
+  #nacaInput { width: 6.5ch; background: var(--surface); color: var(--input-ink); border: 1px solid var(--card-bd); border-radius: 6px; font-family: var(--mono); font-size: 16px; font-weight: 600; text-align: center; padding: 4px 6px; letter-spacing: .08em; }
   #nacaInput:focus { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
   .naca-box { display: flex; align-items: center; gap: 8px; }
   .naca-box .naca-err { font-family: var(--mono); font-size: 11px; color: var(--ifr); display: none; }
@@ -148,7 +155,6 @@
   .learn > .calc-head { margin-top: 0; }
   .learn .block-head { margin-top: 26px; }
   .learn p { max-width: 70ch; color: var(--ink); margin: 0 0 12px; }
-  footer { margin-top: 30px; }
 
   @media (prefers-reduced-motion: reduce) { .ann.warn.on { animation: none; } }
 </style>
@@ -776,6 +782,18 @@ if (typeof document !== "undefined" && document.getElementById) (function () {
   function hornStop() {
     if (hornOsc) { try { hornOsc.stop(); } catch (e) {} hornOsc.disconnect(); hornOsc = null; }
   }
+  /* short arming chirp so toggling the horn is audibly confirmed —
+     the horn itself only sounds during an actual stall */
+  function hornChirp() {
+    var ctx = ensureCtx();
+    if (!ctx) return;
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = "square"; o.frequency.value = 620;
+    g.gain.value = 0.03;
+    o.connect(g); g.connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + 0.18);
+  }
 
   /* ---------- ambient wind sound ----------
      Broadband noise shaped by tunnel speed; the live buffet signal (the same
@@ -811,7 +829,7 @@ if (typeof document !== "undefined" && document.getElementById) (function () {
     var t = audioCtx.currentTime;
     var spd = (parseInt(el.speed.value, 10) || 100) / 100;    // 0.4 .. 2.2
     var run = running ? 1 : 0;
-    var g = run * Math.min(0.34, 0.05 + 0.055 * spd * spd);   // ~dynamic pressure
+    var g = run * Math.min(0.45, 0.10 + 0.07 * spd * spd);    // ~dynamic pressure
     var cut = 350 + 900 * spd;                                 // brighter when faster
     var rough = Math.min(1, sd / 0.25);                        // buffet 0..1
     var dev = isFinite(cl) && isFinite(mean)
@@ -1351,7 +1369,8 @@ el.speed.addEventListener("input", function () {
     hornOn = !hornOn;
     this.textContent = hornOn ? "🔊 Horn" : "🔇 Horn";
     press(this, hornOn);
-    if (hornOn && stalled && running) hornStart(); else hornStop();
+    if (hornOn) { if (stalled && running) hornStart(); else hornChirp(); }
+    else hornStop();
   });
 
   function syncPresets() {
@@ -1391,7 +1410,7 @@ el.speed.addEventListener("input", function () {
     var a = sim.state.aoa;
     if (e.key === "ArrowUp") { setAoa(a + 0.5); e.preventDefault(); }
     else if (e.key === "ArrowDown") { setAoa(a - 0.5); e.preventDefault(); }
-    else if (e.key === " ") { togglePause(); e.preventDefault(); }
+    else if (e.key === " ") { if (e.target && e.target.tagName === "BUTTON") return; togglePause(); e.preventDefault(); }
     else if (e.key === "r" || e.key === "R") { sim.resetFlow(); rollReset(); }
     else if (e.key === "t" || e.key === "T") { if (sweep) stopSweep(); else startSweep(); }
     else if (e.key === "p" || e.key === "P") { el.btnParticles.click(); }

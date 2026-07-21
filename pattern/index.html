@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PilotDECODER: Pattern Decoder — The VFR Traffic Pattern, Animated</title>
 <meta name="description" content="Watch the VFR traffic pattern fly itself: closed-traffic circuits, the 45, midfield crosswind, teardrop, and straight-in entries, with AC 90-66 radio calls, live wind, and runway selection — at Georgetown Executive (KGTU)." />
 <meta name="keywords" content="traffic pattern, VFR traffic pattern, pattern entry, 45 degree entry, teardrop entry, midfield crosswind, straight-in, CTAF radio calls, AC 90-66, traffic pattern altitude, TPA, KGTU, student pilot, private pilot, ground school, flight training, PilotDECODER" />
@@ -43,7 +42,7 @@
 </script>
 <script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
-<link rel="stylesheet" href="../assets/site.css?v=10" />
+<link rel="stylesheet" href="../assets/site.css?v=11" />
 <style>
   /* ============ PAGE-SPECIFIC: pattern decoder ============ */
   /* Site chrome comes from /assets/site.css. The animated "sheet" below
@@ -70,22 +69,22 @@
     border:1px solid var(--ink);
   }
   /* the app's dark theme can override page backgrounds; every section paints its own */
-  .datablock,.controls,.entries,.wind{background:var(--paper)}
+  .sheet .datablock,.sheet .controls,.sheet .entries,.sheet .wind{background:var(--paper)}
   .stage{position:relative;background:var(--buff);border-bottom:1px solid var(--ink)}
   .sheet canvas{display:block;width:100%;height:auto;background:#E0EACF}
-  .hint{
+  .sheet .hint{
     position:absolute;inset:0;display:none;align-items:center;justify-content:center;
     background:rgba(247,241,225,.72);font-size:15px;letter-spacing:.08em;
     text-transform:uppercase;color:var(--ink)
   }
-  .hint.show{display:flex}
+  .sheet .hint.show{display:flex}
 
   /* data block — set like sectional airport data text */
   .datablock{
     display:grid;
     /* leg column fixed to fit the longest value (FINAL APPROACH);
        minmax(0,1fr) keeps the rest from resizing as content changes */
-    grid-template-columns:7.4em repeat(5,minmax(0,1fr));
+    grid-template-columns:8.6em repeat(5,minmax(0,1fr));
     border-bottom:1px solid var(--ink);background:var(--paper);
   }
   .cell{padding:8px 4px 9px;text-align:center;border-right:1px dotted rgba(46,53,96,.35)}
@@ -94,7 +93,7 @@
   .cell .v{font-family:var(--mono);font-size:16px;font-weight:600;margin-top:2px;white-space:nowrap}
   .cell .u{font-size:9px;letter-spacing:.12em;color:var(--ink-soft)}
 
-  .controls{padding:12px 16px 6px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .sheet .controls{padding:12px 16px 6px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
   .seg{display:flex;border:1.5px solid var(--ink);border-radius:3px;overflow:hidden}
   .seg button{
     font-family:var(--cond);font-size:13px;letter-spacing:.08em;text-transform:uppercase;
@@ -109,7 +108,7 @@
     padding:8px 16px;cursor:pointer;min-width:88px;
   }
   button.solo[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
-  button:focus-visible,input:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px}
+  .sheet button:focus-visible,.sheet input:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px}
 
   /* pattern entry chips — blue like the route they draw */
   .entries{padding:2px 16px 4px}
@@ -422,7 +421,7 @@ var ENTRIES={e45:E45, mid:MID, tear:TEAR, str:STR, eout:EOUT};
 
 /* ---------- CTAF calls, keyed to position ----------
    AC 90-66 style: airport name first and last, full callsign. */
-function dirWord(){ return st.mirror*st.rsgn===1?"left":"right"; }
+function dirWord(){ return st.mirror===1?"left":"right"; }
 function radioCall(body){ return "Georgetown traffic, Cessna 8381 Lima, "+body+", Georgetown."; }
 /* calls fire as each turn begins — announce while you roll in */
 var CIRCUIT_CALLS=[
@@ -435,7 +434,7 @@ var CIRCUIT_CALLS=[
 E45.arrowF=[0.20,0.61,0.87];   /* clear of the 360 crossing point */
 E45.calls=[
   {id:"e45-1", f:0.06,  t:function(){return radioCall("entering the 45, "+dirWord()+" downwind, Runway "+st.rwy+"");}},
-  {id:"e45-2", f:0.40,  t:function(){return radioCall("making a "+(st.mirror*st.rsgn===1?"right":"left")+" 360 for spacing on the 45, Runway "+st.rwy+"");}}
+  {id:"e45-2", f:0.40,  t:function(){return radioCall("making a "+(st.mirror===1?"right":"left")+" 360 for spacing on the 45, Runway "+st.rwy+"");}}
 ];
 MID.calls=[{id:"mid-1", f:0.12, t:function(){return radioCall("crossing midfield at pattern altitude, "+dirWord()+" downwind, Runway "+st.rwy+"");}}];
 TEAR.calls=[
@@ -1047,7 +1046,7 @@ function applyRunway(){
   var hw18=Math.cos((st.windDir-180)*Math.PI/180);
   var want=hw18>=0?"18":"36";                     /* fly the end with the headwind */
   if(want===st.rwy) return;
-  st.rwy=want; st.rsgn=want==="18"?1:-1;
+  st.rwy=want; st.rsgn=want==="18"?1:-1; st.mirror=want==="18"?1:-1; /* KGTU: RWY 18 left traffic, RWY 36 right traffic */
   st.trail=[]; st.puffs=[];
   resize(); renderCalls();
   if(st.booted) say(radioCall("wind shift, now using Runway "+st.rwy), "RWY "+st.rwy, null);
