@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zulu Decoder — four U.S. time zones and Zulu</title>
+<style>
+:root{
+  --desk:#232821;
+  --desk-2:#1A1E19;
+  --stock:#E4E8DD;
+  --stock-2:#F0F2EB;
+  --ink:#161A15;
+  --ink-2:#5D6459;
+  --rule:#A9B0A2;
+  --magenta:#C02888;
+  --blue:#2E7FB8;
+  --link:#6FB3DC;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,"JetBrains Mono","Roboto Mono",Menlo,Consolas,monospace;
+  color-scheme:dark;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+
+*{box-sizing:border-box}
+
+html{-webkit-text-size-adjust:100%}
+
+body{
+  margin:0;
+  padding:clamp(16px,4vw,56px) clamp(14px,4vw,40px);
+  background:var(--desk);
+  background-image:linear-gradient(180deg,var(--desk) 0%,var(--desk-2) 100%);
+  min-height:100vh;
+  color:var(--stock);
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+}
+
+.board{max-width:920px;margin:0 auto}
+
+/* ---- masthead ---- */
+.masthead{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:10px 18px;
+  padding-bottom:14px;
+  border-bottom:1px solid rgba(228,232,221,.22);
+}
+.masthead__name{
+  margin:0;
+  font-size:clamp(1rem,2.6vw,1.25rem);
+  font-weight:700;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+}
+.masthead__slash{color:var(--magenta)}
+.masthead__eyebrow{
+  margin:0;
+  font-size:.63rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:rgba(228,232,221,.55);
+}
+
+/* ---- zulu hero ---- */
+.zulu{padding:clamp(22px,5vw,40px) 0 clamp(18px,4vw,30px)}
+.zulu__label{
+  margin:0 0 6px;
+  font-size:.63rem;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--magenta);
+}
+.zulu__readout{
+  margin:0;
+  font-size:clamp(3.6rem,17vw,8.5rem);
+  font-weight:700;
+  line-height:.86;
+  letter-spacing:-.045em;
+  white-space:nowrap;
+}
+.zulu__suffix{color:var(--magenta);letter-spacing:0}
+.zulu__sub{
+  margin:14px 0 0;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px 14px;
+  font-size:.82rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(228,232,221,.72);
+}
+.zulu__roll{
+  padding:2px 7px;
+  border:1px solid var(--magenta);
+  color:var(--magenta);
+  font-size:.66rem;
+  letter-spacing:.1em;
+}
+
+/* ---- entry ---- */
+.entry{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  gap:12px;
+  padding:16px 0 0;
+  border-top:1px solid rgba(228,232,221,.22);
+}
+.field{display:flex;flex-direction:column;gap:6px}
+.field__label{
+  font-size:.6rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:rgba(228,232,221,.55);
+}
+.field__input{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid rgba(228,232,221,.3);
+  border-radius:2px;
+  background:rgba(228,232,221,.06);
+  color:var(--stock);
+  font-family:var(--mono);
+  font-size:.95rem;
+  letter-spacing:.06em;
+}
+.field__input:hover{border-color:rgba(228,232,221,.5)}
+.field__input:focus-visible{
+  outline:2px solid var(--magenta);
+  outline-offset:1px;
+  border-color:transparent;
+}
+.field__input option{background:var(--desk-2);color:var(--stock)}
+.field--bad .field__input{border-color:var(--magenta)}
+
+.now{
+  align-self:end;
+  padding:11px 14px;
+  border:1px solid var(--stock);
+  border-radius:2px;
+  background:var(--stock);
+  color:var(--ink);
+  font-family:var(--mono);
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+.now:hover{background:var(--stock-2)}
+.now:active{transform:translateY(1px)}
+.now:focus-visible{outline:2px solid var(--magenta);outline-offset:2px}
+
+.status{
+  margin:10px 0 0;
+  min-height:1.1em;
+  font-size:.68rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(228,232,221,.5);
+}
+.status--alert{color:var(--magenta)}
+
+/* ---- strips ---- */
+.strips{margin:22px 0 0;padding:0;list-style:none}
+
+
+.strip{
+  display:grid;
+  grid-template-columns:1.25fr .85fr 1fr 1.15fr 1fr;
+  gap:1px;
+  margin-bottom:6px;
+  background:var(--rule);
+  border:1px solid var(--rule);
+  border-radius:2px;
+  overflow:hidden;
+}
+.strip--source{border-color:var(--magenta);box-shadow:0 0 0 1px var(--magenta)}
+
+.cell{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:2px;
+  min-height:58px;
+  padding:9px 12px;
+  background:var(--stock);
+  color:var(--ink);
+}
+.cell--zone{background:var(--stock-2);position:relative}
+
+.cell__label{
+  font-size:.55rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--ink-2);
+}
+.cell__value{font-size:1.02rem;letter-spacing:.02em}
+.cell__value--lead{font-size:1.22rem;font-weight:700;letter-spacing:-.01em}
+.cell__value--zone{font-size:1rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.cell__meta{font-size:.66rem;letter-spacing:.14em;color:var(--ink-2)}
+
+.chip{
+  display:inline-block;
+  margin-left:7px;
+  padding:1px 5px;
+  border:1px solid var(--blue);
+  color:var(--blue);
+  font-size:.6rem;
+  letter-spacing:.08em;
+  vertical-align:2px;
+}
+.tag{
+  position:absolute;
+  top:6px;
+  right:8px;
+  font-size:.52rem;
+  letter-spacing:.16em;
+  color:var(--magenta);
+}
+
+/* ---- footnotes ---- */
+.notes{
+  margin:30px 0 0;
+  padding-top:16px;
+  border-top:1px solid rgba(228,232,221,.22);
+  font-family:var(--sans);
+  font-size:.78rem;
+  line-height:1.6;
+  color:rgba(228,232,221,.55);
+}
+.notes__lead{margin:0 0 4px}
+.notes__eyebrow{
+  margin:22px 0 0;
+  font-family:var(--mono);
+  font-size:.6rem;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:rgba(228,232,221,.42);
+}
+.notes__stamp{
+  margin:14px 0 0;
+  font-family:var(--mono);
+  font-size:.6rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(228,232,221,.34);
+}
+
+.refs{margin:6px 0 0}
+.ref{padding:13px 0;border-top:1px solid rgba(228,232,221,.13)}
+.ref__term{
+  margin:0;
+  font-family:var(--mono);
+  font-size:.61rem;
+  font-weight:700;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(228,232,221,.78);
+}
+.ref__text{margin:5px 0 0}
+.ref__links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px 18px;
+  margin:7px 0 0;
+}
+.ref__link{
+  font-family:var(--mono);
+  font-size:.66rem;
+  letter-spacing:.04em;
+  color:var(--link);
+  text-decoration:none;
+  border-bottom:1px solid rgba(111,179,220,.35);
+  padding-bottom:1px;
+}
+.ref__link:hover{color:var(--stock);border-bottom-color:var(--stock)}
+.ref__link:focus-visible{outline:2px solid var(--magenta);outline-offset:3px;border-bottom-color:transparent}
+
+/* ---- motion ---- */
+@keyframes stamp{
+  from{opacity:.25;transform:translateY(4px)}
+  to{opacity:1;transform:none}
+}
+.is-fresh{animation:stamp 200ms ease-out}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+/* ---- narrow ---- */
+@media (max-width:680px){
+  .strip{grid-template-columns:1fr 1fr}
+  .cell--zone{grid-column:1 / -1}
+  .cell{min-height:52px}
+}
+</style>
+</head>
+<body>
+<main class="board">
+
+  <header class="masthead">
+    <h1 class="masthead__name">Zulu<span class="masthead__slash">/</span>Decoder</h1>
+    <p class="masthead__eyebrow">Four U.S. zones + Zulu &middot; 24-hour and 12-hour</p>
+  </header>
+
+  <section class="zulu" aria-live="polite">
+    <p class="zulu__label">Zulu &middot; Coordinated Universal Time<span id="zuluTag" hidden> &middot; entered</span></p>
+    <p class="zulu__readout"><span id="zuluDigits">1930</span><span class="zulu__suffix">Z</span></p>
+    <p class="zulu__sub">
+      <span id="zulu12">7:30 PM</span>
+      <span id="zuluDate">Wed 22 Jul 2026</span>
+      <span class="zulu__roll" id="zuluRoll" hidden>+1 day</span>
+    </p>
+  </section>
+
+  <form class="entry" id="entry" autocomplete="off">
+    <div class="field">
+      <label class="field__label" for="dateIn">Date</label>
+      <input class="field__input" type="date" id="dateIn">
+    </div>
+    <div class="field" id="timeField">
+      <label class="field__label" for="timeIn">Time &mdash; 1430 or 2:30 PM</label>
+      <input class="field__input" type="text" id="timeIn" inputmode="numeric" spellcheck="false" placeholder="1430">
+    </div>
+    <div class="field">
+      <label class="field__label" for="zoneIn">Entered in</label>
+      <select class="field__input" id="zoneIn"></select>
+    </div>
+    <button class="now" type="button" id="nowBtn">Use my system clock</button>
+  </form>
+
+  <p class="status" id="status"></p>
+
+  <ol class="strips" id="strips"></ol>
+
+  <footer class="notes">
+    <p class="notes__lead">Offsets follow each zone's daylight saving rules for the date you enter, so 22 July and 22 January give different answers. On the spring-forward day one clock hour never happens; on the fall-back day one clock hour happens twice. Enter a time inside either window and a line above the strips says which instant was used.</p>
+
+    <p class="notes__eyebrow">Sources</p>
+    <dl class="refs">
+
+      <div class="ref">
+        <dt class="ref__term">Zulu and the four-figure clock</dt>
+        <dd class="ref__text">
+          The Federal Aviation Administration (FAA) uses Coordinated Universal Time (UTC) for all operations, and the term Zulu may be used to denote it. On the 24-hour clock the hour is the first two figures and the minutes are the last two — which is why the headline reads as four digits and a Z.
+          <span class="ref__links">
+            <a class="ref__link" href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_2.html" target="_blank" rel="noopener noreferrer">Aeronautical Information Manual (AIM) 4-2-12, Time</a>
+            <a class="ref__link" href="https://www.faa.gov/air_traffic/publications/atpubs/aip_html/part1_gen_section_3.4.html" target="_blank" rel="noopener noreferrer">Aeronautical Information Publication (AIP) GEN 3.4</a>
+          </span>
+        </dd>
+      </div>
+
+      <div class="ref">
+        <dt class="ref__term">Which zones exist, and where they end</dt>
+        <dd class="ref__text">
+          The Department of Transportation (DOT) oversees standard time. Nine zones were established by the Standard Time Act of 1918 as amended by the Uniform Time Act of 1966, and their geographic limits are written out in Title 49, Part 71 of the Code of Federal Regulations (CFR). This page covers the four that cover the contiguous states.
+          <span class="ref__links">
+            <a class="ref__link" href="https://www.ecfr.gov/current/title-49/subtitle-A/part-71" target="_blank" rel="noopener noreferrer">49 CFR Part 71, Standard Time Zone Boundaries</a>
+            <a class="ref__link" href="https://www.bts.gov/explore-topics-and-geography/geography/geospatial-portal/history-time-zones-and-daylight-saving" target="_blank" rel="noopener noreferrer">Bureau of Transportation Statistics (BTS), history of U.S. time zones</a>
+          </span>
+        </dd>
+      </div>
+
+      <div class="ref">
+        <dt class="ref__term">Daylight saving dates</dt>
+        <dd class="ref__text">
+          Daylight saving time runs from 2 a.m. on the second Sunday in March to 2 a.m. on the first Sunday in November. For 2026 that is 8 March to 1 November. Hawaii, most of Arizona, American Samoa, Guam, Puerto Rico and the U.S. Virgin Islands do not observe it, which is why none of them appear here.
+          <span class="ref__links">
+            <a class="ref__link" href="https://www.nist.gov/pml/time-and-frequency-division/popular-links/daylight-saving-time-dst" target="_blank" rel="noopener noreferrer">National Institute of Standards and Technology (NIST), daylight saving time rules</a>
+            <a class="ref__link" href="https://aa.usno.navy.mil/faq/us_tzones" target="_blank" rel="noopener noreferrer">U.S. Naval Observatory, U.S. time zones</a>
+          </span>
+        </dd>
+      </div>
+
+      <div class="ref">
+        <dt class="ref__term">Where the offsets come from</dt>
+        <dd class="ref__text">
+          Every conversion on this page reads your browser's copy of the Internet Assigned Numbers Authority (IANA) Time Zone Database, the public-domain record of each zone's offset and daylight saving history. Nothing here is hard-coded, so the page tracks the rules as they are amended.
+          <span class="ref__links">
+            <a class="ref__link" href="https://www.iana.org/time-zones" target="_blank" rel="noopener noreferrer">IANA Time Zone Database</a>
+          </span>
+        </dd>
+      </div>
+
+      <div class="ref">
+        <dt class="ref__term">A change now pending</dt>
+        <dd class="ref__text">
+          H.R. 139, the Sunshine Protection Act, would make daylight saving time permanent. The House of Representatives passed it on 14 July 2026 and it is now before the Senate. If it becomes law, the time zone database is updated and this page follows it without any edit.
+          <span class="ref__links">
+            <a class="ref__link" href="https://www.congress.gov/bill/119th-congress/house-bill/139" target="_blank" rel="noopener noreferrer">Congress.gov, H.R. 139</a>
+          </span>
+        </dd>
+      </div>
+
+    </dl>
+    <p class="notes__stamp">Legislative status checked 22 July 2026</p>
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  var ZONES = [
+    { id:"America/New_York",    name:"Eastern"  },
+    { id:"America/Chicago",     name:"Central"  },
+    { id:"America/Denver",      name:"Mountain" },
+    { id:"America/Los_Angeles", name:"Pacific"  }
+  ];
+
+  var el = {
+    date:    document.getElementById("dateIn"),
+    time:    document.getElementById("timeIn"),
+    zone:    document.getElementById("zoneIn"),
+    timeFld: document.getElementById("timeField"),
+    nowBtn:  document.getElementById("nowBtn"),
+    status:  document.getElementById("status"),
+    strips:  document.getElementById("strips"),
+    digits:  document.getElementById("zuluDigits"),
+    z12:     document.getElementById("zulu12"),
+    zdate:   document.getElementById("zuluDate"),
+    zroll:   document.getElementById("zuluRoll"),
+    ztag:    document.getElementById("zuluTag")
+  };
+
+  var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var fmtCache = {};
+
+  function formatter(tz){
+    if(!fmtCache[tz]){
+      fmtCache[tz] = new Intl.DateTimeFormat("en-US", {
+        timeZone: tz, hourCycle: "h23",
+        year:"numeric", month:"2-digit", day:"2-digit",
+        hour:"2-digit", minute:"2-digit", second:"2-digit",
+        weekday:"short", timeZoneName:"short"
+      });
+    }
+    return fmtCache[tz];
+  }
+
+  // Wall-clock fields for an instant, read in a given zone.
+  function partsIn(ms, tz){
+    var out = {}, list = formatter(tz).formatToParts(new Date(ms));
+    for(var i=0;i<list.length;i++) out[list[i].type] = list[i].value;
+    return {
+      year:+out.year, month:+out.month, day:+out.day,
+      hour:+out.hour, minute:+out.minute,
+      weekday:out.weekday, abbr:out.timeZoneName
+    };
+  }
+
+  // Milliseconds a zone sits east of UTC at a given instant.
+  function offsetAt(ms, tz){
+    var p = partsIn(ms, tz);
+    return Date.UTC(p.year, p.month-1, p.day, p.hour, p.minute, 0) - ms;
+  }
+
+  // Turn a wall-clock reading in one zone into a real instant.
+  // Returns status "ok", "ambiguous" (fall-back hour) or "skipped" (spring-forward hour).
+  function toInstant(y, mo, d, h, mi, tz){
+    var target = Date.UTC(y, mo-1, d, h, mi, 0);
+    var a = target - offsetAt(target - 86400000, tz);
+    var b = target - offsetAt(target + 86400000, tz);
+    var candidates = (a === b) ? [a] : [a, b].sort(function(x,z){ return x - z; });
+
+    var valid = candidates.filter(function(ms){
+      var p = partsIn(ms, tz);
+      return p.year===y && p.month===mo && p.day===d && p.hour===h && p.minute===mi;
+    });
+
+    if(valid.length === 1) return { ms: valid[0], status: "ok" };
+    if(valid.length  >  1) return { ms: valid[0], status: "ambiguous" };
+    return { ms: candidates[candidates.length-1], status: "skipped" };
+  }
+
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+
+  function to12(h, mi){
+    var suffix = h < 12 ? "AM" : "PM";
+    var hour = h % 12; if(hour === 0) hour = 12;
+    return hour + ":" + pad(mi) + " " + suffix;
+  }
+
+  function offsetLabel(ms, tz){
+    var mins = Math.round(offsetAt(ms, tz) / 60000);
+    var sign = mins < 0 ? "\u2212" : "+";
+    mins = Math.abs(mins);
+    return "UTC" + sign + pad(Math.floor(mins/60)) + ":" + pad(mins%60);
+  }
+
+  function dayShift(p, y, mo, d){
+    var here  = Date.UTC(p.year, p.month-1, p.day);
+    var there = Date.UTC(y, mo-1, d);
+    return Math.round((here - there) / 86400000);
+  }
+
+  function shiftChip(n){
+    if(!n) return "";
+    return '<span class="chip">' + (n > 0 ? "+" : "\u2212") + Math.abs(n) + " day</span>";
+  }
+
+  // ---- time entry parsing: 1430, 14:30, 2:30 PM, 230p, 9, 0930z ----
+  function parseTime(raw){
+    var s = String(raw).toUpperCase().replace(/[\s.]/g, "").replace(/[ZL]$/, "");
+    var m = s.match(/^(\d{1,2})(?::?([0-5]\d))?(AM|PM|A|P)?$/);
+    if(!m) return null;
+
+    var h = +m[1], mi = m[2] ? +m[2] : 0, mer = m[3] ? m[3][0] : null;
+
+    if(mer){
+      if(h < 1 || h > 12) return null;
+      if(mer === "A" && h === 12) h = 0;
+      if(mer === "P" && h !== 12) h += 12;
+    } else if(h > 23){
+      return null;
+    }
+    return { hour:h, minute:mi };
+  }
+
+  function systemZone(){
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"; }
+    catch(e){ return "UTC"; }
+  }
+
+  // ---- build the zone menu, adding the system zone if it is outside the four ----
+  var sysZone = systemZone();
+  var menu = ZONES.map(function(z){ return { id:z.id, label:z.name }; });
+  menu.push({ id:"UTC", label:"Zulu \u00b7 UTC" });
+
+  var known = menu.some(function(z){ return z.id === sysZone; });
+  if(!known) menu.unshift({ id:sysZone, label:"My system zone \u00b7 " + sysZone });
+
+  menu.forEach(function(z){
+    var opt = document.createElement("option");
+    opt.value = z.id;
+    opt.textContent = z.label;
+    el.zone.appendChild(opt);
+  });
+  el.zone.value = known ? sysZone : menu[0].id;
+
+  // ---- render ----
+  function setStatus(text, alert){
+    el.status.textContent = text || "";
+    el.status.className = alert ? "status status--alert" : "status";
+  }
+
+  function render(){
+    var dateVal = el.date.value;
+    var parsed  = parseTime(el.time.value);
+
+    el.timeFld.className = parsed || !el.time.value ? "field" : "field field--bad";
+
+    if(!dateVal || !parsed){
+      setStatus(parsed ? "Pick a date" : "Enter a time like 1430, 14:30 or 2:30 PM", true);
+      return;
+    }
+
+    var d  = dateVal.split("-");
+    var y  = +d[0], mo = +d[1], dy = +d[2];
+    var tz = el.zone.value;
+    var res = toInstant(y, mo, dy, parsed.hour, parsed.minute, tz);
+    var ms  = res.ms;
+
+    if(res.status === "skipped"){
+      setStatus("That clock time is skipped by the spring-forward change \u2014 showing the instant right after the jump", true);
+    } else if(res.status === "ambiguous"){
+      setStatus("That clock time happens twice on fall-back day \u2014 showing the first pass, still on daylight time", true);
+    } else {
+      setStatus("");
+    }
+
+    // Zulu hero
+    el.ztag.hidden = tz !== "UTC";
+    var z = partsIn(ms, "UTC");
+    el.digits.textContent = pad(z.hour) + pad(z.minute);
+    el.z12.textContent    = to12(z.hour, z.minute);
+    el.zdate.textContent  = z.weekday + " " + pad(z.day) + " " + MONTHS[z.month-1] + " " + z.year;
+
+    var zShift = dayShift(z, y, mo, dy);
+    el.zroll.hidden = !zShift;
+    if(zShift) el.zroll.textContent = (zShift > 0 ? "+" : "\u2212") + Math.abs(zShift) + " day";
+
+    el.digits.classList.remove("is-fresh");
+    void el.digits.offsetWidth;
+    el.digits.classList.add("is-fresh");
+
+    // Four U.S. zones
+    el.strips.innerHTML = ZONES.map(function(zone){
+      var p = partsIn(ms, zone.id);
+      var isSource = zone.id === tz;
+      return '<li class="strip' + (isSource ? " strip--source" : "") + '">' +
+        '<div class="cell cell--zone">' +
+          (isSource ? '<span class="tag">Entered</span>' : "") +
+          '<span class="cell__value cell__value--zone">' + zone.name + '</span>' +
+          '<span class="cell__meta">' + p.abbr + '</span>' +
+        '</div>' +
+        '<div class="cell"><span class="cell__label">24-hour</span>' +
+          '<span class="cell__value cell__value--lead">' + pad(p.hour) + ":" + pad(p.minute) + '</span></div>' +
+        '<div class="cell"><span class="cell__label">12-hour</span>' +
+          '<span class="cell__value">' + to12(p.hour, p.minute) + '</span></div>' +
+        '<div class="cell"><span class="cell__label">Date</span>' +
+          '<span class="cell__value">' + p.weekday + " " + pad(p.day) + " " + MONTHS[p.month-1] +
+          shiftChip(dayShift(p, y, mo, dy)) + '</span></div>' +
+        '<div class="cell"><span class="cell__label">Offset</span>' +
+          '<span class="cell__value">' + offsetLabel(ms, zone.id) + '</span></div>' +
+      '</li>';
+    }).join("");
+  }
+
+  function loadSystemClock(){
+    var now = new Date();
+    var p = partsIn(now.getTime(), sysZone);
+    el.date.value  = p.year + "-" + pad(p.month) + "-" + pad(p.day);
+    el.time.value  = pad(p.hour) + pad(p.minute);
+    el.zone.value  = sysZone;
+    render();
+    if(!el.status.textContent){
+      setStatus("System clock \u00b7 " + sysZone + " \u00b7 read at " + pad(p.hour) + ":" + pad(p.minute), false);
+    }
+  }
+
+  el.nowBtn.addEventListener("click", loadSystemClock);
+  el.date.addEventListener("input", render);
+  el.zone.addEventListener("change", render);
+  el.time.addEventListener("input", render);
+  document.getElementById("entry").addEventListener("submit", function(e){ e.preventDefault(); render(); });
+
+  loadSystemClock();
+})();
+</script>
+</body>
+</html>
