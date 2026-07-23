@@ -3,9 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zulu Decoder — four U.S. time zones and Zulu</title>
+<title>PilotDECODER: Zulu Decoder — Zulu (UTC) and the Four U.S. Time Zones</title>
+<meta name="description" content="Convert between Zulu (Coordinated Universal Time) and the four U.S. time zones in 24-hour and 12-hour time, with daylight saving handled automatically. For student pilots, flight instructors, and VFR flyers." />
+<meta name="keywords" content="Zulu time, UTC, Coordinated Universal Time, Zulu to local, time zone converter, 24-hour clock, aviation time, Eastern Central Mountain Pacific, daylight saving time, student pilot, ground school, flight training, PilotDECODER" />
+<meta name="author" content="Zane Wubbena" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://pilotdecoder.com/zulu/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pilotdecoder.com/zulu/" />
+<meta property="og:site_name" content="PilotDECODER" />
+<meta property="og:title" content="PilotDECODER: Zulu Decoder" />
+<meta property="og:description" content="Convert between Zulu (UTC) and the four U.S. time zones, in 24-hour and 12-hour time, with daylight saving handled for you." />
+<script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="../assets/site.css?v=11" />
 <style>
-:root{
+/* ============ PAGE-SPECIFIC: zulu decoder ============
+   Site chrome (topbar, masthead, footer) comes from /assets/site.css.
+   The dark "board" below keeps its own instrument palette, scoped to
+   .board only — the same approach the wind tunnel page uses so its
+   readouts stay legible while the page around them is site-themed. */
+.board{
   --desk:#232821;
   --desk-2:#1A1E19;
   --stock:#E4E8DD;
@@ -17,51 +35,19 @@
   --blue:#2E7FB8;
   --link:#6FB3DC;
   --mono:ui-monospace,"SF Mono",SFMono-Regular,"JetBrains Mono","Roboto Mono",Menlo,Consolas,monospace;
-  color-scheme:dark;
   --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-}
-
-*{box-sizing:border-box}
-
-html{-webkit-text-size-adjust:100%}
-
-body{
-  margin:0;
-  padding:clamp(16px,4vw,56px) clamp(14px,4vw,40px);
+  color-scheme:dark;
+  margin:14px 0;
+  padding:clamp(20px,4vw,40px);
   background:var(--desk);
   background-image:linear-gradient(180deg,var(--desk) 0%,var(--desk-2) 100%);
-  min-height:100vh;
+  border:1px solid rgba(228,232,221,.14);
+  border-radius:8px;
   color:var(--stock);
   font-family:var(--mono);
   font-variant-numeric:tabular-nums;
 }
-
-.board{max-width:920px;margin:0 auto}
-
-/* ---- masthead ---- */
-.masthead{
-  display:flex;
-  flex-wrap:wrap;
-  align-items:baseline;
-  gap:10px 18px;
-  padding-bottom:14px;
-  border-bottom:1px solid rgba(228,232,221,.22);
-}
-.masthead__name{
-  margin:0;
-  font-size:clamp(1rem,2.6vw,1.25rem);
-  font-weight:700;
-  letter-spacing:.34em;
-  text-transform:uppercase;
-}
-.masthead__slash{color:var(--magenta)}
-.masthead__eyebrow{
-  margin:0;
-  font-size:.63rem;
-  letter-spacing:.2em;
-  text-transform:uppercase;
-  color:rgba(228,232,221,.55);
-}
+.board *{box-sizing:border-box}
 
 /* ---- zulu hero ---- */
 .zulu{padding:clamp(22px,5vw,40px) 0 clamp(18px,4vw,30px)}
@@ -108,7 +94,7 @@ body{
   padding:16px 0 0;
   border-top:1px solid rgba(228,232,221,.22);
 }
-.field{display:flex;flex-direction:column;gap:6px}
+.zfield{display:flex;flex-direction:column;gap:6px}
 .field__label{
   font-size:.6rem;
   letter-spacing:.2em;
@@ -133,7 +119,7 @@ body{
   border-color:transparent;
 }
 .field__input option{background:var(--desk-2);color:var(--stock)}
-.field--bad .field__input{border-color:var(--magenta)}
+.zfield--bad .field__input{border-color:var(--magenta)}
 
 .now{
   align-self:end;
@@ -299,12 +285,21 @@ body{
 </style>
 </head>
 <body>
-<main class="board">
+  <header class="topbar">
+    <div class="wrap"><a class="brand" href="../index.html">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme (current: teal)" title="Color theme"><span class="knob"></span></button></div>
+  </header>
 
   <header class="masthead">
-    <h1 class="masthead__name">Zulu<span class="masthead__slash">/</span>Decoder</h1>
-    <p class="masthead__eyebrow">Four U.S. zones + Zulu &middot; 24-hour and 12-hour</p>
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">Zulu Decoder</span></nav>
+      <h1 class="eyebrow"><strong>Zulu Decoder</strong></h1>
+      <p class="masthead-desc">Convert between Zulu (Coordinated Universal Time, UTC) and the four U.S. time zones, in both 24-hour and 12-hour time, with daylight saving handled automatically.</p>
+    </div>
   </header>
+
+  <main>
+  <div class="wrap">
+  <div class="board">
 
   <section class="zulu" aria-live="polite">
     <p class="zulu__label">Zulu &middot; Coordinated Universal Time<span id="zuluTag" hidden> &middot; entered</span></p>
@@ -317,15 +312,15 @@ body{
   </section>
 
   <form class="entry" id="entry" autocomplete="off">
-    <div class="field">
+    <div class="zfield">
       <label class="field__label" for="dateIn">Date</label>
       <input class="field__input" type="date" id="dateIn">
     </div>
-    <div class="field" id="timeField">
+    <div class="zfield" id="timeField">
       <label class="field__label" for="timeIn">Time &mdash; 1430 or 2:30 PM</label>
       <input class="field__input" type="text" id="timeIn" inputmode="numeric" spellcheck="false" placeholder="1430">
     </div>
-    <div class="field">
+    <div class="zfield">
       <label class="field__label" for="zoneIn">Entered in</label>
       <select class="field__input" id="zoneIn"></select>
     </div>
@@ -336,7 +331,7 @@ body{
 
   <ol class="strips" id="strips"></ol>
 
-  <footer class="notes">
+  <section class="notes">
     <p class="notes__lead">Offsets follow each zone's daylight saving rules for the date you enter, so 22 July and 22 January give different answers. On the spring-forward day one clock hour never happens; on the fall-back day one clock hour happens twice. Enter a time inside either window and a line above the strips says which instant was used.</p>
 
     <p class="notes__eyebrow">Sources</p>
@@ -397,9 +392,13 @@ body{
 
     </dl>
     <p class="notes__stamp">Legislative status checked 22 July 2026</p>
-  </footer>
+  </section>
 
-</main>
+  </div>
+  </div>
+  </main>
+
+  <footer><div class="wrap"><p class="disclaimer"><b>Disclaimer:</b> Educational reference only. Conversions rely on your browser's time zone data; verify official times against an authoritative source before operational use. The Pilot in Command remains solely responsible for flight safety and official verification.</p></div><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
 
 <script>
 (function(){
@@ -552,7 +551,7 @@ body{
     var dateVal = el.date.value;
     var parsed  = parseTime(el.time.value);
 
-    el.timeFld.className = parsed || !el.time.value ? "field" : "field field--bad";
+    el.timeFld.className = parsed || !el.time.value ? "zfield" : "zfield zfield--bad";
 
     if(!dateVal || !parsed){
       setStatus(parsed ? "Pick a date" : "Enter a time like 1430, 14:30 or 2:30 PM", true);
@@ -632,5 +631,6 @@ body{
   loadSystemClock();
 })();
 </script>
+<script src="../assets/site.js?v=1"></script>
 </body>
 </html>
