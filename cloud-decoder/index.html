@@ -97,7 +97,7 @@
 
   <footer><div class="wrap"><div class="source"><b>References:</b>
 <ul class="source-list">
-<li>FAA Advisory Circular AC 00-6, <i>Aviation Weather</i> &mdash; cloud classification, the ten standard genera, and towering cumulus as a convective-hazard indicator.</li>
+<li>FAA-H-8083-28, <i>Aviation Weather Handbook</i> &mdash; cloud classification, the ten standard genera, and towering cumulus as a convective-hazard indicator. (Supersedes the now-canceled AC 00-6B.)</li>
 <li>FAA Pilot's Handbook of Aeronautical Knowledge (PHAK), Aviation Weather chapter.</li>
 <li>World Meteorological Organization, <i>International Cloud Atlas</i>.</li>
 </ul>
@@ -108,8 +108,9 @@
 "use strict";
 var WORKER_URL = "https://cloud-decoder.zwubbena.workers.dev/classify";
 
-// Descriptors sourced from the WMO International Cloud Atlas / FAA PHAK &amp; AC 00-6
-// (see References below). Kept static rather than model-generated for consistency.
+// Descriptors sourced from the WMO International Cloud Atlas / FAA-H-8083-28
+// Aviation Weather Handbook (see References below). Kept static rather than
+// model-generated for consistency.
 var CLOUD_DESCRIPTORS = {
   "Cirrus": "Thin, wispy, high-altitude ice-crystal clouds, often streaked by upper-level winds. Generally fair weather, but can signal an approaching frontal system.",
   "Cirrocumulus": "High-altitude clouds in small, white, rippled patches resembling fish scales. Often precede fair weather but can indicate approaching instability.",
