@@ -94,8 +94,11 @@
   padding:16px 0 0;
   border-top:1px solid rgba(228,232,221,.22);
 }
-.zfield{display:flex;flex-direction:column;gap:6px}
+.zfield{display:flex;flex-direction:column;gap:6px;min-width:0}
 .field__label{
+  display:flex;
+  align-items:flex-end;
+  min-height:2.4em;              /* reserve two lines so a wrapping label doesn't push its input down */
   font-size:.6rem;
   letter-spacing:.2em;
   text-transform:uppercase;
@@ -103,6 +106,8 @@
 }
 .field__input{
   width:100%;
+  min-width:0;                   /* let the native date control shrink to its cell instead of overflowing */
+  max-width:100%;
   padding:11px 12px;
   border:1px solid rgba(228,232,221,.3);
   border-radius:2px;
@@ -277,6 +282,11 @@
 }
 
 /* ---- narrow ---- */
+@media (max-width:480px){
+  /* stack the entry fields on phones so the date and time boxes never sit side by side */
+  .entry{grid-template-columns:1fr}
+  .field__label{min-height:0}
+}
 @media (max-width:680px){
   .strip{grid-template-columns:1fr 1fr}
   .cell--zone{grid-column:1 / -1}
