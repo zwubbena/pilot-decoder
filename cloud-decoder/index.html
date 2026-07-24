@@ -99,9 +99,9 @@
 
   <footer><div class="wrap"><div class="source"><b>References:</b>
 <ul class="source-list">
-<li>FAA-H-8083-28, <i>Aviation Weather Handbook</i> &mdash; cloud classification, the ten standard genera, and towering cumulus as a convective-hazard indicator. (Supersedes the now-canceled AC 00-6B.)</li>
-<li>FAA Pilot's Handbook of Aeronautical Knowledge (PHAK), Aviation Weather chapter.</li>
-<li>World Meteorological Organization, <i>International Cloud Atlas</i>.</li>
+<li>Federal Aviation Administration (FAA), <a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_weather_handbook" target="_blank" rel="noopener">FAA-H-8083-28, <i>Aviation Weather Handbook</i></a> &mdash; cloud classification, the ten standard genera, and towering cumulus as a convective-hazard indicator. (Supersedes the now-canceled AC 00-6B.)</li>
+<li>Federal Aviation Administration (FAA), <a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak" target="_blank" rel="noopener">Pilot's Handbook of Aeronautical Knowledge (PHAK)</a>, Aviation Weather chapter.</li>
+<li>World Meteorological Organization (WMO), <a href="https://cloudatlas.wmo.int/en/home.html" target="_blank" rel="noopener"><i>International Cloud Atlas</i></a>.</li>
 </ul>
 </div>
 <p class="disclaimer"><b>Disclaimer:</b> Educational only. Cloud identification is AI-generated and may be inaccurate or incomplete &mdash; always verify sky conditions visually and via an official weather briefing (METAR/TAF, PIREPs) before making flight decisions. The Pilot in Command remains solely responsible for flight safety and official verification.</p></div><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
@@ -190,7 +190,7 @@ identifyBtn.addEventListener("click", function () {
       if (types.length === 0) {
         output.innerHTML = '<p class="loading-note">No clouds identified in this photo.</p>';
       } else {
-        var html = '<p class="classify-source">Classified against the <a href="https://cloudatlas.wmo.int/en/cloud-identification-guide.html" target="_blank" rel="noopener">World Meteorological Organization (WMO) International Cloud Atlas</a> standard genera, as taught in the FAA Pilot’s Handbook of Aeronautical Knowledge.</p>';
+        var html = '<p class="classify-source">Classified against the <a href="https://cloudatlas.wmo.int/en/cloud-identification-guide.html" target="_blank" rel="noopener">World Meteorological Organization (WMO) International Cloud Atlas</a> standard genera.</p>';
         html += '<ul class="cloud-types">';
         for (var i = 0; i < types.length; i++) {
           var desc = CLOUD_DESCRIPTORS[types[i]] || "";
