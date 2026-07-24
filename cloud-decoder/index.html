@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PilotDECODER: Cloud Decoder — Identify Cloud Types from a Photo</title>
+<meta name="description" content="Upload a photo of the sky and PilotDECODER identifies the cloud type(s) present — Cirrus, Cumulonimbus, Stratus, and the rest of the ten standard genera — for student and private pilots." />
+<meta name="keywords" content="cloud decoder, cloud identifier, cloud type identification, identify clouds from photo, cumulus, cumulonimbus, cirrus, stratus, cloud types aviation, aviation weather, PilotDECODER, student pilot, private pilot, ground school, flight training" />
+<meta name="author" content="Zane Wubbena" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://pilotdecoder.com/cloud-decoder/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pilotdecoder.com/cloud-decoder/" />
+<meta property="og:site_name" content="PilotDECODER" />
+<meta property="og:title" content="PilotDECODER: Cloud Decoder — Identify Cloud Types from a Photo" />
+<meta property="og:description" content="Upload a photo of the sky and get the cloud type(s) identified — built for student and private pilots." />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="PilotDECODER: Cloud Decoder" />
+<meta name="twitter:description" content="Upload a photo of the sky and get the cloud type(s) identified." />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PilotDECODER",
+  "alternateName": "Cloud Decoder",
+  "url": "https://pilotdecoder.com/cloud-decoder/",
+  "description": "Upload a photo of the sky and identify the cloud type(s) present, from a pilot's perspective.",
+  "applicationCategory": "Aviation weather utility",
+  "operatingSystem": "Any (web browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": {
+    "@type": "Person",
+    "name": "Zane Wubbena",
+    "url": "https://zanewubbena.com/",
+    "sameAs": [
+      "https://txstate.academia.edu/ZaneWubbena",
+      "https://scholar.google.com/citations?user=qr2mU1oAAAAJ&hl=en",
+      "https://www.researchgate.net/profile/Zane-Wubbena"
+    ]
+  }
+}
+</script>
+<script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="../assets/site.css?v=11" />
+<style>
+  /* ============ PAGE-SPECIFIC: Cloud Decoder ============ */
+  .upload-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .file-label { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 7px; padding: 8px 14px; cursor: pointer; touch-action: manipulation; }
+  .file-label:hover { border-color: var(--mid); color: var(--brand); }
+  .file-label input[type="file"] { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+  .file-name { font-size: 13px; color: var(--ink-soft); }
+  .preview-frame { margin: 16px 0 0; max-width: 320px; }
+  .preview-frame img { display: block; width: 100%; border-radius: 10px; border: 1px solid var(--card-bd); }
+  .cloud-types { list-style: none; margin: 10px 16px 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .cloud-types li { background: var(--wash); border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 8px; padding: 16px; }
+  .cloud-type-name { font-family: var(--sans); font-size: 19px; font-weight: 700; color: var(--brand); margin: 0; }
+  .cloud-type-desc { font-size: 14.5px; color: var(--ink); margin: 8px 0 0; line-height: 1.55; }
+  .classify-source { font-size: 12.5px; color: var(--ink-soft); font-family: var(--sans); margin: 4px 0 14px; }
+  .classify-source a { color: var(--mid); text-decoration: underline; text-underline-offset: 3px; }
+  .classify-source a:hover { color: var(--brand); }
+  .loading-note { font-size: 15px; color: var(--ink-soft); }
+  .privacy-note { margin: 14px 0 0; font-size: 12.5px; color: var(--ink-soft); font-family: var(--sans); }
+  .output { padding-top: 24px; padding-bottom: 40px; }
+  .output:empty { padding-top: 0; padding-bottom: 0; }
+</style>
+</head>
+<body>
+  <!-- Site chrome: identical on every page. Do not modify. -->
+  <header class="topbar">
+    <div class="wrap"><a class="brand" href="../index.html">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme (current: teal)" title="Color theme"><span class="knob"></span></button></div>
+  </header>
+
+  <header class="masthead">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">Cloud Decoder</span></nav>
+      <h1 class="eyebrow"><strong>Cloud Decoder</strong></h1>
+      <p class="masthead-desc">Upload a photo of the sky and get the cloud type(s) identified, from a pilot's perspective &mdash; useful for building pattern recognition alongside a real preflight weather briefing.</p>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="wrap">
+      <span class="panel-label">Upload a sky photo</span>
+      <div class="upload-row">
+        <label class="file-label">Choose photo&hellip;<input id="photo-input" type="file" accept="image/*" /></label>
+        <span class="file-name" id="file-name">No file selected</span>
+      </div>
+      <div class="preview-frame" id="preview-frame" hidden><img id="preview-img" alt="Selected sky photo preview" /></div>
+      <div class="controls">
+        <button id="identify-btn" class="btn-primary" type="button" disabled>Identify clouds</button>
+        <button id="reset-btn" class="link-btn" type="button">Reset</button>
+      </div>
+      <p class="privacy-note">Your photo is sent to an AI vision model for analysis and is not stored afterward.</p>
+    </div>
+  </section>
+
+  <main class="output wrap" id="output" aria-live="polite"></main>
+
+  <footer><div class="wrap"><div class="source"><b>References:</b>
+<ul class="source-list">
+<li>Federal Aviation Administration (FAA), <a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_weather_handbook" target="_blank" rel="noopener">FAA-H-8083-28, <i>Aviation Weather Handbook</i></a> &mdash; cloud classification, the ten standard genera, and towering cumulus as a convective-hazard indicator. (Supersedes the now-canceled AC 00-6B.)</li>
+<li>Federal Aviation Administration (FAA), <a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak" target="_blank" rel="noopener">Pilot's Handbook of Aeronautical Knowledge (PHAK)</a>, Aviation Weather chapter.</li>
+<li>World Meteorological Organization (WMO), <a href="https://cloudatlas.wmo.int/en/home.html" target="_blank" rel="noopener"><i>International Cloud Atlas</i></a>.</li>
+</ul>
+</div>
+<p class="disclaimer"><b>Disclaimer:</b> Educational only. Cloud identification is AI-generated and may be inaccurate or incomplete &mdash; always verify sky conditions visually and via an official weather briefing (METAR/TAF, PIREPs) before making flight decisions. The Pilot in Command remains solely responsible for flight safety and official verification.</p></div><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
+
+<script>
+"use strict";
+var WORKER_URL = "https://cloud-decoder.zwubbena.workers.dev/classify";
+
+// Descriptors sourced from the WMO International Cloud Atlas / FAA-H-8083-28
+// Aviation Weather Handbook (see References below). Kept static rather than
+// model-generated for consistency.
+var CLOUD_DESCRIPTORS = {
+  "Cirrus": "Thin, wispy, high-altitude ice-crystal clouds, often streaked by upper-level winds. Generally fair weather, but can signal an approaching frontal system.",
+  "Cirrocumulus": "High-altitude clouds in small, white, rippled patches resembling fish scales. Often precede fair weather but can indicate approaching instability.",
+  "Cirrostratus": "A thin, high-altitude sheet of ice crystals that often covers the whole sky, sometimes producing a halo around the sun or moon. Frequently precedes a warm front.",
+  "Altocumulus": "Mid-altitude clouds in white or gray patches or rolls, often with shading, arranged in groups or waves. Can indicate rising instability.",
+  "Altostratus": "A gray or blue-gray mid-altitude sheet covering most of the sky, through which the sun or moon may appear only as a dim, blurry disk. Often signals an approaching warm front.",
+  "Nimbostratus": "A thick, dark gray layer cloud that blots out the sun and produces continuous, steady rain or snow, with widespread low ceilings and reduced visibility.",
+  "Stratocumulus": "Low, lumpy, gray-and-white patches or rolls, usually with some blue sky visible between them. Generally fair or only slightly unsettled weather.",
+  "Stratus": "A low, flat, featureless gray layer covering the sky like fog that doesn't reach the ground, often producing drizzle and low ceilings.",
+  "Cumulus": "Detached, puffy, cotton-like clouds with flat bases and rounded tops, generally fair weather when small and not building vertically.",
+  "Towering Cumulus": "A cumulus cloud in strong vertical growth, with a firm, cauliflower-like top &mdash; a sign of developing convective instability, associated with turbulence and often a precursor to Cumulonimbus.",
+  "Cumulonimbus": "A towering, dense thunderstorm cloud, often with a flat, anvil-shaped top. Associated with heavy rain, hail, severe turbulence, icing, lightning, and low-level wind shear &mdash; a significant hazard to avoid."
+};
+
+var fileInput = document.getElementById("photo-input");
+var fileName = document.getElementById("file-name");
+var previewFrame = document.getElementById("preview-frame");
+var previewImg = document.getElementById("preview-img");
+var identifyBtn = document.getElementById("identify-btn");
+var resetBtn = document.getElementById("reset-btn");
+var output = document.getElementById("output");
+
+var selectedBase64 = null;
+var selectedMediaType = null;
+
+function resetAll() {
+  fileInput.value = "";
+  fileName.textContent = "No file selected";
+  previewFrame.hidden = true;
+  previewImg.src = "";
+  identifyBtn.disabled = true;
+  selectedBase64 = null;
+  selectedMediaType = null;
+  output.innerHTML = "";
+}
+
+fileInput.addEventListener("change", function () {
+  var file = fileInput.files && fileInput.files[0];
+  if (!file) { resetAll(); return; }
+
+  fileName.textContent = file.name;
+  selectedMediaType = file.type || "image/jpeg";
+  output.innerHTML = "";
+
+  var reader = new FileReader();
+  reader.onload = function () {
+    var dataUrl = reader.result;
+    previewImg.src = dataUrl;
+    previewFrame.hidden = false;
+    selectedBase64 = dataUrl.split(",")[1] || null;
+    identifyBtn.disabled = !selectedBase64;
+  };
+  reader.onerror = function () {
+    output.innerHTML = '<p class="error-note">Couldn’t read that file. Try a different photo.</p>';
+  };
+  reader.readAsDataURL(file);
+});
+
+identifyBtn.addEventListener("click", function () {
+  if (!selectedBase64) return;
+  identifyBtn.disabled = true;
+  output.innerHTML = '<p class="loading-note">Analyzing sky&hellip;</p>';
+
+  fetch(WORKER_URL, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ image: selectedBase64, mediaType: selectedMediaType })
+  })
+    .then(function (res) {
+      if (!res.ok) throw new Error("Server returned " + res.status);
+      return res.json();
+    })
+    .then(function (data) {
+      var types = data && data.types ? data.types : [];
+      if (types.length === 0) {
+        output.innerHTML = '<p class="loading-note">No clouds identified in this photo.</p>';
+      } else {
+        var html = '<p class="classify-source">Classified against the <a href="https://cloudatlas.wmo.int/en/cloud-identification-guide.html" target="_blank" rel="noopener">World Meteorological Organization (WMO) International Cloud Atlas</a> standard genera.</p>';
+        html += '<ul class="cloud-types">';
+        for (var i = 0; i < types.length; i++) {
+          var desc = CLOUD_DESCRIPTORS[types[i]] || "";
+          html += '<li><p class="cloud-type-name">' + types[i] + '</p>';
+          if (desc) html += '<p class="cloud-type-desc">' + desc + '</p>';
+          html += "</li>";
+        }
+        html += "</ul>";
+        output.innerHTML = html;
+      }
+      identifyBtn.disabled = false;
+    })
+    .catch(function () {
+      output.innerHTML = '<p class="error-note">Couldn’t connect — check your connection and try again.</p>';
+      identifyBtn.disabled = false;
+    });
+});
+
+resetBtn.addEventListener("click", resetAll);
+</script>
+<script src="../assets/site.js?v=1"></script>
+</body>
+</html>
