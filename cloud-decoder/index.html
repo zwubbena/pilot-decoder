@@ -52,8 +52,11 @@
   .file-name { font-size: 13px; color: var(--ink-soft); }
   .preview-frame { margin: 16px 0 0; max-width: 320px; }
   .preview-frame img { display: block; width: 100%; border-radius: 10px; border: 1px solid var(--card-bd); }
-  .cloud-types { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-  .cloud-types li { font-family: var(--sans); font-size: 19px; font-weight: 700; color: var(--brand); background: var(--wash); border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 8px; padding: 12px 16px; }
+  .cloud-types { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .cloud-types li { background: var(--wash); border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 8px; padding: 12px 16px; }
+  .cloud-type-name { font-family: var(--sans); font-size: 19px; font-weight: 700; color: var(--brand); margin: 0; }
+  .cloud-type-desc { font-size: 14.5px; color: var(--ink); margin: 6px 0 0; line-height: 1.5; }
+  .classify-source { font-size: 12.5px; color: var(--ink-soft); font-family: var(--sans); margin: 4px 0 14px; }
   .loading-note { font-size: 15px; color: var(--ink-soft); }
   .privacy-note { margin: 14px 0 0; font-size: 12.5px; color: var(--ink-soft); font-family: var(--sans); }
 </style>
@@ -92,7 +95,7 @@
 
   <footer><div class="wrap"><div class="source"><b>References:</b>
 <ul class="source-list">
-<li>FAA Advisory Circular AC 00-6, <i>Aviation Weather</i> &mdash; cloud classification and the ten standard genera.</li>
+<li>FAA Advisory Circular AC 00-6, <i>Aviation Weather</i> &mdash; cloud classification, the ten standard genera, and towering cumulus as a convective-hazard indicator.</li>
 <li>FAA Pilot's Handbook of Aeronautical Knowledge (PHAK), Aviation Weather chapter.</li>
 <li>World Meteorological Organization, <i>International Cloud Atlas</i>.</li>
 </ul>
@@ -102,6 +105,22 @@
 <script>
 "use strict";
 var WORKER_URL = "https://cloud-decoder.zwubbena.workers.dev/classify";
+
+// Descriptors sourced from the WMO International Cloud Atlas / FAA PHAK &amp; AC 00-6
+// (see References below). Kept static rather than model-generated for consistency.
+var CLOUD_DESCRIPTORS = {
+  "Cirrus": "Thin, wispy, high-altitude ice-crystal clouds, often streaked by upper-level winds. Generally fair weather, but can signal an approaching frontal system.",
+  "Cirrocumulus": "High-altitude clouds in small, white, rippled patches resembling fish scales. Often precede fair weather but can indicate approaching instability.",
+  "Cirrostratus": "A thin, high-altitude sheet of ice crystals that often covers the whole sky, sometimes producing a halo around the sun or moon. Frequently precedes a warm front.",
+  "Altocumulus": "Mid-altitude clouds in white or gray patches or rolls, often with shading, arranged in groups or waves. Can indicate rising instability.",
+  "Altostratus": "A gray or blue-gray mid-altitude sheet covering most of the sky, through which the sun or moon may appear only as a dim, blurry disk. Often signals an approaching warm front.",
+  "Nimbostratus": "A thick, dark gray layer cloud that blots out the sun and produces continuous, steady rain or snow, with widespread low ceilings and reduced visibility.",
+  "Stratocumulus": "Low, lumpy, gray-and-white patches or rolls, usually with some blue sky visible between them. Generally fair or only slightly unsettled weather.",
+  "Stratus": "A low, flat, featureless gray layer covering the sky like fog that doesn't reach the ground, often producing drizzle and low ceilings.",
+  "Cumulus": "Detached, puffy, cotton-like clouds with flat bases and rounded tops, generally fair weather when small and not building vertically.",
+  "Towering Cumulus": "A cumulus cloud in strong vertical growth, with a firm, cauliflower-like top &mdash; a sign of developing convective instability, associated with turbulence and often a precursor to Cumulonimbus.",
+  "Cumulonimbus": "A towering, dense thunderstorm cloud, often with a flat, anvil-shaped top. Associated with heavy rain, hail, severe turbulence, icing, lightning, and low-level wind shear &mdash; a significant hazard to avoid."
+};
 
 var fileInput = document.getElementById("photo-input");
 var fileName = document.getElementById("file-name");
@@ -166,9 +185,13 @@ identifyBtn.addEventListener("click", function () {
       if (types.length === 0) {
         output.innerHTML = '<p class="loading-note">No clouds identified in this photo.</p>';
       } else {
-        var html = '<ul class="cloud-types">';
+        var html = '<p class="classify-source">Classified against the WMO International Cloud Atlas standard genera, as taught in the FAA Pilot’s Handbook of Aeronautical Knowledge.</p>';
+        html += '<ul class="cloud-types">';
         for (var i = 0; i < types.length; i++) {
-          html += "<li>" + types[i] + "</li>";
+          var desc = CLOUD_DESCRIPTORS[types[i]] || "";
+          html += '<li><p class="cloud-type-name">' + types[i] + '</p>';
+          if (desc) html += '<p class="cloud-type-desc">' + desc + '</p>';
+          html += "</li>";
         }
         html += "</ul>";
         output.innerHTML = html;
