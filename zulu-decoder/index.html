@@ -286,6 +286,11 @@
   /* stack the entry fields on phones so the date and time boxes never sit side by side */
   .entry{grid-template-columns:1fr}
   .field__label{min-height:0}
+  /* iOS gives <input type="date"> a fixed native width that ignores width:100%
+     and spills off the right edge; strip the native appearance so it fits its
+     cell, and left-align the displayed value. */
+  .field__input[type="date"]{ -webkit-appearance:none; appearance:none; }
+  .field__input[type="date"]::-webkit-date-and-time-value{ text-align:left; margin:0; }
 }
 @media (max-width:680px){
   .strip{grid-template-columns:1fr 1fr}
