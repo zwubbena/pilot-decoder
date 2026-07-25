@@ -110,6 +110,13 @@
 "use strict";
 var WORKER_URL = "https://cloud-decoder.zwubbena.workers.dev/classify";
 
+// Escape any text coming back from the Worker/API before inserting it into the page.
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+
 // Descriptors sourced from the WMO International Cloud Atlas / FAA-H-8083-28
 // Aviation Weather Handbook (see References below). Kept static rather than
 // model-generated for consistency.
@@ -182,19 +189,32 @@ identifyBtn.addEventListener("click", function () {
     body: JSON.stringify({ image: selectedBase64, mediaType: selectedMediaType })
   })
     .then(function (res) {
-      if (!res.ok) throw new Error("Server returned " + res.status);
-      return res.json();
+      // Read the JSON body whether or not the response is OK, so we can show the
+      // Worker's own message (e.g. "Image is too large", "Too many requests").
+      return res.json().then(
+        function (data) { return { ok: res.ok, data: data }; },
+        function () { return { ok: res.ok, data: {} }; }
+      );
     })
-    .then(function (data) {
-      var types = data && data.types ? data.types : [];
+    .then(function (result) {
+      if (!result.ok) {
+        var msg = (result.data && result.data.message)
+          ? result.data.message
+          : "Could not analyze the photo. Try again.";
+        output.innerHTML = '<p class="error-note">' + escapeHtml(msg) + '</p>';
+        identifyBtn.disabled = false;
+        return;
+      }
+      var types = result.data && result.data.types ? result.data.types : [];
       if (types.length === 0) {
         output.innerHTML = '<p class="loading-note">No clouds identified in this photo.</p>';
       } else {
         var html = '<p class="classify-source">Classified against the <a href="https://cloudatlas.wmo.int/en/cloud-identification-guide.html" target="_blank" rel="noopener">World Meteorological Organization (WMO) International Cloud Atlas</a> standard genera.</p>';
         html += '<ul class="cloud-types">';
         for (var i = 0; i < types.length; i++) {
+          var name = escapeHtml(types[i]);
           var desc = CLOUD_DESCRIPTORS[types[i]] || "";
-          html += '<li><p class="cloud-type-name">' + types[i] + '</p>';
+          html += '<li><p class="cloud-type-name">' + name + '</p>';
           if (desc) html += '<p class="cloud-type-desc">' + desc + '</p>';
           html += "</li>";
         }
