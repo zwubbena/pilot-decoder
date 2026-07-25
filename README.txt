@@ -18,10 +18,10 @@ Copy the block below into Claude Cowork as context before working on the site.
 ├── _template/
 │   └── index.html            → copy-me starting point for every new tool
 │                               (underscore folder = not published by GitHub Pages)
-├── metar/index.html          → METAR Decoder
-├── density-altitude/index.html → Density Altitude Decoder
-├── windtunnel/index.html     → Wind Tunnel Decoder
-└── pattern/index.html        → Pattern Decoder (standard site chrome; the animated
+├── metar-decoder/index.html          → METAR Decoder
+├── density-altitude-decoder/index.html → Density Altitude Decoder
+├── wind-tunnel-decoder/index.html     → Wind Tunnel Decoder
+└── flight-pattern-decoder/index.html → Flight Pattern Decoder (standard site chrome; the animated
                                 sheet inside keeps its own poster palette, scoped to .sheet)
 ```
 No build step, no framework, no external dependencies (no CDN fonts/libraries).
@@ -73,7 +73,7 @@ CustomEvent on `document` (listen for it if a page draws canvas/SVG in theme
 colors and needs a redraw). Handled entirely by `/assets/site.js`.
 
 **Intentional page-local palettes (do not "fix" these):**
-- `windtunnel/` keeps its two canvases as dark "instruments" (`--inst-bg`,
+- `wind-tunnel-decoder/` keeps its two canvases as dark "instruments" (`--inst-bg`,
   `--lift`, `--drag`, `--resultant`, `--stall`, `--amber`) so flow colors stay
   readable; the page around them is fully site-themed.
 
@@ -85,7 +85,7 @@ homepage shows a plain `Home` crumb and an h1 of "Home".
 
 **Internal links are RELATIVE** so the site works both served and opened
 straight from Finder: brand + breadcrumb link `../index.html` from tool
-folders, homepage tool cards link `metar/index.html` etc., and cross-tool
+folders, homepage tool cards link `metar-decoder/index.html` etc., and cross-tool
 links use `../slug/index.html`. Canonical tags keep search engines on the
 clean `/slug/` URLs. Only external links and canonical/OG/JSON-LD URLs are
 absolute.
