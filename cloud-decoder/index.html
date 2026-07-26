@@ -63,6 +63,37 @@
   .privacy-note { margin: 14px 0 0; font-size: 12.5px; color: var(--ink-soft); font-family: var(--sans); }
   .output { padding-top: 24px; padding-bottom: 40px; }
   .output:empty { padding-top: 0; padding-bottom: 0; }
+  .file-name-warn { color: var(--ifr); font-weight: 600; }
+  .result-head { margin: 0 0 4px; }
+  .matrix-label { font-family: var(--sans); font-size: 12.5px; font-weight: 700; color: var(--mid); margin: 10px 0 0; }
+  .matrix-list { margin: 4px 0 0; padding-left: 20px; font-size: 13.5px; line-height: 1.55; color: var(--ink); }
+  .matrix-list li { margin: 2px 0; }
+  .pdf-row { margin: 14px 16px 0; }
+  /* Background Knowledge expandable */
+  .bg-know { margin: 0 0 40px; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); }
+  .bg-know summary { cursor: pointer; padding: 14px 16px; font-family: var(--sans); font-weight: 700; font-size: 15px; color: var(--brand); }
+  .bg-know[open] summary { border-bottom: 1px solid var(--rule); }
+  .bg-body { padding: 4px 16px 18px; font-size: 14.5px; line-height: 1.6; color: var(--ink); }
+  .bg-body h3 { font-family: var(--sans); font-size: 13.5px; margin: 18px 0 4px; color: var(--mid); }
+  .bg-body ul { margin: 6px 0 0; padding-left: 20px; }
+  .bg-body li { margin: 3px 0; }
+  .bg-scroll { overflow-x: auto; }
+  .bg-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; min-width: 560px; }
+  .bg-table th, .bg-table td { border: 1px solid var(--rule); padding: 7px 9px; text-align: left; vertical-align: top; }
+  .bg-table thead th, .bg-table tbody th { background: var(--surface); font-family: var(--sans); font-size: 12.5px; }
+  .bg-note { font-size: 12px; color: var(--ink-soft); margin: 10px 0 0; }
+  /* Print sheet: hidden on screen; when printing, it is the only thing on the page */
+  #print-sheet { display: none; }
+  @media print {
+    body > *:not(#print-sheet) { display: none !important; }
+    #print-sheet { display: block !important; color: #000; }
+    .pr-brand { font-family: var(--mono); font-size: 17px; font-weight: 700; margin: 0; }
+    .pr-meta { font-size: 12px; color: #444; margin: 3px 0 14px; }
+    .pr-img { max-width: 100%; max-height: 330px; border-radius: 8px; margin: 0 0 14px; }
+    .pr-head { font-family: var(--sans); font-size: 17px; margin: 0; }
+    .pr-foot { margin-top: 16px; font-size: 11px; color: #555; }
+    #print-sheet .cloud-types { margin: 8px 0 0; }
+  }
 </style>
 </head>
 <body>
@@ -84,6 +115,7 @@
       <span class="panel-label">Upload a sky photo</span>
       <div class="upload-row">
         <label class="file-label">Choose photo&hellip;<input id="photo-input" type="file" accept="image/*" /></label>
+        <label class="file-label" id="camera-label" hidden>Take photo<input id="camera-input" type="file" accept="image/*" capture="environment" /></label>
         <span class="file-name" id="file-name">No file selected</span>
       </div>
       <div class="preview-frame" id="preview-frame" hidden><img id="preview-img" alt="Selected sky photo preview" /></div>
@@ -91,11 +123,53 @@
         <button id="identify-btn" class="btn-primary" type="button" disabled>Identify clouds</button>
         <button id="reset-btn" class="link-btn" type="button">Reset</button>
       </div>
-      <p class="privacy-note">Your photo is sent to an AI vision model for analysis and is not stored afterward.</p>
+      <p class="privacy-note">Photo is not stored afterward.</p>
     </div>
   </section>
 
   <main class="output wrap" id="output" aria-live="polite"></main>
+
+  <section class="wrap">
+    <details class="bg-know" id="bg-know">
+      <summary>Background Knowledge</summary>
+      <div class="bg-body">
+        <p>A structured framework for making sense of cloud classification: think of it as a simple matrix built on two axes &mdash; <b>altitude</b> (where the cloud lives) and <b>form</b> (what it looks like). Every main cloud type is a combination of an altitude prefix and a form root.</p>
+
+        <h3>Axis 1 &mdash; Form roots (what it looks like)</h3>
+        <ul>
+          <li><b>Cumulus</b> (Latin for &ldquo;heap&rdquo; or &ldquo;pile&rdquo;): puffy, heap-like clouds with distinct outlines and flat bases &mdash; floating cotton balls.</li>
+          <li><b>Stratus</b> (Latin for &ldquo;layer&rdquo; or &ldquo;spread out&rdquo;): featureless, flat, blanket-like layers covering large areas of sky.</li>
+          <li><b>Cirrus</b> (Latin for &ldquo;curl&rdquo; or &ldquo;hair&rdquo;): thin, wispy, fibrous clouds made entirely of ice crystals.</li>
+          <li><b>Nimbus / nimbo-</b> (Latin for &ldquo;rain&rdquo;): a modifier marking a cloud that is actively producing precipitation.</li>
+        </ul>
+
+        <h3>Axis 2 &mdash; Altitude tiers (where it lives)</h3>
+        <ul>
+          <li><b>High</b> (above ~20,000 ft): prefix <b>Cirro-</b> &mdash; Cirrus, Cirrocumulus, Cirrostratus.</li>
+          <li><b>Middle</b> (~6,500&ndash;20,000 ft): prefix <b>Alto-</b> &mdash; Altocumulus, Altostratus.</li>
+          <li><b>Low</b> (surface to ~6,500 ft): no altitude prefix &mdash; Stratus, Stratocumulus, Cumulus.</li>
+        </ul>
+
+        <h3>The matrix &mdash; the ten genera</h3>
+        <p>Mix an altitude prefix with a form root and the ten fundamental genera fall out:</p>
+        <div class="bg-scroll">
+          <table class="bg-table">
+            <thead><tr><th>Altitude tier</th><th>Layered (stratus)</th><th>Heap (cumulus)</th><th>Wispy (cirrus)</th><th>Rain (nimbus)</th></tr></thead>
+            <tbody>
+              <tr><th>High (Cirro-)</th><td>Cirrostratus &mdash; high, thin sheet</td><td>Cirrocumulus &mdash; high, tiny ripples</td><td>Cirrus &mdash; high, wispy strands</td><td>&mdash;</td></tr>
+              <tr><th>Middle (Alto-)</th><td>Altostratus &mdash; gray/blue mid sheet</td><td>Altocumulus &mdash; mid rolls and patches</td><td>&mdash;</td><td>&mdash;</td></tr>
+              <tr><th>Low (no prefix)</th><td>Stratus &mdash; low, fog-like layer</td><td>Stratocumulus &mdash; low, patchy rolls</td><td>&mdash;</td><td>Nimbostratus* &mdash; thick, steady-rain layer</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>The exception &mdash; vertical development</h3>
+        <p><b>Cumulonimbus</b> starts low but grows vertically through all three tiers: the classic thunderhead, capable of heavy rain, lightning, hail, and severe turbulence.</p>
+
+        <p class="bg-note">*Placed in the low tier here because its base commonly sags low; the WMO International Cloud Atlas formally classes Nimbostratus as a middle-level cloud.</p>
+      </div>
+    </details>
+  </section>
 
   <footer><div class="wrap"><div class="source"><b>References:</b>
 <ul class="source-list">
@@ -105,6 +179,8 @@
 </ul>
 </div>
 <p class="disclaimer"><b>Disclaimer:</b> Educational only. Cloud identification is AI-generated and may be inaccurate or incomplete &mdash; always verify sky conditions visually and via an official weather briefing (METAR/TAF, PIREPs) before making flight decisions. The Pilot in Command remains solely responsible for flight safety and official verification.</p></div><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
+
+<div id="print-sheet" aria-hidden="true"></div>
 
 <script>
 "use strict";
@@ -134,49 +210,123 @@ var CLOUD_DESCRIPTORS = {
   "Cumulonimbus": "A towering, dense thunderstorm cloud, often with a flat, anvil-shaped top. Associated with heavy rain, hail, severe turbulence, icing, lightning, and low-level wind shear &mdash; a significant hazard to avoid."
 };
 
+// How each type decomposes into the altitude-prefix + form-root matrix
+// (see the Background Knowledge section below the results).
+var CLOUD_MATRIX = {
+  "Cirrus": ["<b>Cirrus</b> (wispy / hair-like form)", "lives in the high tier by definition (above ~20,000 ft)"],
+  "Cirrocumulus": ["<b>Cirro</b> (high tier, above ~20,000 ft)", "<b>cumulus</b> (heap/puffy form)"],
+  "Cirrostratus": ["<b>Cirro</b> (high tier, above ~20,000 ft)", "<b>stratus</b> (layer/sheet form)"],
+  "Altocumulus": ["<b>Alto</b> (middle tier, ~6,500&ndash;20,000 ft)", "<b>cumulus</b> (heap/puffy form)"],
+  "Altostratus": ["<b>Alto</b> (middle tier, ~6,500&ndash;20,000 ft)", "<b>stratus</b> (layer/sheet form)"],
+  "Nimbostratus": ["<b>Nimbo</b> (rain-producing)", "<b>stratus</b> (layer/sheet form)"],
+  "Stratocumulus": ["no altitude prefix (low tier, surface to ~6,500 ft)", "<b>strato</b> + <b>cumulus</b> (a layer broken into heaps)"],
+  "Stratus": ["no altitude prefix (low tier, surface to ~6,500 ft)", "<b>stratus</b> (layer/sheet form)"],
+  "Cumulus": ["no altitude prefix (low tier, surface to ~6,500 ft)", "<b>cumulus</b> (heap/puffy form)"],
+  "Towering Cumulus": ["<b>cumulus</b> (heap/puffy form) in strong vertical growth", "building upward through the tiers &mdash; a step before Cumulonimbus"],
+  "Cumulonimbus": ["<b>Cumulo</b> (heap/puffy form)", "<b>nimbus</b> (rain-producing) &mdash; the exception that grows through all three tiers"]
+};
+
+var ATTRIBUTION = '<p class="classify-source">Classified against the <a href="https://cloudatlas.wmo.int/en/cloud-identification-guide.html" target="_blank" rel="noopener">World Meteorological Organization (WMO) International Cloud Atlas</a> standard genera.</p>';
+
+function cloudCardsHtml(types) {
+  var html = '<ul class="cloud-types">';
+  for (var i = 0; i < types.length; i++) {
+    var name = escapeHtml(types[i]);
+    var desc = CLOUD_DESCRIPTORS[types[i]] || "";
+    var matrix = CLOUD_MATRIX[types[i]];
+    html += '<li><p class="cloud-type-name">' + name + '</p>';
+    if (desc) html += '<p class="cloud-type-desc">' + desc + '</p>';
+    if (matrix) {
+      html += '<p class="matrix-label">Matrix:</p><ul class="matrix-list">';
+      for (var j = 0; j < matrix.length; j++) html += "<li>" + matrix[j] + "</li>";
+      html += "</ul>";
+    }
+    html += "</li>";
+  }
+  return html + "</ul>";
+}
+
+var CLEAR_CARD = '<ul class="cloud-types"><li><p class="cloud-type-name">Clear skies (CLR)</p>' +
+  '<p class="cloud-type-desc">No cloud layers identified in this photo. In a METAR, <b>CLR</b> means no clouds were detected below 12,000 ft by an automated station; <b>SKC</b> (sky clear) is the human-observer equivalent.</p></li></ul>';
+
 var fileInput = document.getElementById("photo-input");
+var cameraInput = document.getElementById("camera-input");
+var cameraLabel = document.getElementById("camera-label");
 var fileName = document.getElementById("file-name");
 var previewFrame = document.getElementById("preview-frame");
 var previewImg = document.getElementById("preview-img");
 var identifyBtn = document.getElementById("identify-btn");
 var resetBtn = document.getElementById("reset-btn");
 var output = document.getElementById("output");
+var printSheet = document.getElementById("print-sheet");
 
 var selectedBase64 = null;
 var selectedMediaType = null;
+var selectedFileName = "";
+var lastTypes = null;
+
+// Matches the Worker's ~5 MB image cap, checked here before wasting an upload.
+var MAX_BYTES = 5 * 1024 * 1024;
+
+// iOS expands the file input into a Take Photo / Photo Library sheet on its own;
+// Android's picker doesn't reliably offer the camera, so Android gets an
+// explicit Take Photo button (opens the camera directly).
+if (cameraLabel && /android/i.test(navigator.userAgent)) cameraLabel.hidden = false;
+
+function fmtSize(bytes) {
+  return bytes < 1048576
+    ? Math.max(1, Math.round(bytes / 1024)) + " KB"
+    : (bytes / 1048576).toFixed(1) + " MB";
+}
 
 function resetAll() {
   fileInput.value = "";
+  if (cameraInput) cameraInput.value = "";
   fileName.textContent = "No file selected";
+  fileName.classList.remove("file-name-warn");
   previewFrame.hidden = true;
   previewImg.src = "";
   identifyBtn.disabled = true;
   selectedBase64 = null;
   selectedMediaType = null;
+  selectedFileName = "";
+  lastTypes = null;
   output.innerHTML = "";
 }
 
-fileInput.addEventListener("change", function () {
-  var file = fileInput.files && fileInput.files[0];
+function onPick(e) {
+  var input = e.target;
+  var file = input.files && input.files[0];
   if (!file) { resetAll(); return; }
+  // Only one source at a time; picking from one clears the other.
+  if (cameraInput && input !== cameraInput) cameraInput.value = "";
+  if (input !== fileInput) fileInput.value = "";
 
-  fileName.textContent = file.name;
+  var tooBig = file.size > MAX_BYTES;
+  fileName.textContent = file.name + " — " + fmtSize(file.size) +
+    (tooBig ? " — over the 5 MB limit, choose a smaller photo" : "");
+  fileName.classList.toggle("file-name-warn", tooBig);
+  selectedFileName = file.name;
   selectedMediaType = file.type || "image/jpeg";
   output.innerHTML = "";
+  lastTypes = null;
 
   var reader = new FileReader();
   reader.onload = function () {
     var dataUrl = reader.result;
     previewImg.src = dataUrl;
     previewFrame.hidden = false;
-    selectedBase64 = dataUrl.split(",")[1] || null;
+    selectedBase64 = tooBig ? null : (dataUrl.split(",")[1] || null);
     identifyBtn.disabled = !selectedBase64;
   };
   reader.onerror = function () {
     output.innerHTML = '<p class="error-note">Couldn’t read that file. Try a different photo.</p>';
   };
   reader.readAsDataURL(file);
-});
+}
+
+fileInput.addEventListener("change", onPick);
+if (cameraInput) cameraInput.addEventListener("change", onPick);
 
 identifyBtn.addEventListener("click", function () {
   if (!selectedBase64) return;
@@ -206,21 +356,13 @@ identifyBtn.addEventListener("click", function () {
         return;
       }
       var types = result.data && result.data.types ? result.data.types : [];
-      if (types.length === 0) {
-        output.innerHTML = '<p class="loading-note">No clouds identified in this photo.</p>';
-      } else {
-        var html = '<p class="classify-source">Classified against the <a href="https://cloudatlas.wmo.int/en/cloud-identification-guide.html" target="_blank" rel="noopener">World Meteorological Organization (WMO) International Cloud Atlas</a> standard genera.</p>';
-        html += '<ul class="cloud-types">';
-        for (var i = 0; i < types.length; i++) {
-          var name = escapeHtml(types[i]);
-          var desc = CLOUD_DESCRIPTORS[types[i]] || "";
-          html += '<li><p class="cloud-type-name">' + name + '</p>';
-          if (desc) html += '<p class="cloud-type-desc">' + desc + '</p>';
-          html += "</li>";
-        }
-        html += "</ul>";
-        output.innerHTML = html;
-      }
+      lastTypes = types;
+      var body = types.length === 0 ? CLEAR_CARD : cloudCardsHtml(types) + ATTRIBUTION;
+      output.innerHTML =
+        '<h2 class="sec-label result-head">Result</h2>' + body +
+        '<p class="pdf-row"><button id="pdf-btn" class="btn-secondary" type="button">Download PDF</button></p>';
+      var pdfBtn = document.getElementById("pdf-btn");
+      if (pdfBtn) pdfBtn.addEventListener("click", downloadPdf);
       identifyBtn.disabled = false;
     })
     .catch(function () {
@@ -228,6 +370,22 @@ identifyBtn.addEventListener("click", function () {
       identifyBtn.disabled = false;
     });
 });
+
+// "Download PDF": fill the print-only sheet with the photo + result, then open
+// the print dialog — on iPhone/iPad tap Print then share/Save to Files as PDF;
+// on desktop choose "Save as PDF" as the destination.
+function downloadPdf() {
+  if (lastTypes === null) return;
+  var stamp = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  printSheet.innerHTML =
+    '<p class="pr-brand">PilotDECODER &mdash; Cloud Decoder</p>' +
+    '<p class="pr-meta">' + escapeHtml(selectedFileName) + " &middot; " + stamp + "</p>" +
+    (previewImg.src ? '<img class="pr-img" src="' + previewImg.src + '" alt="Sky photo" />' : "") +
+    '<h2 class="pr-head">Result</h2>' +
+    (lastTypes.length === 0 ? CLEAR_CARD : cloudCardsHtml(lastTypes) + ATTRIBUTION) +
+    '<p class="pr-foot">pilotdecoder.com/cloud-decoder &middot; Educational only &mdash; not for operational decisions.</p>';
+  window.print();
+}
 
 resetBtn.addEventListener("click", resetAll);
 </script>
