@@ -204,8 +204,8 @@ var CLOUD_DESCRIPTORS = {
   "Stratocumulus": "Low, lumpy, gray-and-white patches or rolls, usually with some blue sky visible between them. Generally fair or only slightly unsettled weather.",
   "Stratus": "A low, flat, featureless gray layer covering the sky like fog that doesn't reach the ground, often producing drizzle and low ceilings.",
   "Cumulus": "Detached, puffy, cotton-like clouds with flat bases and rounded tops, generally fair weather when small and not building vertically.",
-  "Towering Cumulus": "A cumulus cloud in strong vertical growth, with a firm, cauliflower-like top &mdash; a sign of developing convective instability, associated with turbulence and often a precursor to Cumulonimbus.",
-  "Cumulonimbus": "A towering, dense thunderstorm cloud, often with a flat, anvil-shaped top. Associated with heavy rain, hail, severe turbulence, icing, lightning, and low-level wind shear &mdash; a significant hazard to avoid."
+  "Towering Cumulus": "A cumulus cloud in strong vertical growth, with a firm, cauliflower-like top. A sign of developing convective instability, associated with turbulence and often a precursor to Cumulonimbus.",
+  "Cumulonimbus": "A towering, dense thunderstorm cloud, often with a flat, anvil-shaped top. Associated with heavy rain, hail, severe turbulence, icing, lightning, and low-level wind shear. A significant hazard to avoid."
 };
 
 // How each type decomposes into the altitude-prefix + form-root matrix
@@ -220,8 +220,8 @@ var CLOUD_MATRIX = {
   "Stratocumulus": ["no altitude prefix (low tier, surface to ~6,500 ft)", "<b>strato</b> + <b>cumulus</b> (a layer broken into heaps)"],
   "Stratus": ["no altitude prefix (low tier, surface to ~6,500 ft)", "<b>stratus</b> (layer/sheet form)"],
   "Cumulus": ["no altitude prefix (low tier, surface to ~6,500 ft)", "<b>cumulus</b> (heap/puffy form)"],
-  "Towering Cumulus": ["<b>cumulus</b> (heap/puffy form) in strong vertical growth", "building upward through the tiers &mdash; a step before Cumulonimbus"],
-  "Cumulonimbus": ["<b>Cumulo</b> (heap/puffy form)", "<b>nimbus</b> (rain-producing) &mdash; the exception that grows through all three tiers"]
+  "Towering Cumulus": ["<b>cumulus</b> (heap/puffy form) in strong vertical growth", "building upward through the tiers, a step before Cumulonimbus"],
+  "Cumulonimbus": ["<b>Cumulo</b> (heap/puffy form)", "<b>nimbus</b> (rain-producing), the exception that grows through all three tiers"]
 };
 
 // References block for the PDF: the PDF travels without the page's References
@@ -241,7 +241,7 @@ function cloudCardsHtml(types) {
     html += '<li><p class="cloud-type-name">' + name + '</p>';
     if (desc) html += '<p class="cloud-type-desc">' + desc + '</p>';
     if (matrix) {
-      html += '<p class="matrix-label">Matrix:</p><ul class="matrix-list">';
+      html += '<p class="matrix-label">Details:</p><ul class="matrix-list">';
       for (var j = 0; j < matrix.length; j++) html += "<li>" + matrix[j] + "</li>";
       html += "</ul>";
     }
@@ -388,7 +388,7 @@ function downloadPdf() {
     '<h2 class="pr-head">Result</h2>' +
     (lastTypes.length === 0 ? CLEAR_CARD : cloudCardsHtml(lastTypes)) +
     PRINT_REFS +
-    '<p class="pr-foot">pilotdecoder.com/cloud-decoder &middot; Educational only &mdash; not for operational decisions.</p>';
+    '<p class="pr-foot">pilotdecoder.com/cloud-decoder &middot; Educational only. Not for operational decisions.</p>';
   window.print();
 }
 
