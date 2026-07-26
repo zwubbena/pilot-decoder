@@ -28,6 +28,9 @@
   .copyright { margin-top: 0; }
   /* breathing room between the last tool card and the footer */
   main { padding-bottom: 56px; }
+  /* second-level resource entries (e.g. specific airports under ADIP) */
+  .res-list ul { list-style: circle outside; margin: 4px 0 0; padding: 0 0 0 22px; }
+  .res-list ul li { padding: 3px 0; }
 </style>
 </head>
 <body>
@@ -92,8 +95,14 @@
 
       <h3 class="res-sublabel">Airports, NOTAMs &amp; airspace</h3>
       <ul class="res-list">
-        <li><a href="https://adip.faa.gov/agis/public/#/airportSearch" target="_blank" rel="noopener">FAA Airport Data and Information Portal (ADIP)</a> <span class="res-desc">— Search official airport, runway, frequency, facility, ownership, and field-elevation data.</span></li>
-        <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/50R" target="_blank" rel="noopener">ADIP — Lockhart Municipal Airport (50R)</a> <span class="res-desc">— Open the FAA airport-information page specifically for Lockhart Municipal Airport.</span></li>
+        <li><a href="https://adip.faa.gov/agis/public/#/airportSearch" target="_blank" rel="noopener">FAA Airport Data and Information Portal (ADIP)</a> <span class="res-desc">— Search official airport, runway, frequency, facility, ownership, and field-elevation data.</span>
+          <ul>
+            <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/50R" target="_blank" rel="noopener">ADIP — Lockhart Municipal Airport (50R)</a></li>
+            <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/GTU" target="_blank" rel="noopener">ADIP —</a> <a href="https://georgetowntexas.gov/transportation/georgetown_executive_airport_at_johnny_gantt_field/" target="_blank" rel="noopener">Georgetown Executive Airport at Johnny Gantt Field</a> (KGTU)</li>
+            <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/AUS" target="_blank" rel="noopener">ADIP — Austin–Bergstrom International Airport (KAUS)</a></li>
+            <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/HYI" target="_blank" rel="noopener">ADIP — San Marcos Regional Airport (KHYI)</a></li>
+          </ul>
+        </li>
         <li><a href="https://www.faa.gov/airports/runway_safety/diagrams/" target="_blank" rel="noopener">FAA Airport Diagrams</a> <span class="res-desc">— Search and download official FAA airport diagrams by airport identifier.</span></li>
         <li><a href="https://notams.aim.faa.gov/" target="_blank" rel="noopener">FAA NOTAM Search</a> <span class="res-desc">— Search current Notices to Air Missions. Enter 50R for Lockhart Municipal Airport.</span></li>
         <li><a href="https://tfr.faa.gov/" target="_blank" rel="noopener">FAA Temporary Flight Restriction List</a> <span class="res-desc">— Review Temporary Flight Restrictions currently published by the FAA.</span></li>
