@@ -303,8 +303,8 @@ function onPick(e) {
   if (input !== fileInput) fileInput.value = "";
 
   var tooBig = file.size > MAX_BYTES;
-  fileName.textContent = file.name + " — " + fmtSize(file.size) +
-    (tooBig ? " — over the 5 MB limit, choose a smaller photo" : "");
+  fileName.textContent = file.name + " · " + fmtSize(file.size) +
+    (tooBig ? " · over the 5 MB limit, choose a smaller photo" : "");
   fileName.classList.toggle("file-name-warn", tooBig);
   selectedFileName = file.name;
   selectedMediaType = file.type || "image/jpeg";
