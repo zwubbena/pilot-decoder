@@ -80,6 +80,7 @@
   #da-chart .tick-label { fill: var(--ink); font-size: 11.5px; }
   #da-chart .tick-label-f { fill: var(--ink); font-size: 10px; opacity: 0.75; }
   #da-chart .axis-title { fill: var(--ink); font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em; }
+  #da-chart .axis-title-y-mobile { display: none; }
   #da-chart .pa-line { stroke: var(--ink); stroke-width: 1.1; opacity: 0.75; fill: none; }
   #da-chart .pa-label { fill: var(--ink); font-size: 10.5px; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; }
   #da-chart .isa-line { stroke: var(--ink); stroke-width: 1.3; stroke-dasharray: 6 4; fill: none; }
@@ -100,6 +101,8 @@
     #da-chart .tick-label { font-size: 16px; }
     #da-chart .tick-label-f { display: none; }
     #da-chart .axis-title { font-size: 17px; }
+    #da-chart .axis-title-y { display: none; }
+    #da-chart .axis-title-y-mobile { display: block; }
     #da-chart .pa-label, #da-chart .isa-label { font-size: 14px; }
     .calc-chain { font-size: 12.5px; }
     .gen-formula { font-size: 13px; }
@@ -380,9 +383,13 @@ function buildChart() {
   /* axis titles */
   svg.appendChild(el("text", { x: (pl + pr) / 2, y: CH.H - 26, "text-anchor": "middle",
     "class": "axis-title" }, "OUTSIDE AIR TEMPERATURE (OAT)"));
-  var yt = el("text", { x: 0, y: 0, "text-anchor": "middle", "class": "axis-title",
+  var yt = el("text", { x: 0, y: 0, "text-anchor": "middle", "class": "axis-title axis-title-y",
     transform: "translate(14," + (pt + pb) / 2 + ") rotate(-90)" }, "DENSITY ALTITUDE \u2014 FEET");
   svg.appendChild(yt);
+  /* phones: the rotated title collides with the enlarged tick numbers, so a
+     horizontal title above the top-left of the plot is shown instead (CSS swaps them) */
+  svg.appendChild(el("text", { x: 8, y: 15, "text-anchor": "start",
+    "class": "axis-title axis-title-y-mobile" }, "DENSITY ALTITUDE \u2014 FEET"));
 
   /* rotation angle shared by all diagonals (screen coords) */
   var pxPerC = (pr - pl) / (CH.tMax - CH.tMin);
