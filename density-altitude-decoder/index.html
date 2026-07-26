@@ -283,6 +283,7 @@ function renderChains(r) {
 
   /* ---- step 2 ---- */
   c2.innerHTML =
+    line("ISA Temp" + EQ + "15" + MI + "2" + X + "(PA" + D + "1,000)") +
     nline("ISA Temp" + EQ + "15" + MI + "2" + X + "(" + v(fmt(r.PA, 2)) + D + "1,000)", 1) +
     nline("ISA Temp" + EQ + "15" + MI + "2" + X + wrap(r.kilo, 3), 2) +
     nline("ISA Temp" + EQ + "15" + MI + wrap(r.cool, 3), 3) +
