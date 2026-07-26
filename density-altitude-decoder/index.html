@@ -181,27 +181,28 @@
       <ul class="note-line"><li>120 feet per &deg;C above standard; subtract 120 per degree below it.</li></ul>
     </section>
 
-    <div class="result-banner" id="result-banner">
-      <div class="rb-stats">
-        <div class="rb-stat">
-          <p class="rb-label">Field Elevation</p>
-          <p class="rb-big rb-fe" id="rb-fe">&mdash;</p>
-        </div>
-        <div class="rb-arrow" aria-hidden="true">&rarr;</div>
-        <div class="rb-stat">
-          <p class="rb-label">Density Altitude</p>
-          <p class="rb-big" id="rb-big">&mdash;</p>
-        </div>
-      </div>
-      <p class="rb-exact" id="rb-exact"></p>
-      <p class="rb-read" id="rb-read"></p>
-    </div>
-
     <section class="chart-sec">
       <h2 class="calc-head">Density Altitude Chart</h2>
       <div class="chart-frame">
         <svg id="da-chart" viewBox="0 0 640 500" role="img" aria-label="Density altitude chart"><title>Density altitude chart</title></svg>
       </div>
+
+      <div class="result-banner" id="result-banner">
+        <div class="rb-stats">
+          <div class="rb-stat">
+            <p class="rb-label">Field Elevation</p>
+            <p class="rb-big rb-fe" id="rb-fe">&mdash;</p>
+          </div>
+          <div class="rb-arrow" aria-hidden="true">&rarr;</div>
+          <div class="rb-stat">
+            <p class="rb-label">Density Altitude</p>
+            <p class="rb-big" id="rb-big">&mdash;</p>
+          </div>
+        </div>
+        <p class="rb-exact" id="rb-exact"></p>
+        <p class="rb-read" id="rb-read"></p>
+      </div>
+
       <p class="howto-cap">How to read it</p>
       <ul class="summary-list">
         <li>Enter at the bottom at your outside air temperature and rise to your pressure-altitude diagonal (the red dashed diagonal is <i>your exact</i> PA, interpolated between the printed lines).</li>
