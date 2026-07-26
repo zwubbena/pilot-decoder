@@ -65,19 +65,13 @@
   .matrix-list { margin: 4px 0 0; padding-left: 20px; font-size: 13.5px; line-height: 1.55; color: var(--ink); }
   .matrix-list li { margin: 2px 0; }
   .pdf-row { margin: 14px 16px 0; }
-  /* Background Knowledge expandable */
-  .bg-know { margin: 28px 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); }
-  .bg-know summary { cursor: pointer; padding: 14px 16px; font-family: var(--sans); font-weight: 700; font-size: 15px; color: var(--brand); }
-  .bg-know[open] summary { border-bottom: 1px solid var(--rule); }
-  .bg-body { padding: 4px 16px 18px; font-size: 14.5px; line-height: 1.6; color: var(--ink); }
-  .bg-body h3 { font-family: var(--sans); font-size: 13.5px; margin: 18px 0 4px; color: var(--mid); }
-  .bg-body ul { margin: 6px 0 0; padding-left: 20px; }
-  .bg-body li { margin: 3px 0; }
-  .bg-scroll { overflow-x: auto; }
-  .bg-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; min-width: 560px; }
-  .bg-table th, .bg-table td { border: 1px solid var(--rule); padding: 7px 9px; text-align: left; vertical-align: top; }
-  .bg-table thead th, .bg-table tbody th { background: var(--surface); font-family: var(--sans); font-size: 12.5px; }
-  .bg-note { font-size: 12px; color: var(--ink-soft); margin: 10px 0 0; }
+  /* Identifiable cloud types panel: identified ones get bolded via .hit */
+  .types-panel { margin: 28px 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); padding: 14px 16px 16px; }
+  .types-title { font-family: var(--sans); font-weight: 700; font-size: 15px; color: var(--brand); margin: 0 0 10px; }
+  .types-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .types-list li { font-family: var(--sans); font-size: 13px; color: var(--ink-soft); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 999px; padding: 5px 12px; }
+  .types-list li.hit { font-weight: 700; color: var(--brand); border-color: var(--brand); background: color-mix(in srgb, var(--wash) 40%, var(--surface)); }
+  .types-hint { font-size: 12px; color: var(--ink-soft); margin: 10px 0 0; }
   /* Print sheet: hidden on screen; when printing, it is the only thing on the page */
   #print-sheet { display: none; }
   @media print {
@@ -105,7 +99,7 @@
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">Cloud Decoder</span></nav>
       <h1 class="eyebrow"><strong>Cloud Decoder</strong></h1>
-      <p class="masthead-desc">Upload or take a photo of the sky to identify the cloud types. Then learn how these types are classified in the Background Knowledge section.</p>
+      <p class="masthead-desc">Upload or take a photo of the sky to identify the cloud types. Every type the tool can identify is listed below; the ones found in your photo appear bolded.</p>
     </div>
   </header>
 
@@ -128,45 +122,23 @@
   <main class="output wrap" id="output" aria-live="polite"></main>
 
   <section class="wrap">
-    <details class="bg-know" id="bg-know">
-      <summary>Background Knowledge</summary>
-      <div class="bg-body">
-        <p>A structured framework for making sense of cloud classification: think of it as a simple matrix built on two axes &mdash; <b>altitude</b> (where the cloud lives) and <b>form</b> (what it looks like). Every main cloud type is a combination of an altitude prefix and a form root.</p>
-
-        <h3>Axis 1 &mdash; Form roots (what it looks like)</h3>
-        <ul>
-          <li><b>Cumulus</b> (Latin for &ldquo;heap&rdquo; or &ldquo;pile&rdquo;): puffy, heap-like clouds with distinct outlines and flat bases &mdash; floating cotton balls.</li>
-          <li><b>Stratus</b> (Latin for &ldquo;layer&rdquo; or &ldquo;spread out&rdquo;): featureless, flat, blanket-like layers covering large areas of sky.</li>
-          <li><b>Cirrus</b> (Latin for &ldquo;curl&rdquo; or &ldquo;hair&rdquo;): thin, wispy, fibrous clouds made entirely of ice crystals.</li>
-          <li><b>Nimbus / nimbo-</b> (Latin for &ldquo;rain&rdquo;): a modifier marking a cloud that is actively producing precipitation.</li>
-        </ul>
-
-        <h3>Axis 2 &mdash; Altitude tiers (where it lives)</h3>
-        <ul>
-          <li><b>High</b> (above ~20,000 ft): prefix <b>Cirro-</b> &mdash; Cirrus, Cirrocumulus, Cirrostratus.</li>
-          <li><b>Middle</b> (~6,500&ndash;20,000 ft): prefix <b>Alto-</b> &mdash; Altocumulus, Altostratus.</li>
-          <li><b>Low</b> (surface to ~6,500 ft): no altitude prefix &mdash; Stratus, Stratocumulus, Cumulus.</li>
-        </ul>
-
-        <h3>The matrix &mdash; the ten genera</h3>
-        <p>Mix an altitude prefix with a form root and the ten fundamental genera fall out:</p>
-        <div class="bg-scroll">
-          <table class="bg-table">
-            <thead><tr><th>Altitude tier</th><th>Layered (stratus)</th><th>Heap (cumulus)</th><th>Wispy (cirrus)</th><th>Rain (nimbus)</th></tr></thead>
-            <tbody>
-              <tr><th>High (Cirro-)</th><td>Cirrostratus &mdash; high, thin sheet</td><td>Cirrocumulus &mdash; high, tiny ripples</td><td>Cirrus &mdash; high, wispy strands</td><td>&mdash;</td></tr>
-              <tr><th>Middle (Alto-)</th><td>Altostratus &mdash; gray/blue mid sheet</td><td>Altocumulus &mdash; mid rolls and patches</td><td>&mdash;</td><td>&mdash;</td></tr>
-              <tr><th>Low (no prefix)</th><td>Stratus &mdash; low, fog-like layer</td><td>Stratocumulus &mdash; low, patchy rolls</td><td>&mdash;</td><td>Nimbostratus* &mdash; thick, steady-rain layer</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>The exception &mdash; vertical development</h3>
-        <p><b>Cumulonimbus</b> starts low but grows vertically through all three tiers: the classic thunderhead, capable of heavy rain, lightning, hail, and severe turbulence.</p>
-
-        <p class="bg-note">*Placed in the low tier here because its base commonly sags low; the WMO International Cloud Atlas formally classes Nimbostratus as a middle-level cloud.</p>
-      </div>
-    </details>
+    <div class="types-panel">
+      <p class="types-title">Cloud types this tool can identify</p>
+      <ul class="types-list" id="types-list">
+        <li data-type="Cirrus">Cirrus</li>
+        <li data-type="Cirrocumulus">Cirrocumulus</li>
+        <li data-type="Cirrostratus">Cirrostratus</li>
+        <li data-type="Altocumulus">Altocumulus</li>
+        <li data-type="Altostratus">Altostratus</li>
+        <li data-type="Nimbostratus">Nimbostratus</li>
+        <li data-type="Stratocumulus">Stratocumulus</li>
+        <li data-type="Stratus">Stratus</li>
+        <li data-type="Cumulus">Cumulus</li>
+        <li data-type="Towering Cumulus">Towering Cumulus</li>
+        <li data-type="Cumulonimbus">Cumulonimbus</li>
+      </ul>
+      <p class="types-hint">Types identified in your photo appear bolded.</p>
+    </div>
   </section>
 
   <footer><div class="wrap"><div class="source"><b>References:</b>
@@ -296,6 +268,7 @@ function resetAll() {
   selectedFileName = "";
   lastTypes = null;
   output.innerHTML = "";
+  markTypes([]);
 }
 
 function onPick(e) {
@@ -314,6 +287,7 @@ function onPick(e) {
   selectedMediaType = file.type || "image/jpeg";
   output.innerHTML = "";
   lastTypes = null;
+  markTypes([]);
 
   var reader = new FileReader();
   reader.onload = function () {
@@ -327,6 +301,14 @@ function onPick(e) {
     output.innerHTML = '<p class="error-note">Couldn’t read that file. Try a different photo.</p>';
   };
   reader.readAsDataURL(file);
+}
+
+/* Bold the identified types in the "can identify" panel ([] clears all). */
+function markTypes(types) {
+  var lis = document.querySelectorAll("#types-list li");
+  for (var i = 0; i < lis.length; i++) {
+    lis[i].classList.toggle("hit", types.indexOf(lis[i].getAttribute("data-type")) !== -1);
+  }
 }
 
 fileInput.addEventListener("change", onPick);
@@ -361,6 +343,7 @@ identifyBtn.addEventListener("click", function () {
       }
       var types = result.data && result.data.types ? result.data.types : [];
       lastTypes = types;
+      markTypes(types);
       var body = types.length === 0 ? CLEAR_CARD : cloudCardsHtml(types);
       output.innerHTML =
         '<h2 class="sec-label result-head">Result</h2>' + body +
