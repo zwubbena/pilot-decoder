@@ -56,9 +56,6 @@
   .cloud-types li { background: var(--wash); border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 8px; padding: 16px; }
   .cloud-type-name { font-family: var(--sans); font-size: 19px; font-weight: 700; color: var(--brand); margin: 0; }
   .cloud-type-desc { font-size: 14.5px; color: var(--ink); margin: 8px 0 0; line-height: 1.55; }
-  .classify-source { font-size: 12.5px; color: var(--ink-soft); font-family: var(--sans); margin: 4px 0 14px; }
-  .classify-source a { color: var(--mid); text-decoration: underline; text-underline-offset: 3px; }
-  .classify-source a:hover { color: var(--brand); }
   .loading-note { font-size: 15px; color: var(--ink-soft); }
   .output { padding-top: 24px; padding-bottom: 40px; }
   .output:empty { padding-top: 0; padding-bottom: 0; }
@@ -90,6 +87,9 @@
     .pr-meta { font-size: 12px; color: #444; margin: 3px 0 14px; }
     .pr-img { max-width: 100%; max-height: 330px; border-radius: 8px; margin: 0 0 14px; }
     .pr-head { font-family: var(--sans); font-size: 17px; margin: 0; }
+    .pr-refs-head { margin-top: 16px; font-size: 14px; }
+    .pr-refs { margin: 6px 0 0; padding-left: 18px; font-size: 11.5px; line-height: 1.5; color: #333; }
+    .pr-refs li { margin: 2px 0; }
     .pr-foot { margin-top: 16px; font-size: 11px; color: #555; }
     #print-sheet .cloud-types { margin: 8px 0 0; }
   }
@@ -171,9 +171,9 @@
 
   <footer><div class="wrap"><div class="source"><b>References:</b>
 <ul class="source-list">
+<li>World Meteorological Organization (WMO), <a href="https://cloudatlas.wmo.int/en/cloud-identification-guide.html" target="_blank" rel="noopener"><i>International Cloud Atlas</i></a> &mdash; cloud identifications on this page are classified against its standard genera.</li>
 <li>Federal Aviation Administration (FAA), <a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_weather_handbook" target="_blank" rel="noopener">FAA-H-8083-28, <i>Aviation Weather Handbook</i></a> &mdash; cloud classification, the ten standard genera, and towering cumulus as a convective-hazard indicator. (Supersedes the now-canceled AC 00-6B.)</li>
 <li>Federal Aviation Administration (FAA), <a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak" target="_blank" rel="noopener">Pilot's Handbook of Aeronautical Knowledge (PHAK)</a>, Aviation Weather chapter.</li>
-<li>World Meteorological Organization (WMO), <a href="https://cloudatlas.wmo.int/en/home.html" target="_blank" rel="noopener"><i>International Cloud Atlas</i></a>.</li>
 </ul>
 </div>
 <p class="disclaimer"><b>Disclaimer:</b> Photo is not stored afterward. Educational only. Cloud identification may be inaccurate or incomplete. Always verify sky conditions visually and via an official weather briefing (METAR/TAF, PIREPs) before making flight decisions. The Pilot in Command remains solely responsible for flight safety and official verification.</p></div><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
@@ -224,7 +224,13 @@ var CLOUD_MATRIX = {
   "Cumulonimbus": ["<b>Cumulo</b> (heap/puffy form)", "<b>nimbus</b> (rain-producing) &mdash; the exception that grows through all three tiers"]
 };
 
-var ATTRIBUTION = '<p class="classify-source">Classified against the <a href="https://cloudatlas.wmo.int/en/cloud-identification-guide.html" target="_blank" rel="noopener">World Meteorological Organization (WMO) International Cloud Atlas</a> standard genera.</p>';
+// References block for the PDF: the PDF travels without the page's References
+// section, so it carries its own (URLs as plain text — links don't survive print).
+var PRINT_REFS = '<h2 class="pr-head pr-refs-head">References</h2><ul class="pr-refs">' +
+  '<li>World Meteorological Organization (WMO), <i>International Cloud Atlas</i> &mdash; identifications are classified against its standard genera (cloudatlas.wmo.int).</li>' +
+  '<li>Federal Aviation Administration (FAA), FAA-H-8083-28, <i>Aviation Weather Handbook</i> (faa.gov).</li>' +
+  '<li>Federal Aviation Administration (FAA), <i>Pilot&#39;s Handbook of Aeronautical Knowledge</i> (PHAK), Aviation Weather chapter (faa.gov).</li>' +
+  "</ul>";
 
 function cloudCardsHtml(types) {
   var html = '<ul class="cloud-types">';
@@ -355,7 +361,7 @@ identifyBtn.addEventListener("click", function () {
       }
       var types = result.data && result.data.types ? result.data.types : [];
       lastTypes = types;
-      var body = types.length === 0 ? CLEAR_CARD : cloudCardsHtml(types) + ATTRIBUTION;
+      var body = types.length === 0 ? CLEAR_CARD : cloudCardsHtml(types);
       output.innerHTML =
         '<h2 class="sec-label result-head">Result</h2>' + body +
         '<p class="pdf-row"><button id="pdf-btn" class="btn-secondary" type="button">Download PDF</button></p>';
@@ -380,7 +386,8 @@ function downloadPdf() {
     '<p class="pr-meta">' + escapeHtml(selectedFileName) + " &middot; " + stamp + "</p>" +
     (previewImg.src ? '<img class="pr-img" src="' + previewImg.src + '" alt="Sky photo" />' : "") +
     '<h2 class="pr-head">Result</h2>' +
-    (lastTypes.length === 0 ? CLEAR_CARD : cloudCardsHtml(lastTypes) + ATTRIBUTION) +
+    (lastTypes.length === 0 ? CLEAR_CARD : cloudCardsHtml(lastTypes)) +
+    PRINT_REFS +
     '<p class="pr-foot">pilotdecoder.com/cloud-decoder &middot; Educational only &mdash; not for operational decisions.</p>';
   window.print();
 }
