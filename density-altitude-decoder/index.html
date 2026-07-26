@@ -58,7 +58,7 @@
   .calc-chain .eqno { color: var(--ink-soft); font-size: 12px; }
   .calc-chain .val { color: var(--brand); font-weight: 700; }
   .calc-chain .final { font-weight: 700; }
-  .calc-chain .final .boxed { display: inline-block; border: 1.5px solid var(--brand); border-radius: 4px; padding: 1px 10px; color: var(--brand); }
+  .calc-chain .final .boxed { display: inline-block; border: 1.5px solid var(--brand); border-radius: 4px; padding: 1px 10px; color: var(--brand); background: #e2f3e2; }
 
   /* ---------- result banner ---------- */
   .result-banner { margin: 34px 0 0; background: var(--wash); border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 8px; padding: 18px 20px; }
@@ -275,7 +275,7 @@ function renderChains(r) {
 
   /* ---- step 1 ---- */
   c1.innerHTML =
-    line("PA" + EQ + v(fmt(r.FE, 2)) + PL + "(29.92" + MI + "AS)" + X + "1,000") +
+    line("PA" + EQ + "FE" + PL + "(29.92" + MI + "AS)" + X + "1,000") +
     nline("PA" + EQ + fmt(r.FE, 2) + PL + "(29.92" + MI + v(fmt(r.AS, 2)) + ")" + X + "1,000", 1) +
     nline("PA" + EQ + fmt(r.FE, 2) + PL + wrap(r.diff, 3) + X + "1,000", 2) +
     nline("PA" + EQ + fmt(r.FE, 2) + PL + wrap(r.corr, 2), 3) +
@@ -291,7 +291,7 @@ function renderChains(r) {
 
   /* ---- step 3 ---- */
   c3.innerHTML =
-    line("DA" + EQ + v(fmt(r.PA, 2)) + PL + "120" + X + "(OAT" + MI + "ISA Temp)") +
+    line("DA" + EQ + "PA" + PL + "120" + X + "(OAT" + MI + "ISA Temp)") +
     nline("DA" + EQ + fmt(r.PA, 2) + PL + "120" + X + "(" + v(fmt(r.OAT, 2)) + MI + (r.ISA < 0 ? "(" : "") + v(fmt(r.ISA, 3)) + (r.ISA < 0 ? ")" : "") + ")", 1) +
     nline("DA" + EQ + fmt(r.PA, 2) + PL + "120" + X + wrap(r.dev, 3), 2) +
     nline("DA" + EQ + fmt(r.PA, 2) + PL + wrap(r.add, 2), 3) +
