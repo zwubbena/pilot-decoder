@@ -367,10 +367,11 @@ function downloadPdf() {
   var stamp = d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
   // Suggested PDF filename: browsers take it from document.title, so set an
-  // ISO-8601 Zulu-stamped name during printing, then restore the real title.
+  // ISO-8601 local-time-stamped name during printing, then restore the real title.
+  // (No Z suffix: this is the device's local time, not Zulu.)
   function p2(n) { return (n < 10 ? "0" : "") + n; }
-  var iso = d.getUTCFullYear() + "-" + p2(d.getUTCMonth() + 1) + "-" + p2(d.getUTCDate()) +
-    "T" + p2(d.getUTCHours()) + p2(d.getUTCMinutes()) + "Z";
+  var iso = d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()) +
+    "T" + p2(d.getHours()) + p2(d.getMinutes());
   var prevTitle = document.title;
   document.title = "cloud-decoder_" + iso;
   function restoreTitle() { document.title = prevTitle; window.removeEventListener("afterprint", restoreTitle); }
