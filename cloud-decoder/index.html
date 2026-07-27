@@ -363,7 +363,19 @@ identifyBtn.addEventListener("click", function () {
 // on desktop choose "Save as PDF" as the destination.
 function downloadPdf() {
   if (lastTypes === null) return;
-  var stamp = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  var d = new Date();
+  var stamp = d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  // Suggested PDF filename: browsers take it from document.title, so set an
+  // ISO-8601 Zulu-stamped name during printing, then restore the real title.
+  function p2(n) { return (n < 10 ? "0" : "") + n; }
+  var iso = d.getUTCFullYear() + "-" + p2(d.getUTCMonth() + 1) + "-" + p2(d.getUTCDate()) +
+    "T" + p2(d.getUTCHours()) + p2(d.getUTCMinutes()) + "Z";
+  var prevTitle = document.title;
+  document.title = "cloud-decoder_" + iso;
+  function restoreTitle() { document.title = prevTitle; window.removeEventListener("afterprint", restoreTitle); }
+  window.addEventListener("afterprint", restoreTitle);
+  setTimeout(restoreTitle, 3000);
   printSheet.innerHTML =
     '<p class="pr-brand">Cloud Decoder | PilotDECODER</p>' +
     '<p class="pr-meta">' + escapeHtml(selectedFileName) + " &middot; " + stamp + "</p>" +
