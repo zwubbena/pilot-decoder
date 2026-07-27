@@ -371,7 +371,7 @@ function downloadPdf() {
   // (No Z suffix: this is the device's local time, not Zulu.)
   function p2(n) { return (n < 10 ? "0" : "") + n; }
   var iso = d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()) +
-    "T" + p2(d.getHours()) + p2(d.getMinutes());
+    "_T" + p2(d.getHours()) + p2(d.getMinutes());
   var prevTitle = document.title;
   document.title = "cloud-decoder_" + iso;
   function restoreTitle() { document.title = prevTitle; window.removeEventListener("afterprint", restoreTitle); }
