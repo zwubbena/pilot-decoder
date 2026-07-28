@@ -49,6 +49,8 @@
   .file-label { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 7px; padding: 0 14px; cursor: pointer; touch-action: manipulation; }
   /* match the Choose photo / Take photo labels to the Identify button height exactly */
   .file-label, .controls .btn-primary { box-sizing: border-box; height: 34px; display: inline-flex; align-items: center; }
+  /* the display rule above would otherwise defeat the hidden attribute (Android-only Take photo) */
+  .file-label[hidden] { display: none; }
   .file-label:hover { border-color: var(--mid); color: var(--brand); }
   .file-label input[type="file"] { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
   .file-name { font-size: 13px; color: var(--ink-soft); }
