@@ -10,19 +10,28 @@ Copy the block below into Claude Cowork as context before working on the site.
 ```
 /
 ├── CNAME                     → custom domain config, don't touch
+├── robots.txt                → allows all crawling; tells search engines where sitemap.xml is
+├── sitemap.xml               → the 7 canonical page URLs for search engines
+│                               (adding a new tool? add its URL here too)
 ├── index.html                → homepage / landing page (tool directory)
 ├── assets/
 │   ├── site.css              → THE design system: tokens, themes, chrome, components
 │   └── site.js               → theme toggle (+ favicon recolor) and copyright year
-├── preview.command           → double-click local preview server (optional to commit)
+├── preview.command           → double-click local preview server (REQUIRED for local
+│                               browsing now that links are root-relative)
 ├── _template/
 │   └── index.html            → copy-me starting point for every new tool
 │                               (underscore folder = not published by GitHub Pages)
+├── _dev/                     → unpublished parking lot (holds the retired sectional page)
 ├── metar-decoder/index.html          → METAR Decoder
 ├── density-altitude-decoder/index.html → Density Altitude Decoder
 ├── wind-tunnel-decoder/index.html     → Wind Tunnel Decoder
-└── flight-pattern-decoder/index.html → Flight Pattern Decoder (standard site chrome; the animated
-                                sheet inside keeps its own poster palette, scoped to .sheet)
+├── flight-pattern-decoder/index.html → Flight Pattern Decoder (standard site chrome; the animated
+│                               sheet inside keeps its own poster palette, scoped to .sheet)
+├── zulu-decoder/index.html           → Zulu Decoder (site chrome; dark board scoped to .board)
+├── cloud-decoder/index.html          → Cloud Decoder (calls a Cloudflare Worker for classification)
+└── metar/, density-altitude/,        → redirect stubs at the old slugs (meta refresh +
+    windtunnel/, pattern/, zulu/        canonical to the renamed pages; do not delete)
 ```
 No build step, no framework, no external dependencies (no CDN fonts/libraries).
 Each tool lives in its own folder as one `index.html`; the folder name is the
