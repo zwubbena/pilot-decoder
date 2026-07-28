@@ -83,12 +83,14 @@ breadcrumb + h1.eyebrow + `.masthead-desc`) → optional `.panel` input band →
 with `#yr`). The breadcrumb is `Home → Tool Name` with Home linked; the
 homepage shows a plain `Home` crumb and an h1 of "Home".
 
-**Internal links are RELATIVE** so the site works both served and opened
-straight from Finder: brand + breadcrumb link `../index.html` from tool
-folders, homepage tool cards link `metar-decoder/index.html` etc., and cross-tool
-links use `../slug/index.html`. Canonical tags keep search engines on the
-clean `/slug/` URLs. Only external links and canonical/OG/JSON-LD URLs are
-absolute.
+**Internal links are ROOT-RELATIVE CLEAN URLS** matching each page's canonical
+exactly: brand + breadcrumb link `/`, homepage tool cards and cross-tool links
+use `/slug/` (never `/slug/index.html`). This keeps internal linking, canonical
+tags, and sitemap.xml all pointing at one URL per page. Local preview requires
+a server &mdash; double-click `preview.command` (file:// browsing from Finder no
+longer resolves these links). Only external links and canonical/OG/JSON-LD URLs
+are absolute. Renamed slugs keep a redirect stub at the old path (meta refresh +
+canonical to the new URL, e.g. `/metar/` -> `/metar-decoder/`).
 
 **Adding a new tool — checklist:**
 1. Copy `/_template/index.html` to `/your-slug/index.html` and fill in every
