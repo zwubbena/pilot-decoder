@@ -56,6 +56,16 @@
   .cloud-types li { background: var(--wash); background: color-mix(in srgb, var(--wash) 40%, var(--surface)); border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 8px; padding: 16px; }
   .cloud-type-name { font-family: var(--sans); font-size: 19px; font-weight: 700; color: var(--brand); margin: 0; }
   .cloud-type-desc { font-size: 14.5px; color: var(--ink); margin: 8px 0 0; line-height: 1.55; }
+  /* Confidence pill: colors are semantic (traffic light), so fixed across themes */
+  .conf-pill { display: inline-block; font-family: var(--sans); font-size: 11.5px; font-weight: 600; border-radius: 999px; padding: 3px 10px; margin-left: 7px; vertical-align: 2px; white-space: nowrap; }
+  .conf-pill .dots { letter-spacing: 1px; margin-right: 5px; }
+  .conf-pill .off { color: #d3d1c7; }
+  .conf-high { background: #EAF3DE; color: #27500A; }
+  .conf-high .on { color: #3B6D11; }
+  .conf-med { background: #FAEEDA; color: #854F0B; }
+  .conf-med .on { color: #BA7517; }
+  .conf-low { background: #FCEBEB; color: #791F1F; }
+  .conf-low .on { color: #A32D2D; }
   .loading-note { font-size: 15px; color: var(--ink-soft); }
   .output { padding-top: 24px; padding-bottom: 0; }
   .output:empty { padding-top: 0; padding-bottom: 0; }
@@ -210,7 +220,7 @@ function cloudCardsHtml(types) {
     var name = escapeHtml(types[i]);
     var desc = CLOUD_DESCRIPTORS[types[i]] || "";
     var matrix = CLOUD_MATRIX[types[i]];
-    html += '<li><p class="cloud-type-name">' + name + '</p>';
+    html += '<li><p class="cloud-type-name">' + name + confPillHtml(lastConfidence[types[i]]) + '</p>';
     if (desc) html += '<p class="cloud-type-desc">' + desc + '</p>';
     if (matrix) {
       html += '<p class="matrix-label">Details:</p><ul class="matrix-list">';
@@ -222,8 +232,24 @@ function cloudCardsHtml(types) {
   return html + "</ul>";
 }
 
-var CLEAR_CARD = '<ul class="cloud-types"><li><p class="cloud-type-name">Clear skies (CLR)</p>' +
-  '<p class="cloud-type-desc">No cloud layers identified in this photo. In a METAR, <b>CLR</b> means no clouds were detected below 12,000 ft by an automated station; <b>SKC</b> (sky clear) is the human-observer equivalent.</p></li></ul>';
+/* Confidence pill (dots + word). Levels come from the Worker's QA pass; if the
+   Worker doesn't send a level for a type, no pill is shown and the card looks
+   exactly as before. */
+var lastConfidence = {};
+function confPillHtml(level) {
+  var L = { high: ["conf-high", 3, "high"], medium: ["conf-med", 2, "medium"], low: ["conf-low", 1, "low"] }[level];
+  if (!L) return "";
+  var dots = "";
+  for (var i = 0; i < 3; i++) {
+    dots += '<span class="' + (i < L[1] ? "on" : "off") + '">' + (i < L[1] ? "●" : "○") + "</span>";
+  }
+  return '<span class="conf-pill ' + L[0] + '" title="Confidence from an automated second-pass quality check of the identification"><span class="dots">' + dots + "</span>" + L[2] + "</span>";
+}
+
+function clearCardHtml() {
+  return '<ul class="cloud-types"><li><p class="cloud-type-name">Clear skies (CLR)' + confPillHtml(lastConfidence["CLR"]) + '</p>' +
+    '<p class="cloud-type-desc">No cloud layers identified in this photo. In a METAR, <b>CLR</b> means no clouds were detected below 12,000 ft by an automated station; <b>SKC</b> (sky clear) is the human-observer equivalent.</p></li></ul>';
+}
 
 var fileInput = document.getElementById("photo-input");
 var cameraInput = document.getElementById("camera-input");
@@ -267,6 +293,7 @@ function resetAll() {
   selectedMediaType = null;
   selectedFileName = "";
   lastTypes = null;
+  lastConfidence = {};
   output.innerHTML = "";
   markTypes([]);
 }
@@ -287,6 +314,7 @@ function onPick(e) {
   selectedMediaType = file.type || "image/jpeg";
   output.innerHTML = "";
   lastTypes = null;
+  lastConfidence = {};
   markTypes([]);
 
   var reader = new FileReader();
@@ -343,8 +371,9 @@ identifyBtn.addEventListener("click", function () {
       }
       var types = result.data && result.data.types ? result.data.types : [];
       lastTypes = types;
+      lastConfidence = (result.data && result.data.confidence) || {};
       markTypes(types);
-      var body = types.length === 0 ? CLEAR_CARD : cloudCardsHtml(types);
+      var body = types.length === 0 ? clearCardHtml() : cloudCardsHtml(types);
       output.innerHTML =
         '<h2 class="sec-label result-head">Result</h2>' + body +
         '<p class="pdf-row"><button id="pdf-btn" class="btn-secondary" type="button">Download PDF</button></p>';
@@ -382,7 +411,7 @@ function downloadPdf() {
     '<p class="pr-meta">' + escapeHtml(selectedFileName) + " &middot; " + stamp + "</p>" +
     (previewImg.src ? '<img class="pr-img" src="' + previewImg.src + '" alt="Sky photo" />' : "") +
     '<h2 class="pr-head">Result</h2>' +
-    (lastTypes.length === 0 ? CLEAR_CARD : cloudCardsHtml(lastTypes)) +
+    (lastTypes.length === 0 ? clearCardHtml() : cloudCardsHtml(lastTypes)) +
     PRINT_REFS +
     '<p class="pr-foot">pilotdecoder.com/cloud-decoder &middot; Educational only. Not for operational decisions.</p>';
   window.print();
