@@ -241,7 +241,7 @@ function cloudCardsHtml(types) {
    exactly as before. */
 var lastConfidence = {};
 function confPillHtml(level) {
-  var L = { high: ["conf-high", 3, "high"], medium: ["conf-med", 2, "medium"], low: ["conf-low", 1, "low"] }[level];
+  var L = { high: ["conf-high", 3, "high confidence"], medium: ["conf-med", 2, "medium confidence"], low: ["conf-low", 1, "low confidence"] }[level];
   if (!L) return "";
   var dots = "";
   for (var i = 0; i < 3; i++) {
