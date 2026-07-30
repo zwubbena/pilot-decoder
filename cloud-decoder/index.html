@@ -251,17 +251,17 @@ var CLOUD_DESCRIPTORS = {
 // How each type decomposes into the altitude-prefix + form-root matrix
 // (used in the Details bullets under each identified type).
 var CLOUD_MATRIX = {
-  "Cirrus": ["<b>Cirrus</b> (wispy / hair-like form)", "lives in the high tier by definition (above ~20,000 ft)"],
-  "Cirrocumulus": ["<b>Cirro</b> (high tier, above ~20,000 ft)", "<b>cumulus</b> (heap/puffy form)"],
-  "Cirrostratus": ["<b>Cirro</b> (high tier, above ~20,000 ft)", "<b>stratus</b> (layer/sheet form)"],
-  "Altocumulus": ["<b>Alto</b> (middle tier, ~6,500&ndash;20,000 ft)", "<b>cumulus</b> (heap/puffy form)"],
-  "Altostratus": ["<b>Alto</b> (middle tier, ~6,500&ndash;20,000 ft)", "<b>stratus</b> (layer/sheet form)"],
-  "Nimbostratus": ["<b>Nimbo</b> (rain-producing)", "<b>stratus</b> (layer/sheet form)"],
-  "Stratocumulus": ["no altitude prefix (low tier, surface to ~6,500 ft)", "<b>strato</b> + <b>cumulus</b> (a layer broken into heaps)"],
-  "Stratus": ["no altitude prefix (low tier, surface to ~6,500 ft)", "<b>stratus</b> (layer/sheet form)"],
-  "Cumulus": ["no altitude prefix (low tier, surface to ~6,500 ft)", "<b>cumulus</b> (heap/puffy form)"],
-  "Towering Cumulus": ["<b>cumulus</b> (heap/puffy form) in strong vertical growth", "building upward through the tiers, a step before Cumulonimbus"],
-  "Cumulonimbus": ["<b>Cumulo</b> (heap/puffy form)", "<b>nimbus</b> (rain-producing), the exception that grows through all three tiers"]
+  "Cirrus": ["<b>Altitude:</b> no prefix &mdash; cirrus itself names the high tier, above ~20,000 ft", "<b>Form:</b> wispy, hair-like strands of ice crystals"],
+  "Cirrocumulus": ["<b>Altitude:</b> cirro- = high tier, above ~20,000 ft", "<b>Form:</b> cumulus = heap, here fine grains and ripples"],
+  "Cirrostratus": ["<b>Altitude:</b> cirro- = high tier, above ~20,000 ft", "<b>Form:</b> stratus = layer, here a thin veil across the sky"],
+  "Altocumulus": ["<b>Altitude:</b> alto- = middle tier, ~6,500&ndash;20,000 ft", "<b>Form:</b> cumulus = heap, here rounded rolls and patches"],
+  "Altostratus": ["<b>Altitude:</b> alto- = middle tier, ~6,500&ndash;20,000 ft", "<b>Form:</b> stratus = layer, here a featureless grey sheet"],
+  "Nimbostratus": ["<b>Altitude:</b> no prefix &mdash; a deep layer with a low base", "<b>Form:</b> nimbo- = rain + stratus = layer, a raining layer"],
+  "Stratocumulus": ["<b>Altitude:</b> no prefix &mdash; low tier, surface to ~6,500 ft", "<b>Form:</b> strato- = layer + cumulus = heap, a layer broken into rolls"],
+  "Stratus": ["<b>Altitude:</b> no prefix &mdash; low tier, surface to ~6,500 ft", "<b>Form:</b> stratus = layer, here a uniform grey blanket"],
+  "Cumulus": ["<b>Altitude:</b> no prefix &mdash; low tier, surface to ~6,500 ft", "<b>Form:</b> cumulus = heap, here detached cotton-ball puffs"],
+  "Towering Cumulus": ["<b>Altitude:</b> no prefix &mdash; base low, building upward through the tiers", "<b>Form:</b> cumulus = heap, in strong vertical growth"],
+  "Cumulonimbus": ["<b>Altitude:</b> no prefix &mdash; the exception, growing through all three tiers", "<b>Form:</b> cumulo- = heap + nimbus = rain"]
 };
 
 // References block for the PDF: the PDF travels without the page's References
