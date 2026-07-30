@@ -112,6 +112,10 @@
     .pr-refs li { margin: 2px 0; }
     .pr-foot { margin-top: 16px; font-size: 11px; color: #555; }
     #print-sheet .cloud-types { margin: 8px 0 0; }
+    /* keep each cloud card whole instead of splitting a card across pages */
+    #print-sheet .cloud-types li { break-inside: avoid; page-break-inside: avoid; }
+    #print-sheet .matrix-list li, #print-sheet .conf-row { break-inside: avoid; page-break-inside: avoid; }
+    #print-sheet .pr-refs-head { break-after: avoid; page-break-after: avoid; }
   }
 </style>
 </head>
