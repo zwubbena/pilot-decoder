@@ -81,6 +81,15 @@
   .matrix-list { margin: 4px 0 0; padding-left: 20px; font-size: 13.5px; line-height: 1.55; color: var(--ink); }
   .matrix-list li { margin: 2px 0; }
   .pdf-row { margin: 14px 16px 0; }
+  /* expandable chain-of-thought from the Worker; renders only if reasoning is sent */
+  .why-panel { margin: 14px 16px 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); }
+  .why-panel summary { cursor: pointer; padding: 12px 14px; font-family: var(--sans); font-weight: 700; font-size: 13.5px; color: var(--brand); }
+  .why-panel[open] summary { border-bottom: 1px solid var(--rule); }
+  .why-body { padding: 10px 14px 14px; }
+  .why-row { margin: 0 0 8px; }
+  .why-row:last-child { margin-bottom: 0; }
+  .why-label { display: block; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 0.03em; color: var(--mid); }
+  .why-val { display: block; font-size: 13.5px; line-height: 1.5; color: var(--ink); }
   /* Identifiable cloud types, grouped by altitude tier; identified ones bold via .hit */
   .types-panel { margin: 28px 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); padding: 16px; }
   .types-title { font-family: var(--sans); font-weight: 700; font-size: 15px; color: var(--brand); margin: 0 0 14px; }
@@ -115,6 +124,10 @@
     /* keep each cloud card whole instead of splitting a card across pages */
     #print-sheet .cloud-types li { break-inside: avoid; page-break-inside: avoid; }
     #print-sheet .matrix-list li, #print-sheet .conf-row { break-inside: avoid; page-break-inside: avoid; }
+    .pr-why-head { margin-top: 16px; font-size: 14px; }
+    #print-sheet .why-body { break-inside: avoid; page-break-inside: avoid; padding: 4px 0 0; }
+    #print-sheet .why-label { font-size: 11px; }
+    #print-sheet .why-val { font-size: 12px; }
     #print-sheet .pr-refs-head { break-after: avoid; page-break-after: avoid; }
   }
 </style>
@@ -280,6 +293,30 @@ function cloudCardsHtml(types) {
    Worker doesn't send a level for a type, no pill is shown and the card looks
    exactly as before. */
 var lastConfidence = {};
+var lastReasoning = null;
+
+/* Chain-of-thought the Worker returns. Absent = render nothing at all.
+   forPrint drops the <details> wrapper so it prints expanded. */
+function reasoningHtml(r, forPrint) {
+  if (!r) return "";
+  var rows = [
+    ["Perceived altitude", r.perceivedAltitude],
+    ["Texture / structure", Object.prototype.toString.call(r.texture) === "[object Array]" ? r.texture.join(", ") : r.texture],
+    ["Opacity & shading", r.opacityShading],
+    ["Notes", r.notes]
+  ];
+  var body = "";
+  for (var i = 0; i < rows.length; i++) {
+    if (!rows[i][1]) continue;
+    body += '<p class="why-row"><span class="why-label">' + rows[i][0] +
+      '</span><span class="why-val">' + escapeHtml(rows[i][1]) + "</span></p>";
+  }
+  if (!body) return "";
+  if (forPrint) {
+    return '<h2 class="pr-head pr-why-head">How this was identified</h2><div class="why-body">' + body + "</div>";
+  }
+  return '<details class="why-panel"><summary>How this was identified</summary><div class="why-body">' + body + "</div></details>";
+}
 function confPillHtml(level) {
   var L = { high: ["conf-high", 3, "high confidence"], medium: ["conf-med", 2, "medium confidence"], low: ["conf-low", 1, "low confidence"] }[level];
   if (!L) return "";
@@ -338,6 +375,7 @@ function resetAll() {
   selectedFileName = "";
   lastTypes = null;
   lastConfidence = {};
+  lastReasoning = null;
   output.innerHTML = "";
   markTypes([]);
 }
@@ -359,6 +397,7 @@ function onPick(e) {
   output.innerHTML = "";
   lastTypes = null;
   lastConfidence = {};
+  lastReasoning = null;
   markTypes([]);
 
   var reader = new FileReader();
@@ -422,10 +461,12 @@ identifyBtn.addEventListener("click", function () {
       var types = result.data && result.data.types ? result.data.types : [];
       lastTypes = types;
       lastConfidence = (result.data && result.data.confidence) || {};
+      lastReasoning = (result.data && result.data.reasoning) || null;
       markTypes(types);
       var body = types.length === 0 ? clearCardHtml() : cloudCardsHtml(types);
       output.innerHTML =
         '<h2 class="sec-label result-head">Result</h2>' + body +
+        reasoningHtml(lastReasoning, false) +
         '<p class="pdf-row"><button id="pdf-btn" class="btn-secondary" type="button">Download PDF</button></p>';
       var pdfBtn = document.getElementById("pdf-btn");
       if (pdfBtn) pdfBtn.addEventListener("click", downloadPdf);
@@ -462,6 +503,7 @@ function downloadPdf() {
     (previewImg.src ? '<img class="pr-img" src="' + previewImg.src + '" alt="Sky photo" />' : "") +
     '<h2 class="pr-head">Result</h2>' +
     (lastTypes.length === 0 ? clearCardHtml() : cloudCardsHtml(lastTypes)) +
+    reasoningHtml(lastReasoning, true) +
     PRINT_REFS +
     '<p class="pr-foot">pilotdecoder.com/cloud-decoder &middot; Educational only. Not for operational decisions.</p>';
   window.print();
