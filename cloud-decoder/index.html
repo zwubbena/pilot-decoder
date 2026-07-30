@@ -324,7 +324,7 @@ function confPillHtml(level) {
   for (var i = 0; i < 3; i++) {
     dots += '<span class="' + (i < L[1] ? "on" : "off") + '">' + (i < L[1] ? "●" : "○") + "</span>";
   }
-  return '<p class="conf-row"><span class="conf-pill ' + L[0] + '" title="Confidence from an automated second-pass quality check of the identification"><span class="dots">' + dots + "</span>" + L[2] + "</span></p>";
+  return '<p class="conf-row"><span class="conf-pill ' + L[0] + '" title="How much of the identifying evidence was actually visible in this photo"><span class="dots">' + dots + "</span>" + L[2] + "</span></p>";
 }
 
 function clearCardHtml() {
