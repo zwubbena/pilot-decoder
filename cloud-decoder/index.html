@@ -61,7 +61,9 @@
   .cloud-type-name { font-family: var(--sans); font-size: 19px; font-weight: 700; color: var(--brand); margin: 0; }
   .cloud-type-desc { font-size: 14.5px; color: var(--ink); margin: 8px 0 0; line-height: 1.55; }
   /* Confidence pill: colors are semantic (traffic light), so fixed across themes */
-  .conf-pill { display: inline-block; font-family: var(--sans); font-size: 11.5px; font-weight: 600; border-radius: 999px; padding: 3px 10px; margin-left: 7px; vertical-align: 2px; white-space: nowrap; }
+  /* own line under the cloud name so every card lines up regardless of name length */
+  .conf-row { margin: 7px 0 0; }
+  .conf-pill { display: inline-block; font-family: var(--sans); font-size: 11.5px; font-weight: 600; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
   .conf-pill .dots { letter-spacing: 1px; margin-right: 5px; }
   .conf-pill .off { color: #d3d1c7; }
   .conf-high { background: #EAF3DE; color: #27500A; }
@@ -254,7 +256,7 @@ function cloudCardsHtml(types) {
     var name = escapeHtml(types[i]);
     var desc = CLOUD_DESCRIPTORS[types[i]] || "";
     var matrix = CLOUD_MATRIX[types[i]];
-    html += '<li><p class="cloud-type-name">' + name + confPillHtml(lastConfidence[types[i]]) + '</p>';
+    html += '<li><p class="cloud-type-name">' + name + '</p>' + confPillHtml(lastConfidence[types[i]]);
     if (desc) html += '<p class="cloud-type-desc">' + desc + '</p>';
     if (matrix) {
       html += '<p class="matrix-label">Details:</p><ul class="matrix-list">';
@@ -277,11 +279,11 @@ function confPillHtml(level) {
   for (var i = 0; i < 3; i++) {
     dots += '<span class="' + (i < L[1] ? "on" : "off") + '">' + (i < L[1] ? "●" : "○") + "</span>";
   }
-  return '<span class="conf-pill ' + L[0] + '" title="Confidence from an automated second-pass quality check of the identification"><span class="dots">' + dots + "</span>" + L[2] + "</span>";
+  return '<p class="conf-row"><span class="conf-pill ' + L[0] + '" title="Confidence from an automated second-pass quality check of the identification"><span class="dots">' + dots + "</span>" + L[2] + "</span></p>";
 }
 
 function clearCardHtml() {
-  return '<ul class="cloud-types"><li><p class="cloud-type-name">Clear skies (CLR)' + confPillHtml(lastConfidence["CLR"]) + '</p>' +
+  return '<ul class="cloud-types"><li><p class="cloud-type-name">Clear skies (CLR)</p>' + confPillHtml(lastConfidence["CLR"]) +
     '<p class="cloud-type-desc">No cloud layers identified in this photo. In a METAR, <b>CLR</b> means no clouds were detected below 12,000 ft by an automated station; <b>SKC</b> (sky clear) is the human-observer equivalent.</p></li></ul>';
 }
 
