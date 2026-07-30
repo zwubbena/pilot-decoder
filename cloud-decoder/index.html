@@ -79,13 +79,19 @@
   .matrix-list { margin: 4px 0 0; padding-left: 20px; font-size: 13.5px; line-height: 1.55; color: var(--ink); }
   .matrix-list li { margin: 2px 0; }
   .pdf-row { margin: 14px 16px 0; }
-  /* Identifiable cloud types panel: identified ones get bolded via .hit */
-  .types-panel { margin: 28px 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); padding: 14px 16px 16px; }
-  .types-title { font-family: var(--sans); font-weight: 700; font-size: 15px; color: var(--brand); margin: 0 0 10px; }
+  /* Identifiable cloud types, grouped by altitude tier; identified ones bold via .hit */
+  .types-panel { margin: 28px 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); padding: 16px; }
+  .types-title { font-family: var(--sans); font-weight: 700; font-size: 15px; color: var(--brand); margin: 0 0 14px; }
+  .types-group { margin-bottom: 14px; }
+  .types-group:last-of-type { margin-bottom: 0; }
+  .group-label { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mid); margin-bottom: 8px; }
+  .group-label .alt { font-weight: 500; letter-spacing: 0; text-transform: none; font-size: 12px; color: var(--ink-soft); }
   .types-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .types-list li { font-family: var(--sans); font-size: 13px; color: var(--ink-soft); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 999px; padding: 5px 12px; }
   .types-list li.hit { font-weight: 700; color: var(--brand); border-color: var(--brand); background: color-mix(in srgb, var(--wash) 40%, var(--surface)); }
-  .types-hint { font-size: 12px; color: var(--ink-soft); margin: 10px 0 0; }
+  .types-divider { display: flex; align-items: center; gap: 10px; margin: 16px 0 10px; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mid); }
+  .types-divider::before, .types-divider::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+  .types-hint { font-size: 12px; color: var(--ink-soft); margin: 14px 0 0; }
   /* Print sheet: hidden on screen; when printing, it is the only thing on the page */
   #print-sheet { display: none; }
   @media print {
@@ -138,19 +144,43 @@
   <section class="wrap">
     <div class="types-panel">
       <p class="types-title">Cloud types this tool can identify</p>
-      <ul class="types-list" id="types-list">
-        <li data-type="Cirrus">Cirrus</li>
-        <li data-type="Cirrocumulus">Cirrocumulus</li>
-        <li data-type="Cirrostratus">Cirrostratus</li>
-        <li data-type="Altocumulus">Altocumulus</li>
-        <li data-type="Altostratus">Altostratus</li>
-        <li data-type="Nimbostratus">Nimbostratus</li>
-        <li data-type="Stratocumulus">Stratocumulus</li>
-        <li data-type="Stratus">Stratus</li>
-        <li data-type="Cumulus">Cumulus</li>
-        <li data-type="Towering Cumulus">Towering Cumulus</li>
-        <li data-type="Cumulonimbus">Cumulonimbus</li>
-      </ul>
+
+      <div class="types-group">
+        <p class="group-label">High level <span class="alt">above ~20,000 ft</span></p>
+        <ul class="types-list">
+          <li data-type="Cirrus">Cirrus</li>
+          <li data-type="Cirrocumulus">Cirrocumulus</li>
+          <li data-type="Cirrostratus">Cirrostratus</li>
+        </ul>
+      </div>
+
+      <div class="types-group">
+        <p class="group-label">Mid level <span class="alt">~6,500&ndash;20,000 ft</span></p>
+        <ul class="types-list">
+          <li data-type="Altocumulus">Altocumulus</li>
+          <li data-type="Altostratus">Altostratus</li>
+        </ul>
+      </div>
+
+      <div class="types-group">
+        <p class="group-label">Low level <span class="alt">below ~6,500 ft</span></p>
+        <ul class="types-list">
+          <li data-type="Stratus">Stratus</li>
+          <li data-type="Stratocumulus">Stratocumulus</li>
+          <li data-type="Cumulus">Cumulus</li>
+        </ul>
+      </div>
+
+      <p class="types-divider">Spans multiple levels</p>
+
+      <div class="types-group">
+        <ul class="types-list">
+          <li data-type="Nimbostratus">Nimbostratus</li>
+          <li data-type="Towering Cumulus">Towering Cumulus</li>
+          <li data-type="Cumulonimbus">Cumulonimbus</li>
+        </ul>
+      </div>
+
       <p class="types-hint">Types identified in your photo appear bolded.</p>
     </div>
   </section>
@@ -337,7 +367,7 @@ function onPick(e) {
 
 /* Bold the identified types in the "can identify" panel ([] clears all). */
 function markTypes(types) {
-  var lis = document.querySelectorAll("#types-list li");
+  var lis = document.querySelectorAll(".types-panel li[data-type]");
   for (var i = 0; i < lis.length; i++) {
     lis[i].classList.toggle("hit", types.indexOf(lis[i].getAttribute("data-type")) !== -1);
   }
