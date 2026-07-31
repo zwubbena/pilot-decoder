@@ -357,6 +357,40 @@ var MAX_BYTES = 5 * 1024 * 1024;
 // explicit Take Photo button (opens the camera directly).
 if (cameraLabel && /android/i.test(navigator.userAgent)) cameraLabel.hidden = false;
 
+/* Resize a data URL so its longest edge is at most maxEdge, re-encoding as JPEG.
+   Always calls back: on any failure it returns the original untouched, so a
+   quirky image can never block an upload. */
+function shrinkImage(dataUrl, maxEdge, cb) {
+  var done = false;
+  function finish(url, type) { if (!done) { done = true; cb(url, type); } }
+  setTimeout(function () { finish(dataUrl, selectedMediaType); }, 4000); // safety net
+  try {
+    var img = new Image();
+    img.onload = function () {
+      try {
+        var w = img.naturalWidth, h = img.naturalHeight;
+        if (!w || !h) return finish(dataUrl, selectedMediaType);
+        var longest = Math.max(w, h);
+        if (longest <= maxEdge) return finish(dataUrl, selectedMediaType);
+        var scale = maxEdge / longest;
+        var cw = Math.round(w * scale), ch = Math.round(h * scale);
+        var canvas = document.createElement("canvas");
+        canvas.width = cw; canvas.height = ch;
+        var ctx = canvas.getContext("2d");
+        if (!ctx) return finish(dataUrl, selectedMediaType);
+        ctx.drawImage(img, 0, 0, cw, ch);
+        var out = canvas.toDataURL("image/jpeg", 0.85);
+        if (!out || out.indexOf("data:image/jpeg") !== 0 || out.length >= dataUrl.length) {
+          return finish(dataUrl, selectedMediaType);
+        }
+        finish(out, "image/jpeg");
+      } catch (e) { finish(dataUrl, selectedMediaType); }
+    };
+    img.onerror = function () { finish(dataUrl, selectedMediaType); };
+    img.src = dataUrl;
+  } catch (e) { finish(dataUrl, selectedMediaType); }
+}
+
 function fmtSize(bytes) {
   return bytes < 1048576
     ? Math.max(1, Math.round(bytes / 1024)) + " KB"
@@ -406,8 +440,21 @@ function onPick(e) {
     var dataUrl = reader.result;
     previewImg.src = dataUrl;
     previewFrame.hidden = false;
-    selectedBase64 = tooBig ? null : (dataUrl.split(",")[1] || null);
-    identifyBtn.disabled = !selectedBase64;
+    if (tooBig) { selectedBase64 = null; identifyBtn.disabled = true; return; }
+    /* Downscale before upload: a 1200px longest edge is ample for identifying
+       cloud form and shading, and turns a multi-megabyte phone photo into a few
+       hundred KB. Shorter upload = smaller window for a mobile drop. Falls back
+       to the original data if anything about the canvas path fails. */
+    shrinkImage(dataUrl, 1200, function (outUrl, outType) {
+      selectedMediaType = outType;
+      selectedBase64 = outUrl.split(",")[1] || null;
+      identifyBtn.disabled = !selectedBase64;
+      var shrunkBytes = Math.round((selectedBase64.length * 3) / 4);
+      if (shrunkBytes < file.size * 0.9) {
+        fileName.textContent = file.name + " · " + fmtSize(file.size) +
+          " · sending " + fmtSize(shrunkBytes);
+      }
+    });
   };
   reader.onerror = function () {
     output.innerHTML = '<p class="error-note">Couldn’t read that file. Try a different photo.</p>';
@@ -432,16 +479,37 @@ function markTypes(types) {
 fileInput.addEventListener("change", onPick);
 if (cameraInput) cameraInput.addEventListener("change", onPick);
 
+/* POST to the Worker, retrying only on a network-level failure (the request
+   never completed). A real HTTP response, including 4xx/5xx, resolves and is
+   NOT retried — the Worker's own message should reach the user, and retrying a
+   429 or 413 would only make it worse. Mobile connections drop mid-flight now
+   that a single-pass analysis takes longer, which is what this covers. */
+function postWithRetry(body, attemptsLeft, delayMs) {
+  return fetch(WORKER_URL, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: body
+  }).catch(function (err) {
+    if (attemptsLeft <= 0) throw err;
+    output.innerHTML = '<p class="loading-note">Connection dropped, retrying&hellip;</p>';
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        resolve(postWithRetry(body, attemptsLeft - 1, delayMs * 2));
+      }, delayMs);
+    });
+  });
+}
+
 identifyBtn.addEventListener("click", function () {
   if (!selectedBase64) return;
   identifyBtn.disabled = true;
   output.innerHTML = '<p class="loading-note">Analyzing sky&hellip;</p>';
 
-  fetch(WORKER_URL, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ image: selectedBase64, mediaType: selectedMediaType })
-  })
+  postWithRetry(
+    JSON.stringify({ image: selectedBase64, mediaType: selectedMediaType }),
+    2,     /* up to 2 retries, so 3 attempts total */
+    1200   /* 1.2s, then 2.4s */
+  )
     .then(function (res) {
       // Read the JSON body whether or not the response is OK, so we can show the
       // Worker's own message (e.g. "Image is too large", "Too many requests").
