@@ -49,14 +49,26 @@
 }
 .board *{box-sizing:border-box}
 
+/* ---- plain-English explainer (site-themed, sits outside the dark board) ---- */
+.plain{ margin:14px 0 0; border:1px solid var(--rule); border-radius:8px; background:var(--wash); }
+.plain summary{ cursor:pointer; padding:12px 14px; font-family:var(--sans); font-weight:700; font-size:14px; color:var(--brand); }
+.plain[open] summary{ border-bottom:1px solid var(--rule); }
+.plain__body{ padding:10px 16px 16px; }
+.plain__body p{ margin:0 0 10px; font-family:var(--sans); font-size:14.5px; line-height:1.6; color:var(--ink); }
+.plain__body p:last-child{ margin-bottom:0; }
+.plain__tip{ font-size:13.5px !important; color:var(--ink-soft) !important; border-top:1px solid var(--rule); padding-top:10px; }
+
 /* ---- zulu hero ---- */
 .zulu{padding:clamp(22px,5vw,40px) 0 clamp(18px,4vw,30px)}
 .zulu__label{
   margin:0 0 6px;
-  font-size:.63rem;
-  letter-spacing:.28em;
+  /* was .63rem at .28em tracking in magenta on dark: too small, too stretched,
+     too low-contrast to read. Larger, tighter and lighter fixes all three. */
+  font-size:.78rem;
+  font-weight:600;
+  letter-spacing:.14em;
   text-transform:uppercase;
-  color:var(--magenta);
+  color:#F0A9D0;
 }
 .zulu__readout{
   margin:0;
@@ -310,12 +322,23 @@
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">Zulu Decoder</span></nav>
       <h1 class="eyebrow"><strong>Zulu Decoder</strong></h1>
-      <p class="masthead-desc">Convert between Zulu (Coordinated Universal Time, UTC) and the four U.S. time zones, in both 24-hour and 12-hour time, with daylight saving handled automatically.</p>
+      <p class="masthead-desc">Zulu time is the single clock that aviation runs on worldwide, so that a time means the same moment to everyone, everywhere. Convert between Zulu and the four U.S. time zones below, in 24-hour and 12-hour time, with daylight saving handled for you.</p>
     </div>
   </header>
 
   <main>
   <div class="wrap">
+  <details class="plain">
+    <summary>What is Zulu time?</summary>
+    <div class="plain__body">
+      <p>Imagine planning a phone call with someone three time zones away. You have to keep asking &ldquo;your time or mine?&rdquo; Now imagine doing that at 300 knots, crossing a time zone every hour, with air traffic controllers in several states and a weather report from a fourth.</p>
+      <p>So aviation gave up on local time. Everyone &mdash; pilots, controllers, weather forecasters, the military &mdash; agreed to use one clock: the time in Greenwich, England. That is Zulu time. When a pilot in Texas and a controller in New York both say <b>1800Z</b>, they mean the exact same instant.</p>
+      <p>Two things make it dependable. It is the same everywhere on Earth, and it never shifts for daylight saving. Your local clock changes twice a year; Zulu never does.</p>
+      <p>The name is just the alphabet. Pilots spell letters out loud &mdash; Alfa, Bravo, Charlie &mdash; and the time zone through Greenwich is labelled <b>Z</b>. Spoken aloud, Z is &ldquo;Zulu.&rdquo; So <b>1800Z</b> is read &ldquo;eighteen hundred Zulu.&rdquo;</p>
+      <p class="plain__tip">Times are written as four digits: the first two are the hour on a 24-hour clock, the last two the minutes. So 0630Z is 6:30 in the morning in Greenwich, and 1800Z is 6:00 in the evening there.</p>
+    </div>
+  </details>
+
   <div class="board">
 
   <section class="zulu" aria-live="polite">
