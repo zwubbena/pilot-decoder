@@ -73,18 +73,19 @@
   color:#F0A9D0;
 }
 .zulu__readout{
-  margin:0;
+  /* line-height 1 keeps the glyphs inside their box (no overlap), and the em
+     margins claw back the font's built-in slack above and below the digits so
+     the label and date sit close. em scales with the clamped font size. */
+  margin:-.14em 0 -.20em;
   font-size:clamp(3.6rem,17vw,8.5rem);
   font-weight:700;
-  /* line-height under 1 made the line box shorter than the glyphs, so the line
-     below rode up into the digits; 1 keeps it tight without the overlap */
   line-height:1;
   letter-spacing:-.045em;
   white-space:nowrap;
 }
 .zulu__suffix{color:var(--magenta);letter-spacing:0}
 .zulu__sub{
-  margin:18px 0 0;
+  margin:10px 0 0;
   display:flex;
   flex-wrap:wrap;
   align-items:center;
