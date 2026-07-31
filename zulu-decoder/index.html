@@ -62,13 +62,15 @@
   margin:0;
   font-size:clamp(3.6rem,17vw,8.5rem);
   font-weight:700;
-  line-height:.86;
+  /* line-height under 1 made the line box shorter than the glyphs, so the line
+     below rode up into the digits; 1 keeps it tight without the overlap */
+  line-height:1;
   letter-spacing:-.045em;
   white-space:nowrap;
 }
 .zulu__suffix{color:var(--magenta);letter-spacing:0}
 .zulu__sub{
-  margin:14px 0 0;
+  margin:18px 0 0;
   display:flex;
   flex-wrap:wrap;
   align-items:center;
