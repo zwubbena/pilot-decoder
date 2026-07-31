@@ -17,8 +17,6 @@ Copy the block below into Claude Cowork as context before working on the site.
 ├── assets/
 │   ├── site.css              → THE design system: tokens, themes, chrome, components
 │   └── site.js               → theme toggle (+ favicon recolor) and copyright year
-├── preview.command           → double-click local preview server (REQUIRED for local
-│                               browsing now that links are root-relative)
 ├── _template/
 │   └── index.html            → copy-me starting point for every new tool
 │                               (underscore folder = not published by GitHub Pages)
@@ -96,8 +94,9 @@ homepage shows a plain `Home` crumb and an h1 of "Home".
 exactly: brand + breadcrumb link `/`, homepage tool cards and cross-tool links
 use `/slug/` (never `/slug/index.html`). This keeps internal linking, canonical
 tags, and sitemap.xml all pointing at one URL per page. Local preview requires
-a server &mdash; double-click `preview.command` (file:// browsing from Finder no
-longer resolves these links). Only external links and canonical/OG/JSON-LD URLs
+a server: run `preview.command`, which is kept OUTSIDE this folder so it is not
+published with the site (file:// browsing from Finder no longer resolves these
+links). Only external links and canonical/OG/JSON-LD URLs
 are absolute. Renamed slugs keep a redirect stub at the old path (meta refresh +
 canonical to the new URL, e.g. `/metar/` -> `/metar-decoder/`).
 
@@ -120,10 +119,13 @@ canonical to the new URL, e.g. `/metar/` -> `/metar-decoder/`).
   theme snippet, or missing per-page SEO block.
 - Homepage tool list / JSON-LD `hasPart` out of sync with actual folders.
 
-**Local preview:** assets AND internal navigation use relative paths, so the
-whole site — styling, theme toggle, and links between pages — works by simply
-double-clicking any page in Finder. `preview.command` (double-click) is still
-there to serve the site at `http://localhost:8000/` when you want to preview
-it exactly as GitHub Pages will serve it.
+**Local preview:** internal links are root-relative (`/slug/`), so opening a
+page straight from Finder will NOT navigate correctly. Use `preview.command`,
+which is kept outside this folder so it never publishes with the site. It
+serves the site at `http://localhost:8000/`, exactly as GitHub Pages will.
+
+**Nothing but website content lives in this folder.** Helper scripts and notes
+are kept elsewhere on the Desktop, because everything here is published
+publicly at pilotdecoder.com.
 
 ---
