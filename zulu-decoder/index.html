@@ -56,6 +56,9 @@
 .plain__body{ padding:10px 16px 16px; }
 .plain__body p{ margin:0 0 10px; font-family:var(--sans); font-size:14.5px; line-height:1.6; color:var(--ink); }
 .plain__body p:last-child{ margin-bottom:0; }
+.plain__sub{ font-weight:700 !important; color:var(--brand) !important; margin-top:16px !important; }
+.plain__list{ margin:0 0 10px; padding-left:20px; font-family:var(--sans); font-size:14.5px; line-height:1.6; color:var(--ink); }
+.plain__list li{ margin:0 0 7px; }
 .plain__tip{ font-size:13.5px !important; color:var(--ink-soft) !important; border-top:1px solid var(--rule); padding-top:10px; }
 
 /* ---- zulu hero ---- */
@@ -335,9 +338,18 @@
     <summary>What is Zulu time?</summary>
     <div class="plain__body">
       <p>Imagine planning a phone call with someone three time zones away. You have to keep asking &ldquo;your time or mine?&rdquo; Now imagine doing that at 300 knots, crossing a time zone every hour, with air traffic controllers in several states and a weather report from a fourth.</p>
-      <p>So aviation gave up on local time. Everyone &mdash; pilots, controllers, weather forecasters, the military &mdash; agreed to use one clock: the time in Greenwich, England. That is Zulu time. When a pilot in Texas and a controller in New York both say <b>1800Z</b>, they mean the exact same instant.</p>
-      <p>Two things make it dependable. It is the same everywhere on Earth, and it never shifts for daylight saving. Your local clock changes twice a year; Zulu never does.</p>
-      <p>The name is just the alphabet. Pilots spell letters out loud &mdash; Alfa, Bravo, Charlie &mdash; and the time zone through Greenwich is labelled <b>Z</b>. Spoken aloud, Z is &ldquo;Zulu.&rdquo; So <b>1800Z</b> is read &ldquo;eighteen hundred Zulu.&rdquo;</p>
+      <p>So aviation gave up on local time. Pilots, controllers, forecasters and the military all agreed to use one clock: the time on the prime meridian, which runs through Greenwich, England. That is Zulu time. When a pilot in Texas and a controller in New York both say <b>1800Z</b>, they mean the exact same instant.</p>
+      <p>Two things make it dependable. It is the same everywhere on Earth, and it never shifts for daylight saving. Your local clock changes twice a year. Zulu never does.</p>
+      <p>The name is just the alphabet. Pilots spell letters out loud (Alfa, Bravo, Charlie), and the time zone through Greenwich is labelled <b>Z</b>. Spoken aloud, Z is &ldquo;Zulu.&rdquo; So <b>1800Z</b> is read &ldquo;eighteen hundred Zulu.&rdquo;</p>
+
+      <p class="plain__sub">Three names, one clock</p>
+      <p>Zulu, UTC and GMT all mean the same time. They differ only in who uses the name.</p>
+      <ul class="plain__list">
+        <li><b>Zulu</b>: the aviation and military name, from the letter Z that marks the Greenwich time zone.</li>
+        <li><b>UTC</b>: Coordinated Universal Time, the official worldwide standard, kept by atomic clocks.</li>
+        <li><b>GMT</b>: Greenwich Mean Time, the older name, based on the sun over Greenwich.</li>
+      </ul>
+
       <p class="plain__tip">Times are written as four digits: the first two are the hour on a 24-hour clock, the last two the minutes. So 0630Z is 6:30 in the morning in Greenwich, and 1800Z is 6:00 in the evening there.</p>
     </div>
   </details>
