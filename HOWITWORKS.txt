@@ -1,0 +1,118 @@
+================================================================
+CLOUD DECODER — HOW IT WORKS, IN PLAIN ENGLISH
+A walk-through from photo upload to results
+================================================================
+
+For: pilotdecoder.com/cloud-decoder
+Keep this handy for explaining the tool to anyone who asks.
+
+
+----------------------------------------------------------------
+THE 20-SECOND VERSION
+----------------------------------------------------------------
+You upload a photo of the sky, and it tells you what kind of
+clouds are in it, from a pilot's point of view. Behind the scenes
+it hands your photo to Claude — an AI given a detailed cloud-
+identification checklist. Claude names the clouds, rates how sure
+it is, and explains what it saw. It is built so it cannot run up a
+big bill and so my private key stays protected.
+
+
+----------------------------------------------------------------
+THE STEP-BY-STEP (UPLOAD -> RESULTS)
+----------------------------------------------------------------
+
+1. YOU PICK A PHOTO
+   On the page, you choose a sky photo. Your browser reads the
+   photo right there on your device and turns it into a block of
+   text-like data it can send over the internet.
+
+2. FIRST SAFETY NET — SIZE
+   If the photo is huge (over about 5 MB), it is turned away
+   immediately with a "use a smaller photo" message — before
+   anything costs a cent.
+
+3. THE PHOTO GOES TO THE "WORKER"
+   This is a little program running on Cloudflare's servers — not
+   the web page, not my Mac. Think of it as a receptionist sitting
+   between the public website and the AI. Its job is to take the
+   request, add my secret key privately, and pass it along — so my
+   paid key never lives on the public web page where someone could
+   grab it.
+
+4. SECOND SAFETY NET — RATE LIMIT
+   The receptionist checks how many times that visitor has asked in
+   the last minute. If someone is hammering it (more than 15 times
+   a minute), they are politely told to wait. That stops one person
+   from spamming it and burning through my credits.
+
+5. THE WORKER HANDS THE PHOTO TO CLAUDE
+   It attaches my private key (kept encrypted on Cloudflare, never
+   shown) and sends the photo to Claude Sonnet 5, along with a
+   detailed instruction sheet — essentially a pilot's cloud-
+   identification manual.
+
+6. CLAUDE WORKS THROUGH IT LIKE A CHECKLIST
+   This is the heart of it. Claude does not just glance and guess.
+   It follows a strict order:
+     - Reads the photo first (Is the horizon visible? Where is the
+       sun? Is it hazy?).
+     - Writes down what it sees BEFORE naming anything — altitude,
+       texture, shading. This ordering matters: it commits to its
+       observations first, so the answer comes FROM the evidence
+       rather than being justified after the fact.
+     - Tests for dangerous storm clouds first, then works down
+       through the other types.
+     - Applies tie-breaker tests for clouds that look alike (the
+       classic mix-ups).
+     - Names up to three cloud types, and for each one rates its
+       confidence — high, medium, or low — using fixed rules (for
+       example, "high" only if the tell-tale feature is clearly
+       visible in the photo).
+
+7. THE ANSWER COMES BACK AND GETS DOUBLE-CHECKED
+   Claude returns everything as tidy structured data. The worker
+   sanity-checks it — throws out any name that is not one of the 11
+   official cloud types, removes duplicates — and passes the clean
+   result to the page.
+
+8. THE PAGE SHOWS THE RESULT
+   You see:
+     - the cloud type(s),
+     - a colored confidence pill (green = high, amber = medium,
+       red = low),
+     - and an expandable "How this was identified" that reveals
+       Claude's reasoning: altitude, texture, shading, and a plain
+       sentence explaining what it saw (and anything it could NOT
+       tell from the photo).
+
+9. THE COST CEILING
+   It is ONE Claude call per photo — a few cents at most — and
+   there is a hard $5-a-month cap on the whole thing. No matter how
+   many people use it, it physically cannot spend more than that.
+
+
+----------------------------------------------------------------
+THE ONE THING THAT CHANGED RECENTLY
+----------------------------------------------------------------
+It used to run each photo past TWO AI models and compare their
+answers. Now it is ONE model doing one careful pass. Why? The two
+models were basically grading with different rulers, which made
+their "agreement" noisier than it looked. One model following one
+rigorous checklist is more consistent — and it costs half as much.
+
+
+----------------------------------------------------------------
+THE PIECES, AT A GLANCE
+----------------------------------------------------------------
+  The web page ....... pilotdecoder.com/cloud-decoder
+                       (what the visitor sees and uploads to)
+  The worker ......... cloud-decoder.zwubbena.workers.dev
+                       (the private "receptionist" on Cloudflare)
+  The AI ............. Claude Sonnet 5 (does the identifying)
+  The guardrails ..... size limit, per-visitor rate limit,
+                       $5/month spending cap
+
+================================================================
+END
+================================================================

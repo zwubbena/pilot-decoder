@@ -281,7 +281,7 @@ function cloudCardsHtml(types) {
     html += '<li><p class="cloud-type-name">' + name + '</p>' + confPillHtml(lastConfidence[types[i]]);
     if (desc) html += '<p class="cloud-type-desc">' + desc + '</p>';
     if (matrix) {
-      html += '<p class="matrix-label">Details:</p><ul class="matrix-list">';
+      html += '<p class="matrix-label">Details for your brain:</p><ul class="matrix-list">';
       for (var j = 0; j < matrix.length; j++) html += "<li>" + matrix[j] + "</li>";
       html += "</ul>";
     }
