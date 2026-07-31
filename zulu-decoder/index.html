@@ -59,7 +59,9 @@
 .plain__tip{ font-size:13.5px !important; color:var(--ink-soft) !important; border-top:1px solid var(--rule); padding-top:10px; }
 
 /* ---- zulu hero ---- */
-.zulu{padding:clamp(22px,5vw,40px) 0 clamp(18px,4vw,30px)}
+/* no top padding: .board already pads the container, and the two were stacking
+   into ~80px of dead space above the label */
+.zulu{padding:0 0 clamp(18px,4vw,30px)}
 .zulu__label{
   margin:0 0 6px;
   /* was .63rem at .28em tracking in magenta on dark: too small, too stretched,
