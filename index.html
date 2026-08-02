@@ -20,7 +20,7 @@
 </script>
 <script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
-<link rel="stylesheet" href="assets/site.css?v=11" />
+<link rel="stylesheet" href="assets/site.css?v=12" />
 <style>
   /* ============ PAGE-SPECIFIC: homepage ============ */
   /* Footer has no disclaimer here, so collapse the empty band above the copyright bar. */
@@ -31,6 +31,9 @@
   /* second-level resource entries (e.g. specific airports under ADIP) */
   .res-list ul { list-style: circle outside; margin: 4px 0 0; padding: 0 0 0 22px; }
   .res-list ul li { padding: 3px 0; }
+  .support-note { margin: 32px 0 0; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); font-size: 14px; color: var(--ink); line-height: 1.6; }
+  .support-note a { color: var(--mid); text-decoration: underline; text-underline-offset: 3px; }
+  .support-note a:hover { color: var(--brand); }
 </style>
 </head>
 <body>
@@ -180,10 +183,11 @@
         <li><a href="https://www.faa.gov/documentLibrary/media/Order/7110.65BB_Bsc_w_Chg_1_and_2_dtd_1-22-26_Final.pdf" target="_blank" rel="noopener">JO 7110.65BB — Air Traffic Control</a> <span class="res-desc">— Prescribes air traffic control procedures, responsibilities, separation standards, and phraseology used by controllers.</span></li>
         <li><a href="https://www.faa.gov/documentlibrary/media/order/order_jo_7900.5e.pdf" target="_blank" rel="noopener">JO 7900.5E — Surface Weather Observing</a> <span class="res-desc">— Prescribes procedures for aviation surface weather observations, including METAR and SPECI coding.</span></li>
       </ul>
+      <p class="support-note">PilotDECODER is free, ad-free, and collects nothing about you. If a tool here saved you time, you can <a href="https://ko-fi.com/X7Q524CVNM" target="_blank" rel="noopener">buy me a coffee</a> to help cover the domain and the cloud-identification costs. Entirely optional, and everything stays free either way.</p>
     </div>
   </main>
 
-  <footer><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
+  <footer><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a> <a class="kofi" href="https://ko-fi.com/X7Q524CVNM" target="_blank" rel="noopener" title="Help cover the API and domain costs"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>Buy me a coffee</a></div></div></footer>
 
 <script src="assets/site.js?v=1"></script>
 </body>
