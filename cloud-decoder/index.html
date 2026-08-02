@@ -290,9 +290,10 @@ function cloudCardsHtml(types) {
   return html + "</ul>";
 }
 
-/* Confidence pill (dots + word). Levels come from the Worker's QA pass; if the
-   Worker doesn't send a level for a type, no pill is shown and the card looks
-   exactly as before. */
+/* Confidence pill (dots + word). Levels come from the Worker's single-pass
+   classification, which rates itself against a fixed high/medium/low rubric.
+   If the Worker doesn't send a level for a type, no pill is shown and the card
+   looks exactly as before. */
 var lastConfidence = {};
 var lastReasoning = null;
 
