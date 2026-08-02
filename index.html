@@ -31,6 +31,13 @@
   /* second-level resource entries (e.g. specific airports under ADIP) */
   .res-list ul { list-style: circle outside; margin: 4px 0 0; padding: 0 0 0 22px; }
   .res-list ul li { padding: 3px 0; }
+  /* Ko-fi floating widget ships anchored bottom-left; move it to the right,
+     including the popup panel so it doesn't open off-screen. */
+  .floatingchat-container-wrap,
+  .floatingchat-container-wrap-mobi,
+  .floating-chat-kofi-popup-iframe,
+  .floating-chat-kofi-popup-iframe-mobi { left: auto !important; right: 16px !important; }
+  .floatingchat-container-wrap-mobi { width: auto !important; }
 </style>
 </head>
 <body>
@@ -191,7 +198,7 @@
   kofiWidgetOverlay.draw('pilotdecoder', {
     'type': 'floating-chat',
     'floating-chat.donateButton.text': 'Support me',
-    'floating-chat.donateButton.background-color': '#ffffff',
+    'floating-chat.donateButton.background-color': '#f4f4f4',
     'floating-chat.donateButton.text-color': '#323842'
   });
 </script>
