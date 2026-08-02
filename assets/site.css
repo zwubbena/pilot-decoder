@@ -94,12 +94,6 @@ footer a:hover { text-decoration: underline; }
 .copyright { margin-top: 24px; background: var(--brand); color: var(--white); padding: 14px 0; font-size: 13px; }
 .copyright a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
 .copyright a:hover { color: var(--accent); }
-/* Support link in the copyright bar. Built in CSS rather than the platform's
-   hosted image so the site keeps zero external requests. */
-.kofi { display: inline-flex; align-items: center; gap: 6px; margin-left: 4px; padding: 3px 11px; border: 1px solid rgba(255,255,255,.45); border-radius: 999px; text-decoration: none !important; white-space: nowrap; }
-.kofi:hover { background: rgba(255,255,255,.14); border-color: var(--white); color: var(--white) !important; }
-.kofi svg { flex: none; }
-
 /* ---------- 4. SHARED COMPONENTS ---------- */
 /* Section headings */
 .sec-label { font-family: var(--sans); font-size: 20px; font-weight: 700; color: #000000; margin: 34px 0 0; }
