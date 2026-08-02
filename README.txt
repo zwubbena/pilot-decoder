@@ -17,10 +17,6 @@ Copy the block below into Claude Cowork as context before working on the site.
 ├── assets/
 │   ├── site.css              → THE design system: tokens, themes, chrome, components
 │   └── site.js               → theme toggle (+ favicon recolor) and copyright year
-├── _template/
-│   └── index.html            → copy-me starting point for every new tool
-│                               (underscore folder = not published by GitHub Pages)
-├── _dev/                     → unpublished parking lot (holds the retired sectional page)
 ├── metar-decoder/index.html          → METAR Decoder
 ├── density-altitude-decoder/index.html → Density Altitude Decoder
 ├── wind-tunnel-decoder/index.html     → Wind Tunnel Decoder
@@ -101,9 +97,10 @@ are absolute. Renamed slugs keep a redirect stub at the old path (meta refresh +
 canonical to the new URL, e.g. `/metar/` -> `/metar-decoder/`).
 
 **Adding a new tool — checklist:**
-1. Copy `/_template/index.html` to `/your-slug/index.html` and fill in every
-   `___PLACEHOLDER___` (SEO title/description/keywords, canonical, OG/Twitter,
-   JSON-LD, masthead, content, references).
+1. Copy the closest existing tool page to `/your-slug/index.html` (for a simple
+   form-and-result tool, `metar-decoder/` is the cleanest starting point), then
+   replace every page-specific value: SEO title/description/keywords, canonical,
+   OG/Twitter tags, JSON-LD, masthead, content and references.
 2. Build the UI from existing `site.css` components before writing any new
    CSS; keep page CSS page-specific.
 3. Homepage: add a `.tool-card` to the tool list AND an entry to the JSON-LD
