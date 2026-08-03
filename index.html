@@ -31,23 +31,29 @@
   /* second-level resource entries (e.g. specific airports under ADIP) */
   .res-list ul { list-style: circle outside; margin: 4px 0 0; padding: 0 0 0 22px; }
   .res-list ul li { padding: 3px 0; }
-  /* Schematic bracket beside the tool list: one spine with a branch to each
-     card, so the six tools read as one grouped system. Pure CSS, no images.
-     Hidden on narrow screens where the indent would cost real width. */
+  /* Schematic bracket beside the tool list: a vertical spine with a branch to
+     each card. Built as one segment per card rather than a single box, so the
+     spine starts just under the heading and stops exactly at the last branch
+     instead of overrunning. Hidden on narrow screens. */
   .tool-list { position: relative; padding-left: 26px; }
-  .tool-list::before {
-    content: ""; position: absolute; left: 2px; top: 10px; bottom: 10px; width: 12px;
-    border: 2px solid var(--mid); border-right: 0;
-    border-radius: 10px 0 0 10px; pointer-events: none;
-  }
   .tool-list > li { position: relative; }
+  /* vertical segment: spans each card plus the 8px gap, so they join seamlessly */
+  .tool-list > li::after {
+    content: ""; position: absolute; left: -24px; top: -4px; bottom: -4px; width: 2px;
+    background: var(--mid); pointer-events: none;
+  }
+  /* first segment reaches up toward the "Pilot Tools" heading */
+  .tool-list > li:first-child::after { top: -18px; }
+  /* last segment stops at its own branch, forming the bottom corner */
+  .tool-list > li:last-child::after { bottom: auto; height: calc(50% + 4px); }
+  /* horizontal branch into each card */
   .tool-list > li::before {
     content: ""; position: absolute; left: -24px; top: 50%; width: 24px; height: 2px;
-    background: var(--mid); transform: translateY(-1px); pointer-events: none;
+    background: var(--mid); transform: translateY(-1px); pointer-events: none; z-index: 1;
   }
   @media (max-width: 620px) {
     .tool-list { padding-left: 0; }
-    .tool-list::before, .tool-list > li::before { display: none; }
+    .tool-list > li::before, .tool-list > li::after { display: none; }
   }
   /* masthead: intro text left, Ko-fi button top-right; stacks on narrow screens */
   .masthead-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
