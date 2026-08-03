@@ -382,20 +382,19 @@ function makeEntry(label,note,segs,joinS,altK,iasK,flapK){
 
 /* 45° to downwind: from outside, level at TPA, aimed abeam midfield */
 var e45start=[p45[0]+260*SQ, p45[1]+260*SQ];
-var m45=[e45start[0]+0.82*(p45[0]-e45start[0]), e45start[1]+0.82*(p45[1]-e45start[1])];
-var r360=34, c360=[m45[0]+r360*SQ, m45[1]-r360*SQ];   /* tight radius = steep */
+/* No 360 for spacing here. AFH Ch 8: if traffic will not allow the join, the
+   pilot on a 45 continues to turn away from the downwind, flies a safe distance
+   off, and returns for another attempt. A circle in close is not the remedy. */
 var E45=makeEntry("45° ENTRY",
-  "Recommended arrival: level at pattern altitude, enter on the 45 — with a steep 360 for spacing on the way in.",
-  [lineSeg(e45start[0],e45start[1], m45[0],m45[1]),
-   arcSeg(c360[0],c360[1],r360, A34, A34+2*Math.PI),  /* full circle, away from the pattern */
-   lineSeg(m45[0],m45[1], p45[0],p45[1]),
+  "Preferred arrival from the downwind side: level at pattern altitude, join the 45 aimed at a point abeam the midpoint of the runway. If traffic will not allow the join, turn away, fly clear, and come back for another try.",
+  [lineSeg(e45start[0],e45start[1], p45[0],p45[1]),
    arcSeg(B45.cx,B45.cy,B45.r, A34, Math.PI)],
   DW_START+160,
   [[0,1000],[1,1000]], [[0,95],[0.7,92],[1,90]], [[0,0],[1,0]]);
 
 /* Midfield crosswind: cross the runway at TPA, turn onto downwind */
 var MID=makeEntry("MIDFIELD XW",
-  "Alternate when the pattern is quiet: cross midfield at pattern altitude, then turn downwind.",
+  "Alternate from the upwind side, not for a busy pattern: cross midfield at pattern altitude, scan carefully for traffic, announce, then turn downwind.",
   [lineSeg(-340,0, 180,0),
    arcSeg(180,-60,60, HALF_PI, 0)],
   DW_START+220,
@@ -407,7 +406,7 @@ var uTd=(r4*(1+SQ)-p45[1])/SQ;
 var xe=p45[0]+SQ*uTd+SQ*r4;
 var tdEnd=[xe-SQ*r4, r4+SQ*r4];
 var TEAR=makeEntry("TEARDROP",
-  "Cross midfield 500 ft above pattern altitude, continue clear of the pattern, then descend in the teardrop and return on the 45.",
+  "Preferred arrival from the upwind side: cross midfield at least 500 ft above pattern altitude (2,000 ft AGL where large or turbine aircraft operate), continue about 2 miles clear of the pattern, descend to pattern altitude, then turn back to join the 45.",
   [lineSeg(-340,0, xe,0),
    arcSeg(xe,r4,r4, -HALF_PI, A34),
    lineSeg(tdEnd[0],tdEnd[1], p45[0],p45[1]),
@@ -456,10 +455,11 @@ var CIRCUIT_CALLS=[
   {id:"c-base", s:965,  ph:"BASE LEG",   t:function(){return radioCall("turning "+dirWord()+" base leg, Runway "+st.rwy+"");}},
   {id:"c-fin",  s:1175, ph:"FINAL APPROACH", t:function(){return radioCall("turning final, Runway "+st.rwy+", touch and go");}}
 ];
-E45.arrowF=[0.20,0.61,0.87];   /* clear of the 360 crossing point */
+E45.arrowF=[0.20,0.55,0.85];
 E45.calls=[
-  {id:"e45-1", f:0.06,  t:function(){return radioCall("entering the 45, "+dirWord()+" downwind, Runway "+st.rwy+"");}},
-  {id:"e45-2", f:0.40,  t:function(){return radioCall("making a "+(st.mirror===1?"right":"left")+" 360 for spacing on the 45, Runway "+st.rwy+"");}}
+  {id:"e45-1", f:0.06,  t:function(){return radioCall("on the 45, "+dirWord()+" downwind, Runway "+st.rwy+"");}},
+  /* AFH Ch 8 safety list: report entering downwind at a non-towered field */
+  {id:"e45-2", f:0.88,  t:function(){return radioCall("entering the "+dirWord()+" downwind, Runway "+st.rwy+"");}}
 ];
 MID.calls=[{id:"mid-1", f:0.12, t:function(){return radioCall("crossing midfield at pattern altitude, "+dirWord()+" downwind, Runway "+st.rwy+"");}}];
 TEAR.calls=[
