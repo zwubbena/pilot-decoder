@@ -31,13 +31,18 @@
   /* second-level resource entries (e.g. specific airports under ADIP) */
   .res-list ul { list-style: circle outside; margin: 4px 0 0; padding: 0 0 0 22px; }
   .res-list ul li { padding: 3px 0; }
-  /* Ko-fi floating widget ships anchored bottom-left; move it to the right,
-     including the popup panel so it doesn't open off-screen. */
+  /* Ko-fi floating widget ships anchored bottom-left; move it to the right.
+     Its container is 180px but the iframe inside is 195px, and on phones it
+     swaps to a full-width -mobi container, so both get an explicit width that
+     matches the iframe or the button hangs off the right edge. */
   .floatingchat-container-wrap,
   .floatingchat-container-wrap-mobi,
   .floating-chat-kofi-popup-iframe,
-  .floating-chat-kofi-popup-iframe-mobi { left: auto !important; right: 16px !important; }
-  .floatingchat-container-wrap-mobi { width: auto !important; }
+  .floating-chat-kofi-popup-iframe-mobi { left: auto !important; right: 12px !important; }
+  .floatingchat-container-wrap,
+  .floatingchat-container-wrap-mobi { width: 195px !important; max-width: calc(100vw - 24px) !important; }
+  .floatingchat-container-wrap iframe,
+  .floatingchat-container-wrap-mobi iframe { max-width: 100% !important; }
 </style>
 </head>
 <body>
