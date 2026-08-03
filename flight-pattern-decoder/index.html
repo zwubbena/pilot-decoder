@@ -706,7 +706,12 @@ function drawLegLabels(cur){
 }
 
 function drawWindsock(){
-  var base=w2sF(-40, 92);                                /* off the pattern side */
+  /* Sits clear of the green, on the side away from the pattern. It has to be
+     outside rather than tucked in: the sock reaches ~26px at full wind while
+     the field is only ~30px from centerline to edge, so any on-field position
+     would overhang the border at some wind directions. At x=-95 the tip stops
+     short of the edge no matter which way the wind is blowing. */
+  var base=w2sF(-95, 85);
   var toDeg=(st.windDir+180)%360;                       /* sock points downwind */
   var flut=Math.sin(st.t*(2+st.windSpd*0.5))*(st.windSpd*0.6)*Math.PI/180;
   var a=(toDeg-90)*Math.PI/180+flut;                    /* true compass, north=up */
