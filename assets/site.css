@@ -143,9 +143,9 @@ input[type="range"] { accent-color: var(--mid); }
 /* Cards */
 .card { background: var(--surface); border: 1px solid var(--card-bd); border-radius: 10px; padding: 14px 16px; }
 .tool-list { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.tool-card { position: relative; display: block; border: 1px solid var(--card-bd); border-radius: 10px; padding: 9px 44px 10px 14px; text-decoration: none; background: var(--surface); transition: border-color .15s ease, box-shadow .15s ease; }
+.tool-card { position: relative; display: block; border: 1px solid var(--card-bd); border-radius: 10px; padding: 9px 44px 10px 14px; text-decoration: none; background: var(--surface); transition: border-color .15s ease, background .15s ease, box-shadow .15s ease; }
 .tool-card::after { content: "\2192"; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--mid); transition: transform .15s ease; }
-.tool-card:hover { border-color: var(--mid); box-shadow: 0 6px 16px var(--btn-shadow); }
+.tool-card:hover { border-color: var(--mid); background: color-mix(in srgb, var(--wash) 45%, var(--surface)); box-shadow: 0 6px 16px var(--btn-shadow); }
 .tool-card:hover::after { transform: translateY(-50%) translateX(3px); }
 .tool-card:focus-visible { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
 .tool-name { font-family: var(--sans); font-weight: 700; font-size: 15.5px; color: var(--brand); margin: 0 0 1px; }
