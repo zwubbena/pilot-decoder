@@ -297,7 +297,7 @@ function polyline(path,step){
 
 /* ---------- the circuit racetrack ---------- */
 var LOOP_PATH=buildPath([
-  lineSeg(0,A_TOP+R, 0,A_BOT-R),                       /* final → t&g → upwind */
+  lineSeg(0,A_TOP+R, 0,A_BOT-R),                       /* final → t&g → departure */
   arcSeg(R, A_BOT-R, R, Math.PI, HALF_PI),             /* crosswind turn */
   lineSeg(R,A_BOT, D-R,A_BOT),                         /* crosswind */
   arcSeg(D-R, A_BOT-R, R, HALF_PI, 0),                 /* turn downwind */
@@ -334,7 +334,7 @@ function legAt(s){
   s=((s%TOTAL)+TOTAL)%TOTAL;
   if(s<90||s>=1225) return "FINAL APPROACH";
   if(s<230) return "TOUCH & GO";
-  if(s<375) return "UPWIND";
+  if(s<375) return "DEPARTURE";
   if(s<585) return "CROSSWIND";
   if(s<1015) return "DOWNWIND";
   return "BASE LEG";
@@ -518,7 +518,7 @@ function contour(x0,y0,pts){
   ctx.stroke();
 }
 function drawObstacle(){
-  var p=w2sF(-200, 172); /* west of the field, opposite the circuit — pushed out clear of the RWY 18 upwind label */
+  var p=w2sF(-200, 172); /* west of the field, opposite the circuit — pushed out clear of the RWY 18 departure label */
   ctx.strokeStyle=BLUE; ctx.fillStyle=BLUE; ctx.lineWidth=1.6;
   ctx.beginPath(); ctx.moveTo(p[0]-6,p[1]); ctx.lineTo(p[0]+6,p[1]);
   ctx.moveTo(p[0],p[1]); ctx.lineTo(p[0],p[1]-13); ctx.stroke();
@@ -631,10 +631,10 @@ function drawEntryRoute(){
    leg away from the pattern's center. Because the direction is derived from
    the transformed geometry, labels land correctly for either runway. */
 var LEGLBL=[
-  {n:"UPWIND",          s:302},
-  {n:"CROSSWIND",       s:480},
-  {n:"DOWNWIND",        s:800},
-  {n:"BASE LEG",        s:1120},
+  {n:"DEPARTURE\nLEG",  s:302},
+  {n:"CROSSWIND\nLEG",  s:480},
+  {n:"DOWNWIND\nLEG",   s:800},
+  {n:"BASE\nLEG",       s:1120},
   {n:"FINAL\nAPPROACH", s:(1225+(TOTAL-1225+90)/2)%TOTAL}  /* midpoint of the wrapped final leg */
 ];
 function drawLegLabels(cur){
