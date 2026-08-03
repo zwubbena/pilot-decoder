@@ -37,13 +37,13 @@
   .tool-list { position: relative; padding-left: 26px; }
   .tool-list::before {
     content: ""; position: absolute; left: 2px; top: 10px; bottom: 10px; width: 12px;
-    border: 2px solid var(--rule); border-right: 0;
+    border: 2px solid var(--mid); border-right: 0;
     border-radius: 10px 0 0 10px; pointer-events: none;
   }
   .tool-list > li { position: relative; }
   .tool-list > li::before {
     content: ""; position: absolute; left: -12px; top: 50%; width: 12px; height: 2px;
-    background: var(--rule); transform: translateY(-1px); pointer-events: none;
+    background: var(--mid); transform: translateY(-1px); pointer-events: none;
   }
   @media (max-width: 620px) {
     .tool-list { padding-left: 0; }
