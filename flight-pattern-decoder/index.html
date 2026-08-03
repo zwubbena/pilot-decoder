@@ -112,8 +112,14 @@
 
   /* pattern entry chips — blue like the route they draw */
   .entries{padding:2px 16px 4px}
-  .entries .k,.calllog .k{font-size:11px;letter-spacing:.18em;color:var(--ink-soft);text-transform:uppercase;font-weight:600}
+  .entries .k,.calllog .k,.acro .k{font-size:11px;letter-spacing:.18em;color:var(--ink-soft);text-transform:uppercase;font-weight:600}
   .calllog{padding:2px 16px 14px;background:var(--paper)}
+  /* acronym key: same paper stock as the call log, two columns where there is room */
+  .acro{padding:10px 16px 14px;background:var(--paper);border-top:1px dotted rgba(46,53,96,.3)}
+  .acrolist{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0 24px;margin:6px 0 0}
+  .acrolist>div{display:flex;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px dotted rgba(46,53,96,.3)}
+  .acrolist dt{font-family:var(--cond);font-size:12px;letter-spacing:.08em;font-weight:600;color:var(--red);white-space:nowrap;min-width:3.6em}
+  .acrolist dd{margin:0;font-family:var(--mono);font-size:12px;color:var(--ink);line-height:1.4}
   .fnote{
     padding:10px 16px 4px;background:var(--paper);
     font-size:12.5px;line-height:1.55;color:var(--ink-soft);letter-spacing:.02em;
@@ -244,6 +250,22 @@
 <div class="calllog">
   <div class="k">Call Log</div>
   <table class="logtable" aria-label="Radio call log"><tbody id="logBody"></tbody></table>
+</div>
+
+<div class="acro">
+  <div class="k">Acronyms</div>
+  <dl class="acrolist">
+    <div><dt>ALT</dt><dd>Altitude, shown here in feet above ground level (AGL)</dd></div>
+    <div><dt>GS</dt><dd>Groundspeed, speed measured over the ground</dd></div>
+    <div><dt>HDG</dt><dd>Heading, in degrees magnetic</dd></div>
+    <div><dt>HW</dt><dd>Headwind component</dd></div>
+    <div><dt>IAS</dt><dd>Indicated airspeed, the speed read off the airspeed indicator</dd></div>
+    <div><dt>KGTU</dt><dd>ICAO location indicator for Georgetown Executive Airport</dd></div>
+    <div><dt>kt</dt><dd>Knots, nautical miles per hour</dd></div>
+    <div><dt>RWY</dt><dd>Runway</dd></div>
+    <div><dt>VFR</dt><dd>Visual Flight Rules</dd></div>
+    <div><dt>XW</dt><dd>Crosswind component</dd></div>
+  </dl>
 </div>
 
 <div class="fnote"><b>Why 1,000 ft?</b> There is no universal regulatory pattern altitude — the official Traffic Pattern Altitude (TPA) is whatever the FAA Chart Supplement publishes for the airport, and published values vary. Where none is published, the FAA&#39;s Advisory Circular (<a href="https://www.faa.gov/documentlibrary/media/advisory_circular/ac_90-66c.pdf" target="_blank" rel="noopener">AC 90-66C</a>) recommends a traffic pattern altitude (TPA) of 1,000 feet above ground level (AGL). At KGTU, with a field elevation of 789.5 ft above mean sea level (MSL), that puts the pattern near 1,790 ft on your altimeter.</div>
