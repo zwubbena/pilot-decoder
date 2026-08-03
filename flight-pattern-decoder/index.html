@@ -569,8 +569,10 @@ function drawNorthArrow(){
 }
 
 function drawTurf(){
-  /* the airport grounds: a deeper green field around the runway and windsock */
-  var a=w2sF(-48,-134), b=w2sF(32,134);
+  /* the airport grounds: a deeper green field around the runway and windsock.
+     Symmetric about x=0 so the turf reads as centered on the runway. The half
+     width is set by the windsock at x=-40, which needs to sit inside the edge. */
+  var a=w2sF(-48,-134), b=w2sF(48,134);
   var x=Math.min(a[0],b[0]), y=Math.min(a[1],b[1]);
   var w=Math.abs(b[0]-a[0]), h=Math.abs(b[1]-a[1]), r=Math.min(24*SCALE,w/2);
   ctx.beginPath();
