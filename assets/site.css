@@ -59,9 +59,9 @@ main a:hover { color: var(--brand); }
 
 /* ---------- 3. SITE CHROME ---------- */
 /* Top bar */
-.topbar { background: var(--brand); height: 53px; flex-shrink: 0; }
+.topbar { background: var(--brand); height: 58px; flex-shrink: 0; }
 .topbar .wrap { display: flex; justify-content: space-between; align-items: center; }
-.brand { display: inline-block; line-height: 53px; font-family: var(--mono); font-weight: 700; font-size: 19px; letter-spacing: 0.03em; color: var(--white); text-decoration: none; }
+.brand { display: inline-block; line-height: 58px; font-family: var(--mono); font-weight: 700; font-size: 19px; letter-spacing: 0.03em; color: var(--white); text-decoration: none; }
 .brand span { color: var(--accent); }
 #theme-btn { box-sizing: border-box; position: relative; width: 36px; height: 20px; border-radius: 999px; background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.5); cursor: pointer; padding: 0; }
 #theme-btn:hover { background: rgba(255,255,255,0.32); }
