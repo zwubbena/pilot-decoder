@@ -31,6 +31,24 @@
   /* second-level resource entries (e.g. specific airports under ADIP) */
   .res-list ul { list-style: circle outside; margin: 4px 0 0; padding: 0 0 0 22px; }
   .res-list ul li { padding: 3px 0; }
+  /* Schematic bracket beside the tool list: one spine with a branch to each
+     card, so the six tools read as one grouped system. Pure CSS, no images.
+     Hidden on narrow screens where the indent would cost real width. */
+  .tool-list { position: relative; padding-left: 26px; }
+  .tool-list::before {
+    content: ""; position: absolute; left: 2px; top: 10px; bottom: 10px; width: 12px;
+    border: 2px solid var(--rule); border-right: 0;
+    border-radius: 10px 0 0 10px; pointer-events: none;
+  }
+  .tool-list > li { position: relative; }
+  .tool-list > li::before {
+    content: ""; position: absolute; left: -12px; top: 50%; width: 12px; height: 2px;
+    background: var(--rule); transform: translateY(-1px); pointer-events: none;
+  }
+  @media (max-width: 620px) {
+    .tool-list { padding-left: 0; }
+    .tool-list::before, .tool-list > li::before { display: none; }
+  }
   /* masthead: intro text left, Ko-fi button top-right; stacks on narrow screens */
   .masthead-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
   .masthead-text { flex: 1 1 auto; min-width: 0; }
