@@ -46,8 +46,10 @@
 <style>
   /* ============ PAGE-SPECIFIC: phonetic alphabet ============ */
   /* Tokens, chrome, buttons and panels come from /assets/site.css */
-  /* bottom padding keeps the AIM panel off the footer band */
-  main { padding: 8px 0 44px; }
+  /* main carries class="wrap", and .wrap sets `padding: 0 20px` in site.css.
+     A bare `main` selector loses to that on specificity, so these have to be
+     longhand on main.wrap or they are silently ignored. */
+  main.wrap { padding-top: 8px; padding-bottom: 44px; }
 
   /* view + mode switches */
   .switch-row { display: flex; flex-wrap: wrap; gap: 8px; }
