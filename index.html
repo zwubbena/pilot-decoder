@@ -74,7 +74,9 @@ try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.s
 
   /* ---------- hero ---------- */
   .hero{background:var(--surface)}
-  .hero-inner{padding:72px 0 56px}
+  /* longhand: a `padding` shorthand here would zero out .wrap's side padding
+     (same element carries both classes) — that bug shipped once already */
+  .hero-inner{padding-top:72px;padding-bottom:56px}
   .crumb{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted);margin:0 0 18px}
   h1{font-size:46px;font-weight:700;letter-spacing:-1px;line-height:1.1;color:var(--ink);margin:0 0 18px}
   .intro{font-size:17px;line-height:1.65;max-width:640px;margin:0;color:var(--body)}
@@ -135,7 +137,7 @@ try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.s
   @media (max-width:640px){
     .wrap{padding:0 20px}
     h1{font-size:34px}
-    .hero-inner{padding:52px 0 44px}
+    .hero-inner{padding-top:52px;padding-bottom:44px}
     .band{padding:52px 0 60px}
   }
 </style>
