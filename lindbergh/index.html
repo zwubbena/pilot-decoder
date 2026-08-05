@@ -1,35 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="top">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Charles Lindbergh — Live Sketch</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Lone Eagle | PilotDECODER</title>
+<meta name="description" content="A live ink sketch of Charles Lindbergh, The Lone Eagle, and the Spirit of St. Louis, drawn stroke by stroke in the browser." />
+<meta name="author" content="Zane Wubbena" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://pilotdecoder.com/lindbergh/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pilotdecoder.com/lindbergh/" />
+<meta property="og:site_name" content="PilotDECODER" />
+<meta property="og:title" content="The Lone Eagle | PilotDECODER" />
+<meta property="og:description" content="A live ink sketch of Charles Lindbergh and the Spirit of St. Louis, drawn stroke by stroke." />
+<script>try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2316294f'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="../assets/site.css?v=18" />
 <style>
+  /* ============ PAGE-SPECIFIC: Lindbergh live sketch ============ */
+  /* The sketch keeps its own sepia palette, renamed to --sk-* so it can
+     never collide with the site tokens (their --ink is not our --ink). */
+  main.wrap { padding-top: 8px; padding-bottom: 44px; }
+
   :root {
-    --paper: #efe7d6;
-    --page: #fbf7ec;
-    --ink: #2a2118;
-    --muted: #8a7f6c;
+    --sk-paper: #efe7d6;
+    --sk-page: #fbf7ec;
+    --sk-ink: #2a2118;
+    --sk-muted: #8a7f6c;
   }
-  * { box-sizing: border-box; }
-  html, body { height: 100%; }
-  body {
-    margin: 0;
+  /* the sepia desk, now a framed stage inside the page instead of the body */
+  .sketch-stage {
     background:
       radial-gradient(120% 90% at 50% 8%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
       radial-gradient(130% 120% at 50% 110%, rgba(94,75,50,.18), rgba(94,75,50,0) 55%),
-      var(--paper);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 12px;
+      var(--sk-paper);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: clamp(22px, 5vw, 44px) 14px;
+    display: flex; align-items: center; justify-content: center;
     font-family: Georgia, 'Times New Roman', serif;
+    margin-top: 18px;
   }
   .page {
     position: relative;
-    width: min(92vw, 78vh);
+    width: min(100%, 78vh);
     max-width: 700px;
-    background: var(--page);
+    background: var(--sk-page);
     border-radius: 3px;
     padding: clamp(14px, 3.2vmin, 30px) clamp(14px, 3.2vmin, 30px) clamp(10px, 2vmin, 18px);
     box-shadow:
@@ -57,7 +73,7 @@
   .strokes path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
   .caption {
     text-align: center;
-    color: var(--ink);
+    color: var(--sk-ink);
     font-style: italic;
     font-size: clamp(13px, 2.4vmin, 19px);
     letter-spacing: .06em;
@@ -65,21 +81,33 @@
     opacity: 0;
   }
   .hint {
-    position: fixed;
-    bottom: 8px;
-    left: 0; right: 0;
     text-align: center;
-    color: var(--muted);
-    font-size: 11px;
+    color: var(--ink-soft);
+    font-size: 12px;
     font-style: italic;
     letter-spacing: .08em;
-    opacity: .65;
-    pointer-events: none;
+    margin: 12px 0 0;
   }
+
 </style>
 </head>
 <body>
-  <figure class="page" id="page" style="margin:0" title="Click to pause / resume">
+
+  <header class="topbar">
+    <div class="wrap"><a class="brand" href="/">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme" title="Color theme"><span class="knob"></span></button></div>
+  </header>
+
+  <header class="masthead">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">The Lone Eagle</span></nav>
+      <h1 class="eyebrow"><strong>The Lone Eagle</strong></h1>
+      <p class="masthead-desc">Charles A. Lindbergh, &ldquo;The Lone Eagle,&rdquo; flew the Spirit of St. Louis nonstop from New York to Paris in May 1927, the first solo crossing of the Atlantic. The ink study below draws itself: lines first, then shading.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="sketch-stage">
+<figure class="page" id="page" style="margin:0" title="Click to pause / resume">
     <div id="artwrap">
       <svg id="art" viewBox="0 0 1072 1200" aria-label="Ink sketch of Charles Lindbergh beside the Spirit of St. Louis">
         <g class="strokes" id="strokes"></g>
@@ -217,5 +245,11 @@ if (reduced) {
   })(performance.now());
 }
 </script>
+    </div>
+  </main>
+
+  <footer><div class="copyright"><div class="wrap"><span>&copy; <span id="yr"></span> PilotDECODER</span><a class="totop" href="#top">BACK TO TOP &uarr;</a></div></div></footer>
+
+<script src="../assets/site.js?v=2"></script>
 </body>
 </html>
