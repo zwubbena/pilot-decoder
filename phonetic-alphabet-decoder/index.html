@@ -46,13 +46,15 @@
 <style>
   /* ============ PAGE-SPECIFIC: phonetic alphabet ============ */
   /* Tokens, chrome, buttons and panels come from /assets/site.css */
-  main { padding: 8px 0 0; }
+  /* bottom padding keeps the AIM panel off the footer band */
+  main { padding: 8px 0 44px; }
 
   /* view + mode switches */
   .switch-row { display: flex; flex-wrap: wrap; gap: 8px; }
   /* the display rule above would otherwise defeat the hidden attribute */
   .switch-row[hidden] { display: none; }
   .switch-row + .switch-row { margin-top: 12px; }
+  .panel-label.sub { margin-top: 16px; }
 
   /* ---------- reference grid ---------- */
   .ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
@@ -134,10 +136,21 @@
         <button type="button" class="btn-secondary" data-view="ref" aria-pressed="true">Reference</button>
         <button type="button" class="btn-secondary" data-view="quiz" aria-pressed="false">Practice</button>
       </div>
-      <div class="switch-row" id="modes" role="group" aria-label="Choose a drill" hidden>
-        <button type="button" class="btn-secondary btn-sm" data-qt="l2w" aria-pressed="true">Character to word</button>
-        <button type="button" class="btn-secondary btn-sm" data-qt="fake" aria-pressed="false">Spot the fake</button>
-        <button type="button" class="btn-secondary btn-sm" data-qt="call" aria-pressed="false">Callsign readback</button>
+      <div id="practice-controls" hidden>
+        <span class="panel-label sub">Drill</span>
+        <div class="switch-row" id="modes" role="group" aria-label="Choose a drill">
+          <button type="button" class="btn-secondary btn-sm" data-qt="l2w" aria-pressed="true">Character to word</button>
+          <button type="button" class="btn-secondary btn-sm" data-qt="fake" aria-pressed="false">Spot the fake</button>
+          <button type="button" class="btn-secondary btn-sm" data-qt="call" aria-pressed="false">Callsign readback</button>
+        </div>
+        <div id="pool-block">
+          <span class="panel-label sub">Characters</span>
+          <div class="switch-row" id="pools" role="group" aria-label="Choose which characters to drill">
+            <button type="button" class="btn-secondary btn-sm" data-pool="both" aria-pressed="true">Both</button>
+            <button type="button" class="btn-secondary btn-sm" data-pool="letters" aria-pressed="false">Letters</button>
+            <button type="button" class="btn-secondary btn-sm" data-pool="numbers" aria-pressed="false">Numbers</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -248,18 +261,24 @@ function shuffle(a){
 }
 
 /* ---------------- question generators ---------------- */
+/* Which characters the drills draw from. "both" is a flat pick across all 36,
+   which is what the old 72/28 letter-to-digit split already worked out to. */
+function poolFor(){
+  return S.pool === "letters" ? LETTERS : S.pool === "numbers" ? DIGITS : ALL;
+}
 function genMCQ(){
-  const item = pick(Math.random() < 0.72 ? LETTERS : DIGITS);
+  const item = pick(poolFor());
   return { prompt:item[0], sub:"What is the phonetic word?",
            options: shuffle([item[1], ...shuffle(FAKES[item[0]]).slice(0, 3)]),
            answer:item[1], pron:item[2] };
 }
 function genFake(){
-  const host = pick(ALL);
+  const pool = poolFor();
+  const host = pick(pool);
   const fake = pick(FAKES[host[0]]);
   const reals = new Map();
   while (reals.size < 3){
-    const o = pick(ALL);
+    const o = pick(pool);
     if (o[0] !== host[0]) reals.set(o[0], o[1]);
   }
   return { sub:"One of these is not in AIM TBL 4-2-2. Tap the impostor.",
@@ -289,7 +308,7 @@ function genCall(seed){
 }
 
 /* ---------------- state ---------------- */
-const S = { qt:"l2w", q:genMCQ(), picked:null, score:0, tries:0, streak:0, call:null, sel:[], done:null, seenCall:false };
+const S = { qt:"l2w", pool:"both", q:genMCQ(), picked:null, score:0, tries:0, streak:0, call:null, sel:[], done:null, seenCall:false };
 const $ = id => document.getElementById(id);
 
 function onScore(ok){
@@ -419,13 +438,16 @@ $("views").addEventListener("click", e => {
   const quiz = b.dataset.view === "quiz";
   $("view-ref").hidden = quiz;
   $("view-quiz").hidden = !quiz;
-  $("modes").hidden = !quiz;
+  $("practice-controls").hidden = !quiz;
 });
 $("modes").addEventListener("click", e => {
   const b = e.target.closest("button[data-qt]");
   if (!b) return;
   setPressed($("modes"), b);
   S.qt = b.dataset.qt;
+  /* a tail number is always letters and digits together, so the filter does
+     not apply to the readback drill */
+  $("pool-block").hidden = S.qt === "call";
   if (S.qt === "call"){ S.call = genCall(S.seenCall ? null : HOME_TAIL); S.seenCall = true; S.sel = []; S.done = null; }
   else { S.q = S.qt === "fake" ? genFake() : genMCQ(); S.picked = null; }
   drawQuiz();
@@ -437,6 +459,16 @@ $("btn-reset").addEventListener("click", () => {
   announce("Score reset.");
   const v = $("views").querySelector('[aria-pressed="true"]');
   if (v) v.focus();          /* the reset button just disabled itself, so move focus off it */
+});
+
+$("pools").addEventListener("click", e => {
+  const b = e.target.closest("button[data-pool]");
+  if (!b || S.qt === "call") return;
+  setPressed($("pools"), b);
+  S.pool = b.dataset.pool;
+  S.q = S.qt === "fake" ? genFake() : genMCQ();
+  S.picked = null;
+  drawQuiz();
 });
 
 buildRef();
