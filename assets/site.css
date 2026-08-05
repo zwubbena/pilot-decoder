@@ -70,7 +70,7 @@
 * { box-sizing: border-box; }
 /* overflow-x: clip (not hidden) — hidden silently disables position: sticky */
 html, body { margin: 0; padding: 0; overflow-x: clip; }
-html { background: var(--surface); -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; background: var(--surface); -webkit-text-size-adjust: 100%; }
 body {
   font-family: var(--sans); color: var(--ink); background: var(--surface);
   line-height: 1.55; -webkit-font-smoothing: antialiased;
@@ -122,6 +122,9 @@ footer a:hover { text-decoration: underline; }
 .source-list li { margin: 2px 0; }
 .disclaimer { margin: 0 0 14px; font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
 .copyright { margin-top: 24px; background: var(--chrome); color: var(--chrome-ink); padding: 14px 0; font-size: 13px; }
+.copyright .wrap { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.totop { font-family: var(--mono); font-size: 12px; letter-spacing: 1.5px; color: var(--chrome-ink); text-decoration: none; }
+.totop:hover { text-decoration: underline; text-underline-offset: 3px; }
 .copyright a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
 .copyright a:hover { color: var(--accent); }
 /* ---------- 4. SHARED COMPONENTS ---------- */
