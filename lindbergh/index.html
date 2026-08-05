@@ -21,6 +21,8 @@
   /* The sketch keeps its own sepia palette, renamed to --sk-* so it can
      never collide with the site tokens (their --ink is not our --ink). */
   main.wrap { padding-top: 8px; padding-bottom: 44px; }
+  .sk-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .sk-spacer { flex: 1; }
 
   :root {
     --sk-paper: #efe7d6;
@@ -225,17 +227,123 @@ if (reduced) {
 } else {
   let t0 = performance.now() - seek;
   let paused = false, pausedAt = 0;
-  document.getElementById("page").addEventListener("click", () => {
-    paused = !paused;
-    if (paused) pausedAt = performance.now();
-    else t0 += performance.now() - pausedAt;
-  });
+  const syncBtn = () => {
+    const b = document.getElementById("btn-pause");
+    if (b) { b.innerHTML = paused ? "&#9654; Resume" : "&#9208; Pause"; b.setAttribute("aria-pressed", String(paused)); }
+  };
+  window.sketchCtl = {
+    toggle() {
+      paused = !paused;
+      if (paused) pausedAt = performance.now();
+      else t0 += performance.now() - pausedAt;
+      syncBtn();
+    },
+    restart() {
+      if (paused) paused = false;
+      t0 = performance.now();      /* render() sees time go backward and resets itself */
+      syncBtn();
+    }
+  };
+  document.getElementById("page").addEventListener("click", () => window.sketchCtl.toggle());
   (function tick(now) {
     if (!paused) render((now - t0) % CYCLE);
     requestAnimationFrame(tick);
   })(performance.now());
+  syncBtn();
 }
+
+/* ---------- controls + export ---------- */
+(function () {
+  const $ = id => document.getElementById(id);
+
+  /* no animation to control under prefers-reduced-motion */
+  if (!window.sketchCtl) { const a = $("btn-pause"), b = $("btn-restart"); if (a) a.hidden = true; if (b) b.hidden = true; }
+  if ($("btn-pause"))   $("btn-pause").addEventListener("click", () => window.sketchCtl && window.sketchCtl.toggle());
+  if ($("btn-restart")) $("btn-restart").addEventListener("click", () => window.sketchCtl && window.sketchCtl.restart());
+
+  /* the-lone-eagle_YYYY-MM-DD_THHMM.ext — same convention as the Cloud Decoder PDF */
+  function stampName(ext) {
+    const d = new Date(), p = n => String(n).padStart(2, "0");
+    return "the-lone-eagle_" + d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) +
+           "_T" + p(d.getHours()) + p(d.getMinutes()) + (ext ? "." + ext : "");
+  }
+
+  /* snapshot the svg exactly as drawn right now (works paused or mid-stroke) */
+  function exportSvgMarkup() {
+    const svg = document.getElementById("art");
+    const clone = svg.cloneNode(true);
+    clone.setAttribute("xmlns", svgNS);
+    const pen = clone.querySelector("#pencil"); if (pen) pen.remove();
+    /* the page CSS that styles the strokes does not travel with a serialized
+       svg, so inline the three inherited properties on the group */
+    const g = clone.querySelector("#strokes");
+    g.setAttribute("fill", "none");
+    g.setAttribute("stroke-linecap", "round");
+    g.setAttribute("stroke-linejoin", "round");
+    return new XMLSerializer().serializeToString(clone);
+  }
+  const captionText = () => (document.getElementById("caption").textContent || "").replace(/\s+/g, " ").trim();
+
+  window.buildPngBlob = function () {
+    return new Promise((resolve, reject) => {
+      const markup = exportSvgMarkup();
+      const url = URL.createObjectURL(new Blob([markup], { type: "image/svg+xml;charset=utf-8" }));
+      const img = new Image();
+      img.onload = () => {
+        const S = 2, W = 1072 * S, H = 1200 * S, PAD = 40 * S, CAP = 70 * S;
+        const c = document.createElement("canvas");
+        c.width = W + PAD * 2; c.height = H + PAD + CAP;
+        const x = c.getContext("2d");
+        x.fillStyle = "#fbf7ec"; x.fillRect(0, 0, c.width, c.height);
+        x.drawImage(img, PAD, PAD, W, H);
+        x.fillStyle = "#2a2118"; x.textAlign = "center";
+        x.font = "italic " + (17 * S) + "px Georgia, 'Times New Roman', serif";
+        x.fillText(captionText(), c.width / 2, H + PAD + CAP * 0.55);
+        URL.revokeObjectURL(url);
+        c.toBlob(b => b ? resolve({ blob: b, name: stampName("png") }) : reject(new Error("toBlob failed")), "image/png");
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("svg rasterize failed")); };
+      img.src = url;
+    });
+  };
+
+  window.buildPrintDoc = function () {
+    return "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>" + stampName("") + "</title>" +
+      "<style>@page{margin:14mm}body{margin:0;font-family:Georgia,'Times New Roman',serif;color:#2a2118;text-align:center}" +
+      "svg{width:100%;height:auto;max-height:85vh}figcaption{font-style:italic;margin-top:10px;font-size:14px}" +
+      "p.src{font-size:10px;color:#8a7f6c;margin-top:14px}</style></head><body>" +
+      exportSvgMarkup() +
+      "<figcaption>" + captionText() + "</figcaption>" +
+      "<p class=\"src\">pilotdecoder.com/lindbergh</p>" +
+      "</body></html>";
+  };
+
+  if ($("btn-save")) $("btn-save").addEventListener("click", () => {
+    window.buildPngBlob().then(r => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(r.blob); a.download = r.name;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    }).catch(() => alert("Could not build the image in this browser."));
+  });
+
+  if ($("btn-print")) $("btn-print").addEventListener("click", () => {
+    const w = window.open("", "_blank");
+    if (!w) return;
+    w.document.write(window.buildPrintDoc());
+    w.document.close();
+    w.focus();
+    setTimeout(() => w.print(), 350);
+  });
+})();
 </script>
+    </div>
+    <div class="sk-controls">
+      <button id="btn-pause" class="btn-secondary" type="button" aria-pressed="false">&#9208; Pause</button>
+      <button id="btn-restart" class="btn-secondary" type="button">&#8634; Restart</button>
+      <span class="sk-spacer"></span>
+      <button id="btn-save" class="btn-primary" type="button">Save image</button>
+      <button id="btn-print" class="btn-secondary" type="button">Print / PDF</button>
     </div>
   </main>
 
