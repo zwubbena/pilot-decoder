@@ -308,7 +308,10 @@ function genCall(seed){
 }
 
 /* ---------------- state ---------------- */
-const S = { qt:"l2w", pool:"both", q:genMCQ(), picked:null, score:0, tries:0, streak:0, call:null, sel:[], done:null, seenCall:false };
+/* q is filled in after S exists: genMCQ now reads S.pool, and calling it
+   inside this initializer would hit the temporal dead zone and throw. */
+const S = { qt:"l2w", pool:"both", q:null, picked:null, score:0, tries:0, streak:0, call:null, sel:[], done:null, seenCall:false };
+S.q = genMCQ();
 const $ = id => document.getElementById(id);
 
 function onScore(ok){
