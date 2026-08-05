@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2316294f'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
 <title>METAR Decoder | PilotDECODER</title>
 <meta name="description" content="PilotDECODER is a METAR decoder for student and private pilots. Paste a raw METAR and get a plain-English breakdown of wind, visibility, clouds, temperature, and altimeter." />
 <meta name="keywords" content="PilotDECODER, pilotdecoder.com, Zane Wubbena, what's a METAR, what is a METAR, METAR, METAR decoder, METAR translator, decode METAR, read METAR, plain English METAR, aviation weather, aviation weather decoder, aviation weather report, aerodrome weather, pilot weather, student pilot, private pilot, ground school, flight training, preflight weather briefing, wind visibility ceiling altimeter, TAF" />
@@ -42,8 +42,8 @@
   }
 }
 </script>
-<script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
-<link rel="stylesheet" href="../assets/site.css?v=16" />
+<script>try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
+<link rel="stylesheet" href="../assets/site.css?v=17" />
 <style>
   /* ============ PAGE-SPECIFIC: METAR decoder ============ */
   /* Shared tokens, chrome, panel, fields, buttons come from /assets/site.css */
@@ -210,6 +210,6 @@ document.getElementById("sample-btn").addEventListener("click",function(){docume
 document.getElementById("clear-btn").addEventListener("click",function(){document.getElementById("metar-input").value="";document.getElementById("output").innerHTML="";document.getElementById("metar-input").focus();});
 document.getElementById("metar-input").addEventListener("keydown",function(e){if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){e.preventDefault();runDecode();}});
 </script>
-<script src="../assets/site.js?v=1"></script>
+<script src="../assets/site.js?v=2"></script>
 </body>
 </html>

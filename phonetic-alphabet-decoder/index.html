@@ -40,9 +40,9 @@
   }
 }
 </script>
-<script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
-<link rel="stylesheet" href="../assets/site.css?v=16" />
+<script>try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2316294f'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="../assets/site.css?v=17" />
 <style>
   /* ============ PAGE-SPECIFIC: phonetic alphabet ============ */
   /* Tokens, chrome, buttons and panels come from /assets/site.css */
@@ -72,6 +72,7 @@
   .stat .lab { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
   .stat .val { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--brand); }
   .stat .val.hot { color: #8A5510; }
+  [data-theme="dark"] .stat .val.hot { color: #E8B464; }
 
   .qcard { border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 8px; background: color-mix(in srgb, var(--wash) 45%, var(--surface)); padding: 20px 18px; text-align: center; margin: 16px 0 0; }
   .qsub { font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); margin: 0 0 6px; }
@@ -202,7 +203,7 @@
 </div>
 <p class="disclaimer"><b>Disclaimer:</b> Educational only. Not an official source; always work from the current AIM. The Pilot in Command remains solely responsible for flight safety and official verification.</p></div><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
 
-<script src="../assets/site.js?v=1"></script>
+<script src="../assets/site.js?v=2"></script>
 <script>
 /* ============================================================
    Data is transcribed from AIM TBL 4-2-2, Phonetic Alphabet/Morse Code.
