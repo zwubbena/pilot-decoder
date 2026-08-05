@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Phonetic Alphabet Decoder | PilotDECODER</title>
+<meta name="description" content="The ICAO phonetic alphabet exactly as the FAA publishes it in AIM Table 4-2-2, with pronunciations, plus three drills: letter to word, spot the fake, and callsign readback." />
+<meta name="keywords" content="phonetic alphabet, ICAO phonetic alphabet, NATO alphabet, aviation alphabet, Alfa Bravo Charlie, AIM 4-2-7, TBL 4-2-2, callsign readback, radio communications, CTAF, student pilot, private pilot, ground school, flight training, PilotDECODER" />
+<meta name="author" content="Zane Wubbena" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://pilotdecoder.com/phonetic-alphabet-decoder/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pilotdecoder.com/phonetic-alphabet-decoder/" />
+<meta property="og:site_name" content="PilotDECODER" />
+<meta property="og:title" content="Phonetic Alphabet Decoder | PilotDECODER" />
+<meta property="og:description" content="The ICAO phonetic alphabet as published in AIM Table 4-2-2, with pronunciations and three practice drills." />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Phonetic Alphabet Decoder | PilotDECODER" />
+<meta name="twitter:description" content="The ICAO phonetic alphabet as published in AIM Table 4-2-2, with pronunciations and three practice drills." />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PilotDECODER",
+  "alternateName": "Phonetic Alphabet Decoder",
+  "url": "https://pilotdecoder.com/phonetic-alphabet-decoder/",
+  "description": "Reference and practice drills for the ICAO phonetic alphabet as published by the FAA in AIM Table 4-2-2.",
+  "applicationCategory": "Aviation communications utility",
+  "operatingSystem": "Any (web browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": {
+    "@type": "Person",
+    "name": "Zane Wubbena",
+    "url": "https://zanewubbena.com/",
+    "sameAs": [
+      "https://txstate.academia.edu/ZaneWubbena",
+      "https://scholar.google.com/citations?user=qr2mU1oAAAAJ&hl=en",
+      "https://www.researchgate.net/profile/Zane-Wubbena"
+    ]
+  }
+}
+</script>
+<script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="../assets/site.css?v=16" />
+<style>
+  /* ============ PAGE-SPECIFIC: phonetic alphabet ============ */
+  /* Tokens, chrome, buttons and panels come from /assets/site.css */
+  main { padding: 8px 0 0; }
+
+  /* view + mode switches */
+  .switch-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  /* the display rule above would otherwise defeat the hidden attribute */
+  .switch-row[hidden] { display: none; }
+  .switch-row + .switch-row { margin-top: 12px; }
+
+  /* ---------- reference grid ---------- */
+  .ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
+  .ref-cell { display: flex; align-items: baseline; gap: 12px; border: 1px solid var(--rule); border-radius: 8px; background: color-mix(in srgb, var(--wash) 40%, var(--surface)); padding: 9px 12px; }
+  .ref-char { flex: none; width: 1.5em; font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--brand); }
+  .ref-word { font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--ink); display: block; }
+  .ref-pron { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); display: block; letter-spacing: .02em; }
+  .group-head { font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); margin: 22px 0 0; }
+
+  /* ---------- practice ---------- */
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0 0; }
+  .stat { border: 1px solid var(--rule); border-radius: 8px; background: color-mix(in srgb, var(--wash) 40%, var(--surface)); padding: 7px 6px; text-align: center; }
+  .stat .lab { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+  .stat .val { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--brand); }
+  .stat .val.hot { color: #8A5510; }
+
+  .qcard { border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 8px; background: color-mix(in srgb, var(--wash) 45%, var(--surface)); padding: 20px 18px; text-align: center; margin: 16px 0 0; }
+  .qsub { font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); margin: 0 0 6px; }
+  .qglyph { font-family: var(--mono); font-size: 46px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+  .qlead { font-family: var(--sans); font-size: 15.5px; font-weight: 600; color: var(--ink); margin: 0; }
+
+  .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 12px 0 0; }
+  .choice { font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 12px 8px; cursor: pointer; text-align: center; touch-action: manipulation; transition: border-color .15s ease, background .15s ease; }
+  .choice:hover:not(:disabled) { border-color: var(--mid); color: var(--brand); }
+  .choice:disabled { cursor: default; }
+  /* result colors are semantic, so they stay fixed across both themes */
+  .choice.correct { border-color: #3B6D11; background: #EAF3DE; color: #27500A; }
+  .choice.wrong { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
+  .choice.dim { opacity: .5; }
+
+  .feedback { border: 1px solid; border-radius: 8px; padding: 11px 14px; margin: 12px 0 0; font-family: var(--sans); font-size: 14.5px; line-height: 1.5; }
+  .feedback.good { border-color: #3B6D11; background: #EAF3DE; color: #27500A; }
+  .feedback.bad { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
+  .feedback .say { font-family: var(--mono); font-weight: 700; }
+
+  .act-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+
+  /* ---------- callsign drill ---------- */
+  .slots { display: flex; flex-wrap: wrap; gap: 6px; min-height: 46px; align-items: center; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); padding: 8px; margin: 12px 0 0; }
+  .slot { font-family: var(--mono); font-size: 13.5px; font-weight: 600; border: 1px solid; border-radius: 6px; padding: 5px 10px; }
+  .slot.empty { border-style: dashed; border-color: var(--card-bd); color: var(--placeholder); }
+  .slot.pend { border-color: var(--mid); background: var(--wash); color: var(--brand); }
+  .slot.ok { border-color: #3B6D11; background: #EAF3DE; color: #27500A; }
+  .slot.bad { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
+  .bank { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 8px; margin: 10px 0 0; }
+  .bankbtn { font-family: var(--mono); font-size: 13.5px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 10px 6px; cursor: pointer; touch-action: manipulation; }
+  .bankbtn:hover:not(:disabled) { border-color: var(--mid); color: var(--brand); }
+  .bankbtn:disabled { opacity: .4; cursor: default; }
+
+  /* ---------- AIM quote ---------- */
+  .aim { margin: 28px 0 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); }
+  .aim summary { cursor: pointer; padding: 12px 14px; font-family: var(--sans); font-weight: 700; font-size: 14px; color: var(--brand); }
+  .aim[open] summary { border-bottom: 1px solid var(--rule); }
+  .aim-body { padding: 12px 16px 16px; }
+  .aim-body p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--ink); }
+  .aim-cite { margin: 10px 0 0 !important; font-size: 13px !important; color: var(--ink-soft) !important; }
+  .note { margin: 16px 0 0; border: 1px solid var(--rule); border-radius: 8px; background: color-mix(in srgb, var(--wash) 40%, var(--surface)); padding: 12px 14px; font-size: 13.5px; line-height: 1.6; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="wrap"><a class="brand" href="/">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme (current: teal)" title="Color theme"><span class="knob"></span></button></div>
+  </header>
+
+  <header class="masthead">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">Phonetic Alphabet Decoder</span></nav>
+      <h1 class="eyebrow"><strong>Phonetic Alphabet Decoder</strong></h1>
+      <p class="masthead-desc">The International Civil Aviation Organization (ICAO) phonetic alphabet, listed exactly as the FAA publishes it in the Aeronautical Information Manual (AIM). Use the reference to look a character up, or the drills to get it into your hands before you key the mic.</p>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="wrap">
+      <span class="panel-label">View</span>
+      <div class="switch-row" id="views" role="group" aria-label="Choose a view">
+        <button type="button" class="btn-secondary" data-view="ref" aria-pressed="true">Reference</button>
+        <button type="button" class="btn-secondary" data-view="quiz" aria-pressed="false">Practice</button>
+      </div>
+      <div class="switch-row" id="modes" role="group" aria-label="Choose a drill" hidden>
+        <button type="button" class="btn-secondary btn-sm" data-qt="l2w" aria-pressed="true">Character to word</button>
+        <button type="button" class="btn-secondary btn-sm" data-qt="fake" aria-pressed="false">Spot the fake</button>
+        <button type="button" class="btn-secondary btn-sm" data-qt="call" aria-pressed="false">Callsign readback</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section id="view-ref" aria-label="Phonetic alphabet reference"></section>
+
+    <section id="view-quiz" hidden aria-label="Practice drills">
+      <div class="stat-row">
+        <div class="stat"><div class="lab">Score</div><div class="val" id="st-score">0/0</div></div>
+        <div class="stat"><div class="lab">Streak</div><div class="val" id="st-streak">0</div></div>
+        <div class="stat"><div class="lab">Accuracy</div><div class="val" id="st-acc">&ndash;</div></div>
+      </div>
+      <div id="qarea"></div>
+      <p id="q-status" role="status" class="sr-only"></p>
+    </section>
+
+    <details class="aim">
+      <summary>What the AIM says</summary>
+      <div class="aim-body">
+        <p>The International Civil Aviation Organization (ICAO) phonetic alphabet is used by FAA personnel when communications conditions are such that the information cannot be readily received without their use. ATC facilities may also request pilots to use phonetic letter equivalents when aircraft with similar sounding identifications are receiving communications on the same frequency. Pilots should use the phonetic alphabet when identifying their aircraft during initial contact with air traffic control facilities. Additionally, use the phonetic equivalents for single letters and to spell out groups of letters or difficult words during adverse communications conditions.</p>
+        <p class="aim-cite">FAA Aeronautical Information Manual, Paragraph 4-2-7, Phonetic Alphabet. The table of characters, words, and pronunciations is AIM TBL 4-2-2.</p>
+      </div>
+    </details>
+  </main>
+
+  <footer><div class="wrap"><div class="source"><b>References:</b>
+<ul class="source-list">
+<li>Phonetic alphabet, words, and pronunciations: <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_2.html#4-2-7" target="_blank" rel="noopener">FAA Aeronautical Information Manual (AIM) Paragraph 4-2-7, Phonetic Alphabet, and TBL 4-2-2, Phonetic Alphabet/Morse Code</a></li>
+<li>Aircraft call signs and initial contact: <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_2.html#4-2-3" target="_blank" rel="noopener">AIM Paragraph 4-2-3, Contact Procedures, and Paragraph 4-2-4, Aircraft Call Signs</a></li>
+</ul>
+</div>
+<p class="disclaimer"><b>Disclaimer:</b> Educational only. Not an official source; always work from the current AIM. The Pilot in Command remains solely responsible for flight safety and official verification.</p></div><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
+
+<script src="../assets/site.js?v=1"></script>
+<script>
+/* ============================================================
+   Data is transcribed from AIM TBL 4-2-2, Phonetic Alphabet/Morse Code.
+   Two columns matter here:
+     Telephony  = the word you say and see in print  (Three, Five, Nine)
+     Phonic     = how it is pronounced on the radio  (TREE, FIFE, NIN-ER)
+   Keeping those straight matters: an earlier draft of this page listed
+   the digits as "Tree/Fife/Niner" in the word column and then marked the
+   real AIM words as wrong answers in the quiz.
+   ============================================================ */
+const LETTERS = [
+  ["A","Alfa","AL-FAH"],            ["B","Bravo","BRAH-VOH"],
+  ["C","Charlie","CHAR-LEE or SHAR-LEE"], ["D","Delta","DELL-TAH"],
+  ["E","Echo","ECK-OH"],            ["F","Foxtrot","FOKS-TROT"],
+  ["G","Golf","GOLF"],              ["H","Hotel","HOH-TEL"],
+  ["I","India","IN-DEE-AH"],        ["J","Juliett","JEW-LEE-ETT"],
+  ["K","Kilo","KEY-LOH"],           ["L","Lima","LEE-MAH"],
+  ["M","Mike","MIKE"],              ["N","November","NO-VEM-BER"],
+  ["O","Oscar","OSS-CAH"],          ["P","Papa","PAH-PAH"],
+  ["Q","Quebec","KEH-BECK"],        ["R","Romeo","ROW-ME-OH"],
+  ["S","Sierra","SEE-AIR-RAH"],     ["T","Tango","TANG-GO"],
+  ["U","Uniform","YOU-NEE-FORM or OO-NEE-FORM"], ["V","Victor","VIK-TAH"],
+  ["W","Whiskey","WISS-KEY"],       ["X","Xray","ECKS-RAY"],
+  ["Y","Yankee","YANG-KEY"],        ["Z","Zulu","ZOO-LOO"]
+];
+/* AIM lists the digits 1 through 9 and then 0 */
+const DIGITS = [
+  ["1","One","WUN"],   ["2","Two","TOO"],    ["3","Three","TREE"],
+  ["4","Four","FOW-ER"],["5","Five","FIFE"], ["6","Six","SIX"],
+  ["7","Seven","SEV-EN"],["8","Eight","AIT"],["9","Nine","NIN-ER"],
+  ["0","Zero","ZEE-RO"]
+];
+const ALL = [...LETTERS, ...DIGITS];
+const LOOK = Object.fromEntries(ALL.map(x => [x[0], x]));
+const HOME_TAIL = "N8381L";
+
+/* Distractors. Older alphabets (Able Baker, Adam Boy), common misspellings
+   (Alpha, Juliet, Gulf, Whisky), and for digits the plain-English forms.
+   Nothing in here may be a real AIM word or a real AIM pronunciation, or the
+   drill would mark a correct answer wrong. */
+const FAKES = {
+  A:["Alpha","Able","Adam"],      B:["Baker","Beta","Bingo"],
+  C:["Charles","Coca","Chester"], D:["Dog","David","Dixie"],
+  E:["Easy","Edward","Eagle"],    F:["Fox","Freddie","Frank"],
+  G:["George","Gulf","Golden"],   H:["How","Henry","Harry"],
+  I:["Item","Ida","Ink"],         J:["Juliet","Julietta","John"],
+  K:["King","Kappa","Kite"],      L:["London","Love","Lincoln"],
+  M:["Mary","Metro","Monkey"],    N:["Nan","Nora","Nectar"],
+  O:["Oboe","Ocean","Orange"],    P:["Peter","Paul","Pip"],
+  Q:["Queen","Quest","Quaker"],   R:["Roger","Robert","Romero"],
+  S:["Sugar","Sam","Santiago"],   T:["Tom","Tare","Texas"],
+  U:["Uncle","Union","Utah"],     V:["Victoria","Vector","Vic"],
+  W:["William","Whisky","Washington"], X:["Xerox","Extra","Xavier"],
+  Y:["Yoke","Young","Yorker"],    Z:["Zebra","Zorro","Zeta"],
+  "0":["Oh","Nought","Null"],     "1":["Won","Unit","Ace"],
+  "2":["Deuce","Double","Twain"], "3":["Trey","Third","Treble"],
+  "4":["Fore","Forty","Quad"],    "5":["Fiver","Fifty","Penta"],
+  "6":["Sixer","Sicks","Sax"],    "7":["Sevens","Setter","Septa"],
+  "8":["Ate","Octo","Eighty"],    "9":["Ninety","Nina","Nines"]
+};
+
+/* ---------------- helpers ---------------- */
+const rand = n => Math.floor(Math.random() * n);
+const pick = a => a[rand(a.length)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function shuffle(a){
+  const b = [...a];
+  for (let i = b.length - 1; i > 0; i--){ const j = rand(i + 1); [b[i], b[j]] = [b[j], b[i]]; }
+  return b;
+}
+
+/* ---------------- question generators ---------------- */
+function genMCQ(){
+  const item = pick(Math.random() < 0.72 ? LETTERS : DIGITS);
+  return { prompt:item[0], sub:"What is the phonetic word?",
+           options: shuffle([item[1], ...shuffle(FAKES[item[0]]).slice(0, 3)]),
+           answer:item[1], pron:item[2] };
+}
+function genFake(){
+  const host = pick(ALL);
+  const fake = pick(FAKES[host[0]]);
+  const reals = new Map();
+  while (reals.size < 3){
+    const o = pick(ALL);
+    if (o[0] !== host[0]) reals.set(o[0], o[1]);
+  }
+  return { sub:"One of these is not in AIM TBL 4-2-2. Tap the impostor.",
+           options: shuffle([fake, ...reals.values()]),
+           answer:fake, char:host[0], word:host[1] };
+}
+/* US registrations: the character after the N is never 0, and the FAA never
+   issues I or O in a tail number because they read as 1 and 0. Drawing freely
+   from all digits and letters produced tails that cannot legally exist. */
+const REG_FIRST = DIGITS.filter(d => d[0] !== "0");
+const REG_LETTERS = LETTERS.filter(l => l[0] !== "I" && l[0] !== "O");
+function genCall(seed){
+  let chars;
+  if (seed){ chars = seed.split("").map(c => LOOK[c]).filter(Boolean); }
+  else {
+    chars = [LOOK["N"], pick(REG_FIRST)];
+    for (let i = 0; i < 2; i++) chars.push(pick(DIGITS));
+    for (let i = 0; i < 2; i++) chars.push(pick(REG_LETTERS));
+  }
+  const target = chars.map(c => c[1]);
+  const label = chars.map(c => c[0]).join("");
+  const traps = [...new Set(shuffle(chars.flatMap(c => FAKES[c[0]] || [])))].filter(w => !target.includes(w));
+  const extra = shuffle(ALL.map(x => x[1]).filter(w => !target.includes(w) && !traps.includes(w)));
+  const dis = traps.slice(0, 4);
+  while (dis.length < 4 && extra.length) dis.push(extra.pop());
+  return { label, target, bank: shuffle([...target, ...dis]).map((w, i) => ({ id:i, w })) };
+}
+
+/* ---------------- state ---------------- */
+const S = { qt:"l2w", q:genMCQ(), picked:null, score:0, tries:0, streak:0, call:null, sel:[], done:null, seenCall:false };
+const $ = id => document.getElementById(id);
+
+function onScore(ok){
+  S.tries++;
+  if (ok){ S.score++; S.streak++; } else S.streak = 0;
+  drawStats();
+}
+function announce(msg){
+  const el = $("q-status");
+  if (el) el.textContent = msg || "";
+}
+function drawStats(){
+  $("st-score").textContent = S.score + "/" + S.tries;
+  const st = $("st-streak");
+  st.textContent = S.streak;
+  st.classList.toggle("hot", S.streak >= 3);
+  $("st-acc").textContent = S.tries ? Math.round(100 * S.score / S.tries) + "%" : "–";
+}
+
+/* ---------------- multiple choice ---------------- */
+function drawQuiz(){
+  if (S.qt === "call"){ drawCall(); return; }
+  const el = $("qarea"), q = S.q, picked = S.picked;
+  const status = o => picked === null ? "" : o === q.answer ? "correct" : o === picked ? "wrong" : "dim";
+  let h = q.prompt
+    ? `<div class="qcard"><p class="qsub">${esc(q.sub)}</p><div class="qglyph">${esc(q.prompt)}</div></div>`
+    : `<div class="qcard"><p class="qlead">${esc(q.sub)}</p></div>`;
+  h += `<div class="choices">` + q.options.map(o =>
+        `<button type="button" class="choice ${status(o)}" data-o="${esc(o)}"${picked !== null ? " disabled" : ""}>${esc(o)}</button>`
+       ).join("") + `</div>`;
+  if (picked !== null){
+    const good = picked === q.answer;
+    var msgPlain = "";
+    const msg = S.qt === "fake"
+      ? (good ? `Impostor found. ${esc(q.char)} is ${esc(q.word)}, and ${esc(q.answer)} is not in the table.`
+              : `${esc(picked)} is a real word from the table. The impostor was ${esc(q.answer)}; ${esc(q.char)} is ${esc(q.word)}.`)
+      : (good ? `Correct. Say it <span class="say">${esc(q.pron)}</span>.`
+              : `${esc(q.prompt)} is ${esc(q.answer)}, said <span class="say">${esc(q.pron)}</span>.`);
+    msgPlain = msg.replace(/<[^>]*>/g, "");
+    h += `<div class="feedback ${good ? "good" : "bad"}">${msg}</div>`;
+    h += `<div class="act-row"><button type="button" class="btn-primary" id="btn-next">Next</button></div>`;
+  }
+  el.innerHTML = h;
+  announce(picked === null ? "" : msgPlain);
+  el.querySelectorAll(".choice").forEach(b => b.addEventListener("click", () => {
+    if (S.picked !== null) return;
+    S.picked = b.dataset.o;
+    onScore(S.picked === S.q.answer);
+    drawQuiz();
+    const n = $("btn-next"); if (n) n.focus();   /* innerHTML swap drops focus to body */
+  }));
+  const nx = $("btn-next");
+  if (nx) nx.addEventListener("click", () => {
+    S.q = S.qt === "fake" ? genFake() : genMCQ();
+    S.picked = null;
+    drawQuiz();
+  });
+}
+
+/* ---------------- callsign readback ---------------- */
+function drawCall(){
+  const el = $("qarea"), q = S.call;
+  const wordOf = id => q.bank.find(b => b.id === id).w;
+  const slots = q.target.map((w, i) => {
+    const id = S.sel[i];
+    if (id === undefined) return `<span class="slot empty">&middot;&middot;&middot;</span>`;
+    const cls = S.done === null ? "pend" : (wordOf(id) === w ? "ok" : "bad");
+    return `<span class="slot ${cls}">${esc(wordOf(id))}</span>`;
+  }).join("");
+  const bank = q.bank.map(b => {
+    const used = S.sel.includes(b.id) || S.done !== null;
+    return `<button type="button" class="bankbtn" data-id="${b.id}"${used ? " disabled" : ""}>${esc(b.w)}</button>`;
+  }).join("");
+  let h = `<div class="qcard"><p class="qsub">Read back the tail number</p>` +
+          `<div class="qglyph" style="letter-spacing:.1em;font-size:34px">${esc(q.label)}</div></div>` +
+          `<div class="slots">${slots}</div><div class="bank">${bank}</div>`;
+  if (S.done === null){
+    h += `<div class="act-row"><button type="button" class="btn-secondary" id="btn-undo"${S.sel.length === 0 ? " disabled" : ""}>Undo last</button></div>`;
+  } else {
+    h += S.done
+      ? `<div class="feedback good">Readback correct.</div>`
+      : `<div class="feedback bad">Correct readback: <span class="say">${esc(q.target.join(" "))}</span></div>`;
+    h += `<div class="act-row"><button type="button" class="btn-primary" id="btn-new">New callsign</button></div>`;
+  }
+  el.innerHTML = h;
+  el.querySelectorAll(".bankbtn").forEach(b => b.addEventListener("click", () => {
+    const id = Number(b.dataset.id);
+    if (S.done !== null || S.sel.includes(id)) return;
+    S.sel.push(id);
+    if (S.sel.length === q.target.length){
+      const ok = S.sel.map(wordOf).every((w, i) => w === q.target[i]);
+      S.done = ok;
+      onScore(ok);
+    }
+    drawCall();
+    const nxt = $("btn-new") || el.querySelector(".bankbtn:not([disabled])");
+    if (nxt) nxt.focus();                        /* innerHTML swap drops focus to body */
+  }));
+  const un = $("btn-undo");
+  if (un) un.addEventListener("click", () => { if (S.done === null && S.sel.length){ S.sel.pop(); drawCall(); const u = $("btn-undo"); if (u && !u.disabled) u.focus(); } });
+  const nw = $("btn-new");
+  if (nw) nw.addEventListener("click", () => { S.call = genCall(); S.sel = []; S.done = null; drawCall(); });
+}
+
+/* ---------------- reference ---------------- */
+function buildRef(){
+  const cell = ([c, w, p]) =>
+    `<li class="ref-cell"><span class="ref-char">${esc(c)}</span><span><span class="ref-word">${esc(w)}</span><span class="ref-pron">${esc(p)}</span></span></li>`;
+  $("view-ref").innerHTML =
+    `<h2 class="group-head" style="margin-top:14px">Letters</h2>` +
+    `<ul class="ref-grid" role="list">${LETTERS.map(cell).join("")}</ul>` +
+    `<h2 class="group-head">Numbers</h2>` +
+    `<ul class="ref-grid" role="list">${DIGITS.map(cell).join("")}</ul>` +
+    `<p class="note">Two columns of AIM TBL 4-2-2 are easy to mix up. The word column is how a character is written, so the digits are ordinary English: Three, Five, Nine. The pronunciation column is how it is spoken on the radio: TREE, FIFE, NIN-ER. Those shifted sounds are what keep the digits apart through static. One wrinkle worth knowing: the AIM's examples elsewhere print niner rather than nine, but never tree or fife. In this table the letters are spelled Alfa rather than Alpha, and Juliett with two t's.</p>`;
+}
+
+/* ---------------- wiring ---------------- */
+function setPressed(group, el){
+  group.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b === el)));
+}
+$("views").addEventListener("click", e => {
+  const b = e.target.closest("button[data-view]");
+  if (!b) return;
+  setPressed($("views"), b);
+  const quiz = b.dataset.view === "quiz";
+  $("view-ref").hidden = quiz;
+  $("view-quiz").hidden = !quiz;
+  $("modes").hidden = !quiz;
+});
+$("modes").addEventListener("click", e => {
+  const b = e.target.closest("button[data-qt]");
+  if (!b) return;
+  setPressed($("modes"), b);
+  S.qt = b.dataset.qt;
+  if (S.qt === "call"){ S.call = genCall(S.seenCall ? null : HOME_TAIL); S.seenCall = true; S.sel = []; S.done = null; }
+  else { S.q = S.qt === "fake" ? genFake() : genMCQ(); S.picked = null; }
+  drawQuiz();
+});
+
+buildRef();
+drawStats();
+drawQuiz();
+</script>
+</body>
+</html>
