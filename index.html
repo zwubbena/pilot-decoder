@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="top">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,213 +18,375 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"PilotDECODER","url":"https://pilotdecoder.com/","description":"Aviation tools for student pilots, flight instructors, and VFR flyers.","author":{"@type":"Person","name":"Zane Wubbena","url":"https://zanewubbena.com/"},"hasPart":[{"@type":"WebApplication","name":"METAR Decoder","url":"https://pilotdecoder.com/metar-decoder/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Decode any METAR (Meteorological Aerodrome Report) into plain English aviation weather."},{"@type":"WebApplication","name":"Density Altitude Decoder","url":"https://pilotdecoder.com/density-altitude-decoder/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Calculate density altitude from field elevation, altimeter setting, and temperature with every step of the math shown, plotted on the density altitude chart."},{"@type":"WebApplication","name":"Wind Tunnel Decoder","url":"https://pilotdecoder.com/wind-tunnel-decoder/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Interactive 2D wind tunnel: change the angle of attack on a NACA airfoil and watch lift, drag, buffet, and stall develop in real time."},{"@type":"WebApplication","name":"Flight Pattern Decoder","url":"https://pilotdecoder.com/flight-pattern-decoder/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Animated VFR traffic pattern at Georgetown Executive (KGTU): closed-traffic circuits, standard entries, AC 90-66 radio calls, and wind-driven runway selection."},{"@type":"WebApplication","name":"Zulu Decoder","url":"https://pilotdecoder.com/zulu-decoder/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Convert between Zulu (UTC) and the four U.S. time zones, in 24-hour and 12-hour time."},{"@type":"WebApplication","name":"Cloud Decoder","url":"https://pilotdecoder.com/cloud-decoder/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Upload a photo of the sky and identify the cloud type(s) present, from a pilot's perspective."},{"@type":"WebApplication","name":"Phonetic Alphabet Decoder","url":"https://pilotdecoder.com/phonetic-alphabet-decoder/","applicationCategory":"Aviation","operatingSystem":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"The ICAO phonetic alphabet as published in FAA AIM Table 4-2-2, with pronunciations and practice drills for callsign readback."}]}
 </script>
-<script>try{var t=localStorage.getItem("pd-theme");if(t==="blue")document.documentElement.setAttribute("data-theme","blue");}catch(e){}</script>
+<script>
+/* Pre-paint dark mode. Deliberately NOT the `pd-theme` key: the seven tool
+   pages persist their teal/blue toggle there (values "green"/"blue"), and
+   sharing the key would let either toggle silently clobber the other. */
+try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}
+</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2314555e'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
-<link rel="stylesheet" href="assets/site.css?v=16" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-  /* ============ PAGE-SPECIFIC: homepage ============ */
-  /* Footer has no disclaimer here, so collapse the empty band above the copyright bar. */
-  footer { padding: 0; border-top: 0; }
-  .copyright { margin-top: 0; }
-  /* breathing room between the last tool card and the footer */
-  main { padding-bottom: 56px; }
-  /* second-level resource entries (e.g. specific airports under ADIP) */
-  .res-list ul { list-style: circle outside; margin: 4px 0 0; padding: 0 0 0 22px; }
-  .res-list ul li { padding: 3px 0; }
-  /* Schematic bracket beside the tool list: a vertical spine with a branch to
-     each card. Built as one segment per card rather than a single box, so the
-     spine starts just under the heading and stops exactly at the last branch
-     instead of overrunning. Hidden on narrow screens. */
-  .tool-list { position: relative; padding-left: 26px; }
-  .tool-list > li { position: relative; }
-  /* vertical segment: spans each card plus the 8px gap, so they join seamlessly */
-  .tool-list > li::after {
-    content: ""; position: absolute; left: -24px; top: -4px; bottom: -4px; width: 2px;
-    background: var(--mid); pointer-events: none;
+  /* ============ homepage redesign: self-contained, does not use site.css ============ */
+  :root{
+    --bg:#f5f7fa; --surface:#ffffff; --surface2:#edf0f7;
+    --ink:#16233c; --body:#45526b; --muted:#626e85; --border:#dde2ec;
+    --accent:#2f4d8c; --accent2:#b3273a; --headerBg:#16294f;
+    --chrome-ink:#ccd8ee; --mark-p:#9fb3d9; --mark-d:#ffffff;
+    --coffee-bg:#ecd9bd; --coffee-bd:#dfc79f; --coffee-ink:#4a3419;
+    --shadow:rgba(22,35,60,.08);
+    --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    color-scheme: light;
   }
-  /* first segment reaches up toward the "Pilot Tools" heading */
-  .tool-list > li:first-child::after { top: -18px; }
-  /* last segment stops at its own branch, forming the bottom corner */
-  .tool-list > li:last-child::after { bottom: auto; height: calc(50% + 4px); }
-  /* horizontal branch into each card */
-  .tool-list > li::before {
-    content: ""; position: absolute; left: -24px; top: 50%; width: 24px; height: 2px;
-    background: var(--mid); transform: translateY(-1px); pointer-events: none; z-index: 1;
+  [data-theme="dark"]{
+    --bg:#0c1424; --surface:#121c33; --surface2:#1a2a4a;
+    --ink:#eaeef7; --body:#c5cede; --muted:#93a1bd; --border:#26375c;
+    --accent:#9db8ec; --accent2:#ee8a96; --headerBg:#070d1c;
+    --shadow:rgba(0,0,0,.4);
+    color-scheme: dark;
   }
-  @media (max-width: 620px) {
-    .tool-list { padding-left: 0; }
-    .tool-list > li::before, .tool-list > li::after { display: none; }
-  }
-  /* masthead: intro text left, Ko-fi button top-right; stacks on narrow screens */
-  .masthead-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
-  .masthead-text { flex: 1 1 auto; min-width: 0; }
-  .kofi-btn { flex: none; margin-top: 30px; line-height: 0; }
-  .kofi-btn img { display: block; height: 36px; width: auto; border: 0; }
-  @media (max-width: 640px) {
-    .masthead-row { flex-direction: column; gap: 14px; }
-    .kofi-btn { margin-top: 0; }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  html,body{margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--bg);color:var(--body);line-height:1.6;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 40px;width:100%}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  section{scroll-margin-top:64px}
+
+  /* ---------- sticky header ---------- */
+  .site-head{position:sticky;top:0;z-index:50;background:var(--headerBg);padding:14px 0}
+  .site-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  .wordmark{font-family:var(--mono);font-size:18px;text-decoration:none;letter-spacing:.02em}
+  .wordmark .p{font-weight:400;color:var(--mark-p)}
+  .wordmark .d{font-weight:700;color:var(--mark-d)}
+  .head-right{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .top-nav{display:flex;gap:20px}
+  .top-nav a{font-family:var(--mono);font-size:12px;letter-spacing:1.5px;color:var(--chrome-ink);text-decoration:none}
+  .top-nav a:hover{text-decoration:underline;text-underline-offset:3px}
+  #mode-btn{position:relative;width:44px;height:24px;border-radius:999px;border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.16);cursor:pointer;padding:0;flex:none}
+  #mode-btn:hover{background:rgba(255,255,255,.26)}
+  #mode-btn::after{content:"";position:absolute;inset:-8px}  /* bigger tap target */
+  #mode-btn .knob{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s ease}
+  [data-theme="dark"] #mode-btn .knob{transform:translateX(20px)}
+
+  /* ---------- hero ---------- */
+  .hero{background:var(--surface)}
+  .hero-inner{padding:72px 0 56px}
+  .crumb{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted);margin:0 0 18px}
+  h1{font-size:46px;font-weight:700;letter-spacing:-1px;line-height:1.1;color:var(--ink);margin:0 0 18px}
+  .intro{font-size:17px;line-height:1.65;max-width:640px;margin:0;color:var(--body)}
+  .intro a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+  .intro a:hover{color:var(--ink)}
+  .actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:30px}
+  .coffee{display:inline-flex;align-items:center;gap:8px;background:var(--coffee-bg);border:1px solid var(--coffee-bd);color:var(--coffee-ink);border-radius:999px;padding:9px 18px;font-size:13.5px;font-weight:600;text-decoration:none}
+  .coffee:hover{filter:brightness(1.04)}
+  .browse{font-family:var(--mono);font-size:12.5px;letter-spacing:1.5px;color:var(--accent);text-decoration:none}
+  .browse:hover{text-decoration:underline;text-underline-offset:3px}
+  .hero-rule{height:3px;background:linear-gradient(90deg,#16294f 0%,#3a5ca8 32%,#b3273a 68%,#f4dcdf 100%)}
+
+  /* ---------- shared section furniture ---------- */
+  .band{padding:72px 0 84px}
+  #resources{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .sec-head{display:flex;align-items:baseline;gap:14px}
+  .sec-num{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent2)}
+  .sec-line{flex:1;height:1px;background:var(--border)}
+  .sec-count{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--muted);white-space:nowrap}
+  h2{font-size:27px;font-weight:700;color:var(--ink);margin:14px 0 36px}
+
+  /* ---------- 01 tools ---------- */
+  .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(330px,100%),1fr));gap:14px;list-style:none;margin:0;padding:0}
+  .tcard{display:block;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:19px 20px;text-decoration:none;transition:border-color .15s ease,box-shadow .15s ease,transform .15s ease}
+  .tcard:hover{border-color:var(--accent);box-shadow:0 8px 22px var(--shadow);transform:translateY(-1px)}
+  .trow{display:flex;justify-content:space-between;align-items:baseline}
+  .ttag{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:1px;color:var(--accent2)}
+  .tarrow{color:var(--accent2);font-size:15px}
+  .tname{font-size:16.5px;font-weight:600;color:var(--ink);margin:10px 0 6px}
+  .tdesc{font-size:13.5px;color:var(--muted);line-height:1.55;margin:0}
+
+  /* ---------- 02 / 03 category grids ---------- */
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr));gap:40px 56px}
+  .cat-label{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin:0 0 14px}
+  .cat-label::after{content:"";flex:1;height:1px;background:var(--border)}
+  .res-items{list-style:none;margin:0;padding:0}
+  .res-items>li{font-size:14.5px;line-height:1.6;margin:0 0 12px}
+  .res-items a{color:var(--accent);font-weight:600;text-decoration:none}
+  .res-items a:hover{text-decoration:underline;text-underline-offset:3px}
+  .res-desc{color:var(--muted)}
+  .sub{list-style:none;margin:8px 0 2px 2px;padding:0 0 0 14px;border-left:2px solid var(--border)}
+  .sub li{font-family:var(--mono);font-size:12.5px;margin:6px 0}
+  .sub a{font-weight:500}
+
+  /* ---------- 03 publications ---------- */
+  .pub-items>li{margin:0 0 16px}
+  .chip{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent2);background:var(--surface2);border-radius:5px;padding:2px 7px;margin-right:8px;white-space:nowrap}
+  .pub-desc{display:block;font-size:13.5px;color:var(--muted);margin-top:3px}
+
+  /* ---------- footer ---------- */
+  .site-foot{background:var(--headerBg);color:var(--chrome-ink);padding:22px 0}
+  .site-foot .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .site-foot .left{font-size:13.5px}
+  .site-foot .left a{color:#fff;text-decoration:underline;text-underline-offset:3px}
+  .totop{font-family:var(--mono);font-size:12px;letter-spacing:1.5px;color:var(--chrome-ink);text-decoration:none}
+  .totop:hover{text-decoration:underline;text-underline-offset:3px}
+
+  @media (max-width:640px){
+    .wrap{padding:0 20px}
+    h1{font-size:34px}
+    .hero-inner{padding:52px 0 44px}
+    .band{padding:52px 0 60px}
   }
 </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="wrap"><a class="brand" href="/">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme (current: teal)" title="Color theme"><span class="knob"></span></button></div>
-  </header>
 
-  <header class="masthead">
-    <div class="wrap masthead-row">
-      <div class="masthead-text">
-        <nav class="crumbs" aria-label="Breadcrumb"><span aria-current="page">Home</span></nav>
-        <h1 class="eyebrow">Home</h1>
-        <p class="intro-note">PilotDECODER is my personal aviation learning tool. I&#39;m <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Dr. Zane Wubbena</a>, currently the Managing Director of Forecasting in School Finance at the Texas Education Agency. But I like airplanes, aviation, and learning.</p>
+  <header class="site-head">
+    <div class="wrap">
+      <a class="wordmark" href="/"><span class="p">Pilot</span><span class="d">DECODER</span></a>
+      <div class="head-right">
+        <nav class="top-nav" aria-label="Sections">
+          <a href="#tools">TOOLS</a>
+          <a href="#resources">RESOURCES</a>
+          <a href="#publications">PUBLICATIONS</a>
+        </nav>
+        <button id="mode-btn" type="button" aria-pressed="false" aria-label="Switch to dark mode"><span class="knob"></span></button>
       </div>
-      <a class="kofi-btn" href="https://ko-fi.com/pilotdecoder" target="_blank" rel="noopener" title="Help cover the domain and cloud-identification costs"><img src="https://storage.ko-fi.com/cdn/kofi1.png?v=6" alt="Buy me a coffee at ko-fi.com" height="36" loading="lazy" /></a>
     </div>
   </header>
+
+  <div class="hero">
+    <div class="wrap hero-inner">
+      <p class="crumb">HOME</p>
+      <h1>Aviation, decoded.</h1>
+      <p class="intro">PilotDECODER is my personal aviation learning tool. I&#39;m <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Dr. Zane Wubbena</a>, currently the Managing Director of Forecasting in School Finance at the Texas Education Agency. But I like airplanes, aviation, and learning.</p>
+      <div class="actions">
+        <a class="coffee" href="https://ko-fi.com/pilotdecoder" target="_blank" rel="noopener" title="Help cover the domain and cloud-identification costs">&#9749; Buy me a coffee</a>
+        <a class="browse" href="#tools">BROWSE PILOT TOOLS &darr;</a>
+      </div>
+    </div>
+    <div class="hero-rule" aria-hidden="true"></div>
+  </div>
 
   <main>
-    <div class="wrap">
-      <h2 class="sec-label">Pilot Tools</h2>
-      <ul class="tool-list">
-        <li><a class="tool-card" href="/metar-decoder/">
-          <p class="tool-name">METAR Decoder</p>
-          <p class="tool-desc">Any METAR (Meteorological Aerodrome Report), decoded into plain-English weather.</p>
-        </a></li>
-        <li><a class="tool-card" href="/density-altitude-decoder/">
-          <p class="tool-name">Density Altitude Decoder</p>
-          <p class="tool-desc">Density altitude worked line by line, the way the FAA written test does it.</p>
-        </a></li>
-        <li><a class="tool-card" href="/wind-tunnel-decoder/">
-          <p class="tool-name">Wind Tunnel Decoder</p>
-          <p class="tool-desc">Watch air flow over a wing and then change the angle of attack (AOA), see lift, drag, and stall live.</p>
-        </a></li>
-        <li><a class="tool-card" href="/flight-pattern-decoder/">
-          <p class="tool-name">Flight Pattern Decoder</p>
-          <p class="tool-desc">The VFR traffic pattern, animated: circuits, entries, radio calls, and live wind at Georgetown Executive (KGTU).</p>
-        </a></li>
-        <li><a class="tool-card" href="/zulu-decoder/">
-          <p class="tool-name">Zulu Decoder</p>
-          <p class="tool-desc">Convert between Zulu (UTC) and the four U.S. time zones, in 24-hour and 12-hour time.</p>
-        </a></li>
-        <li><a class="tool-card" href="/cloud-decoder/">
-          <p class="tool-name">Cloud Decoder</p>
-          <p class="tool-desc">Upload a photo of the sky and get the cloud type(s) identified, from a pilot's perspective.</p>
-        </a></li>
-        <li><a class="tool-card" href="/phonetic-alphabet-decoder/">
-          <p class="tool-name">Phonetic Alphabet Decoder</p>
-          <p class="tool-desc">The ICAO phonetic alphabet exactly as the AIM publishes it, with pronunciations and drills for callsign readback.</p>
-        </a></li>
-      </ul>
-      <h2 class="sec-label">Resources</h2>
+    <section class="band" id="tools" aria-labelledby="tools-h">
+      <div class="wrap">
+        <div class="sec-head"><span class="sec-num">01</span><span class="sec-line" aria-hidden="true"></span><span class="sec-count">7 TOOLS</span></div>
+        <h2 id="tools-h">Pilot Tools</h2>
+        <ul class="tools-grid">
+          <li><a class="tcard" href="/metar-decoder/">
+            <span class="trow"><span class="ttag">T-01</span><span class="tarrow" aria-hidden="true">&rarr;</span></span>
+            <p class="tname">METAR Decoder</p>
+            <p class="tdesc">Any METAR (Meteorological Aerodrome Report), decoded into plain-English weather.</p>
+          </a></li>
+          <li><a class="tcard" href="/density-altitude-decoder/">
+            <span class="trow"><span class="ttag">T-02</span><span class="tarrow" aria-hidden="true">&rarr;</span></span>
+            <p class="tname">Density Altitude Decoder</p>
+            <p class="tdesc">Density altitude worked line by line, the way the FAA written test does it.</p>
+          </a></li>
+          <li><a class="tcard" href="/wind-tunnel-decoder/">
+            <span class="trow"><span class="ttag">T-03</span><span class="tarrow" aria-hidden="true">&rarr;</span></span>
+            <p class="tname">Wind Tunnel Decoder</p>
+            <p class="tdesc">Watch air flow over a wing and then change the angle of attack (AOA), see lift, drag, and stall live.</p>
+          </a></li>
+          <li><a class="tcard" href="/flight-pattern-decoder/">
+            <span class="trow"><span class="ttag">T-04</span><span class="tarrow" aria-hidden="true">&rarr;</span></span>
+            <p class="tname">Flight Pattern Decoder</p>
+            <p class="tdesc">The VFR traffic pattern, animated: circuits, entries, radio calls, and live wind at Georgetown Executive (KGTU).</p>
+          </a></li>
+          <li><a class="tcard" href="/zulu-decoder/">
+            <span class="trow"><span class="ttag">T-05</span><span class="tarrow" aria-hidden="true">&rarr;</span></span>
+            <p class="tname">Zulu Decoder</p>
+            <p class="tdesc">Convert between Zulu (UTC) and the four U.S. time zones, in 24-hour and 12-hour time.</p>
+          </a></li>
+          <li><a class="tcard" href="/cloud-decoder/">
+            <span class="trow"><span class="ttag">T-06</span><span class="tarrow" aria-hidden="true">&rarr;</span></span>
+            <p class="tname">Cloud Decoder</p>
+            <p class="tdesc">Upload a photo of the sky and get the cloud type(s) identified, from a pilot's perspective.</p>
+          </a></li>
+          <li><a class="tcard" href="/phonetic-alphabet-decoder/">
+            <span class="trow"><span class="ttag">T-07</span><span class="tarrow" aria-hidden="true">&rarr;</span></span>
+            <p class="tname">Phonetic Alphabet Decoder</p>
+            <p class="tdesc">The ICAO phonetic alphabet exactly as the AIM publishes it, with pronunciations and drills for callsign readback.</p>
+          </a></li>
+        </ul>
+      </div>
+    </section>
 
-      <h3 class="res-sublabel">Certification, medical &amp; airman records</h3>
-      <ul class="res-list">
-        <li><a href="https://iacra.faa.gov/IACRA/default.aspx" target="_blank" rel="noopener">Integrated Airman Certification and Rating Application (IACRA)</a> <span class="res-desc">— Apply for student pilot certificates, airman certificates, ratings, and other certification actions.</span></li>
-        <li><a href="https://medxpress.faa.gov/MedXpress/Disclaimer.aspx" target="_blank" rel="noopener">FAA MedXPress</a> <span class="res-desc">— Complete the online application for an FAA medical certificate before visiting an Aviation Medical Examiner.</span></li>
-        <li><a href="https://designee.faa.gov/#/designeeLocator" target="_blank" rel="noopener">Aviation Medical Examiner Locator</a> <span class="res-desc">— Find an FAA-designated Aviation Medical Examiner.</span></li>
-        <li><a href="https://amsrvs.registry.faa.gov/airmeninquiry/" target="_blank" rel="noopener">FAA Airmen Inquiry</a> <span class="res-desc">— Look up airman information and access FAA airman-record services.</span></li>
-        <li><a href="https://www.fcc.gov/wireless/universal-licensing-system" target="_blank" rel="noopener">FCC Universal Licensing System</a> <span class="res-desc">— Apply for and manage FCC radio licenses, including a Restricted Radiotelephone Operator Permit when required.</span></li>
-      </ul>
+    <section class="band" id="resources" aria-labelledby="resources-h">
+      <div class="wrap">
+        <div class="sec-head"><span class="sec-num">02</span><span class="sec-line" aria-hidden="true"></span><span class="sec-count">7 CATEGORIES &middot; 32 LINKS</span></div>
+        <h2 id="resources-h">Resources</h2>
+        <div class="cat-grid">
 
-      <h3 class="res-sublabel">Weather &amp; flight planning</h3>
-      <ul class="res-list">
-        <li><a href="https://aviationweather.gov/" target="_blank" rel="noopener">Aviation Weather Center</a> <span class="res-desc">— Access METARs, TAFs, PIREPs, AIRMETs, SIGMETs, graphical forecasts, radar, satellite imagery, and other aviation weather products.</span></li>
-        <li><a href="https://www.1800wxbrief.com/" target="_blank" rel="noopener">Leidos Flight Service (1-800-WX-BRIEF)</a> <span class="res-desc">— Obtain official weather briefings and file, amend, activate, or close flight plans.</span></li>
-        <li><a href="https://skyvector.com/" target="_blank" rel="noopener">SkyVector</a> <span class="res-desc">— View interactive VFR and IFR charts and use chart-based flight-planning tools.</span></li>
-      </ul>
+          <div>
+            <h3 class="cat-label">Certification, medical &amp; airman records</h3>
+            <ul class="res-items">
+              <li><a href="https://iacra.faa.gov/IACRA/default.aspx" target="_blank" rel="noopener">Integrated Airman Certification and Rating Application (IACRA)</a> <span class="res-desc">&mdash; Apply for student pilot certificates, airman certificates, ratings, and other certification actions.</span></li>
+              <li><a href="https://medxpress.faa.gov/MedXpress/Disclaimer.aspx" target="_blank" rel="noopener">FAA MedXPress</a> <span class="res-desc">&mdash; Complete the online application for an FAA medical certificate before visiting an Aviation Medical Examiner.</span></li>
+              <li><a href="https://designee.faa.gov/#/designeeLocator" target="_blank" rel="noopener">Aviation Medical Examiner Locator</a> <span class="res-desc">&mdash; Find an FAA-designated Aviation Medical Examiner.</span></li>
+              <li><a href="https://amsrvs.registry.faa.gov/airmeninquiry/" target="_blank" rel="noopener">FAA Airmen Inquiry</a> <span class="res-desc">&mdash; Look up airman information and access FAA airman-record services.</span></li>
+              <li><a href="https://www.fcc.gov/wireless/universal-licensing-system" target="_blank" rel="noopener">FCC Universal Licensing System</a> <span class="res-desc">&mdash; Apply for and manage FCC radio licenses, including a Restricted Radiotelephone Operator Permit when required.</span></li>
+            </ul>
+          </div>
 
-      <h3 class="res-sublabel">Airports, NOTAMs &amp; airspace</h3>
-      <ul class="res-list">
-        <li><a href="https://adip.faa.gov/agis/public/#/airportSearch" target="_blank" rel="noopener">FAA Airport Data and Information Portal (ADIP)</a> <span class="res-desc">— Search official airport, runway, frequency, facility, ownership, and field-elevation data.</span>
-          <ul>
-            <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/50R" target="_blank" rel="noopener">ADIP — Lockhart Municipal Airport (50R)</a></li>
-            <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/GTU" target="_blank" rel="noopener">ADIP —</a> <a href="https://georgetowntexas.gov/transportation/georgetown_executive_airport_at_johnny_gantt_field/" target="_blank" rel="noopener">Georgetown Executive Airport at Johnny Gantt Field</a> (KGTU)</li>
-            <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/AUS" target="_blank" rel="noopener">ADIP — Austin–Bergstrom International Airport (KAUS)</a></li>
-            <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/HYI" target="_blank" rel="noopener">ADIP — San Marcos Regional Airport (KHYI)</a></li>
-          </ul>
-        </li>
-        <li><a href="https://www.faa.gov/airports/runway_safety/diagrams/" target="_blank" rel="noopener">FAA Airport Diagrams</a> <span class="res-desc">— Search and download official FAA airport diagrams by airport identifier.</span></li>
-        <li><a href="https://notams.aim.faa.gov/" target="_blank" rel="noopener">FAA NOTAM Search</a> <span class="res-desc">— Search current Notices to Air Missions. Enter 50R for Lockhart Municipal Airport.</span></li>
-        <li><a href="https://tfr.faa.gov/" target="_blank" rel="noopener">FAA Temporary Flight Restriction List</a> <span class="res-desc">— Review Temporary Flight Restrictions currently published by the FAA.</span></li>
-        <li><a href="https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/vfr/" target="_blank" rel="noopener">FAA VFR Raster Charts</a> <span class="res-desc">— Download official FAA sectional charts, terminal area charts, and other VFR chart products.</span></li>
-        <li><a href="https://vfrmap.com/" target="_blank" rel="noopener">VFRMap</a> <span class="res-desc">— Pan and zoom the VFR sectional chart in your browser; search an identifier such as KGTU to jump to an airport.</span></li>
-        <li><a href="https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dafd/" target="_blank" rel="noopener">FAA Chart Supplement</a> <span class="res-desc">— Download the Chart Supplement (formerly the Airport/Facility Directory) with airport, frequency, runway, and service details.</span></li>
-        <li><a href="https://taf.faa.gov/" target="_blank" rel="noopener">Terminal Area Forecast (TAF)</a> <span class="res-desc">— Query the FAA's historical and forecast aviation-activity data for U.S. airports (airport planning; distinct from the weather TAF).</span></li>
-      </ul>
+          <div>
+            <h3 class="cat-label">Weather &amp; flight planning</h3>
+            <ul class="res-items">
+              <li><a href="https://aviationweather.gov/" target="_blank" rel="noopener">Aviation Weather Center</a> <span class="res-desc">&mdash; Access METARs, TAFs, PIREPs, AIRMETs, SIGMETs, graphical forecasts, radar, satellite imagery, and other aviation weather products.</span></li>
+              <li><a href="https://www.1800wxbrief.com/" target="_blank" rel="noopener">Leidos Flight Service (1-800-WX-BRIEF)</a> <span class="res-desc">&mdash; Obtain official weather briefings and file, amend, activate, or close flight plans.</span></li>
+              <li><a href="https://skyvector.com/" target="_blank" rel="noopener">SkyVector</a> <span class="res-desc">&mdash; View interactive VFR and IFR charts and use chart-based flight-planning tools.</span></li>
+            </ul>
+          </div>
 
-      <h3 class="res-sublabel">Aircraft registration &amp; flight tracking</h3>
-      <ul class="res-list">
-        <li><a href="https://registry.faa.gov/aircraftinquiry/" target="_blank" rel="noopener">FAA N-Number Lookup</a> <span class="res-desc">— Search the U.S. civil aircraft registry by registration number, owner, manufacturer, model, or serial number.</span></li>
-        <li><a href="https://www.flightradar24.com/" target="_blank" rel="noopener">Flightradar24</a> <span class="res-desc">— Track live air traffic and review flight and aircraft histories worldwide.</span></li>
-        <li><a href="https://www.liveatc.net/" target="_blank" rel="noopener">LiveATC.net</a> <span class="res-desc">— Listen to live and archived air traffic control audio from airports worldwide.</span></li>
-      </ul>
+          <div>
+            <h3 class="cat-label">Airports, NOTAMs &amp; airspace</h3>
+            <ul class="res-items">
+              <li><a href="https://adip.faa.gov/agis/public/#/airportSearch" target="_blank" rel="noopener">FAA Airport Data and Information Portal (ADIP)</a> <span class="res-desc">&mdash; Search official airport, runway, frequency, facility, ownership, and field-elevation data.</span>
+                <ul class="sub">
+                  <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/50R" target="_blank" rel="noopener">ADIP &mdash; Lockhart Municipal Airport (50R)</a></li>
+                  <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/GTU" target="_blank" rel="noopener">ADIP &mdash;</a> <a href="https://georgetowntexas.gov/transportation/georgetown_executive_airport_at_johnny_gantt_field/" target="_blank" rel="noopener">Georgetown Executive Airport at Johnny Gantt Field</a> (KGTU)</li>
+                  <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/AUS" target="_blank" rel="noopener">ADIP &mdash; Austin&ndash;Bergstrom International Airport (KAUS)</a></li>
+                  <li><a href="https://adip.faa.gov/agis/public/#/simpleAirportMap/HYI" target="_blank" rel="noopener">ADIP &mdash; San Marcos Regional Airport (KHYI)</a></li>
+                </ul>
+              </li>
+              <li><a href="https://www.faa.gov/airports/runway_safety/diagrams/" target="_blank" rel="noopener">FAA Airport Diagrams</a> <span class="res-desc">&mdash; Search and download official FAA airport diagrams by airport identifier.</span></li>
+              <li><a href="https://notams.aim.faa.gov/" target="_blank" rel="noopener">FAA NOTAM Search</a> <span class="res-desc">&mdash; Search current Notices to Air Missions. Enter 50R for Lockhart Municipal Airport.</span></li>
+              <li><a href="https://tfr.faa.gov/" target="_blank" rel="noopener">FAA Temporary Flight Restriction List</a> <span class="res-desc">&mdash; Review Temporary Flight Restrictions currently published by the FAA.</span></li>
+              <li><a href="https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/vfr/" target="_blank" rel="noopener">FAA VFR Raster Charts</a> <span class="res-desc">&mdash; Download official FAA sectional charts, terminal area charts, and other VFR chart products.</span></li>
+              <li><a href="https://vfrmap.com/" target="_blank" rel="noopener">VFRMap</a> <span class="res-desc">&mdash; Pan and zoom the VFR sectional chart in your browser; search an identifier such as KGTU to jump to an airport.</span></li>
+              <li><a href="https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dafd/" target="_blank" rel="noopener">FAA Chart Supplement</a> <span class="res-desc">&mdash; Download the Chart Supplement (formerly the Airport/Facility Directory) with airport, frequency, runway, and service details.</span></li>
+              <li><a href="https://taf.faa.gov/" target="_blank" rel="noopener">Terminal Area Forecast (TAF)</a> <span class="res-desc">&mdash; Query the FAA&#39;s historical and forecast aviation-activity data for U.S. airports (airport planning; distinct from the weather TAF).</span></li>
+            </ul>
+          </div>
 
-      <h3 class="res-sublabel">Knowledge testing &amp; study portals</h3>
-      <ul class="res-list">
-        <li><a href="https://faa.psiexams.com/FAA/login" target="_blank" rel="noopener">FAA Knowledge Testing Through PSI</a> <span class="res-desc">— Schedule and manage an FAA airman knowledge test, including the Private Pilot Airplane test.</span></li>
-        <li><a href="https://www.ecfr.gov/current/title-14" target="_blank" rel="noopener">Federal Aviation Regulations (eCFR Title 14)</a> <span class="res-desc">— Read the current, continuously updated federal aviation regulations.</span></li>
-        <li><a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation" target="_blank" rel="noopener">FAA Aviation Handbooks and Manuals</a> <span class="res-desc">— Access FAA pilot handbooks, flying handbooks, weather references, and other aviation manuals.</span></li>
-        <li><a href="https://www.faa.gov/training_testing/testing/acs" target="_blank" rel="noopener">Airman Certification Standards (ACS)</a> <span class="res-desc">— Access the standards used for FAA knowledge testing, risk-management evaluation, and practical tests.</span></li>
-        <li><a href="https://www.faasafety.gov/" target="_blank" rel="noopener">FAASafety.gov and WINGS</a> <span class="res-desc">— Take FAA safety courses, attend seminars, and participate in the WINGS Pilot Proficiency Program.</span></li>
-      </ul>
+          <div>
+            <h3 class="cat-label">Aircraft registration &amp; flight tracking</h3>
+            <ul class="res-items">
+              <li><a href="https://registry.faa.gov/aircraftinquiry/" target="_blank" rel="noopener">FAA N-Number Lookup</a> <span class="res-desc">&mdash; Search the U.S. civil aircraft registry by registration number, owner, manufacturer, model, or serial number.</span></li>
+              <li><a href="https://www.flightradar24.com/" target="_blank" rel="noopener">Flightradar24</a> <span class="res-desc">&mdash; Track live air traffic and review flight and aircraft histories worldwide.</span></li>
+              <li><a href="https://www.liveatc.net/" target="_blank" rel="noopener">LiveATC.net</a> <span class="res-desc">&mdash; Listen to live and archived air traffic control audio from airports worldwide.</span></li>
+            </ul>
+          </div>
 
-      <h3 class="res-sublabel">Flight-training operations</h3>
-      <ul class="res-list">
-        <li><a href="https://www.flightcircle.com/" target="_blank" rel="noopener">FlightCircle</a> <span class="res-desc">— Schedule aircraft and instructors and access flight-school or flying-club management functions.</span></li>
-        <li><a href="https://www.sportys.com/" target="_blank" rel="noopener">Sporty&#8217;s</a> <span class="res-desc">— Online pilot training courses, test prep, and aviation gear from Sporty&#8217;s Pilot Shop.</span></li>
-      </ul>
+          <div>
+            <h3 class="cat-label">Knowledge testing &amp; study portals</h3>
+            <ul class="res-items">
+              <li><a href="https://faa.psiexams.com/FAA/login" target="_blank" rel="noopener">FAA Knowledge Testing Through PSI</a> <span class="res-desc">&mdash; Schedule and manage an FAA airman knowledge test, including the Private Pilot Airplane test.</span></li>
+              <li><a href="https://www.ecfr.gov/current/title-14" target="_blank" rel="noopener">Federal Aviation Regulations (eCFR Title 14)</a> <span class="res-desc">&mdash; Read the current, continuously updated federal aviation regulations.</span></li>
+              <li><a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation" target="_blank" rel="noopener">FAA Aviation Handbooks and Manuals</a> <span class="res-desc">&mdash; Access FAA pilot handbooks, flying handbooks, weather references, and other aviation manuals.</span></li>
+              <li><a href="https://www.faa.gov/training_testing/testing/acs" target="_blank" rel="noopener">Airman Certification Standards (ACS)</a> <span class="res-desc">&mdash; Access the standards used for FAA knowledge testing, risk-management evaluation, and practical tests.</span></li>
+              <li><a href="https://www.faasafety.gov/" target="_blank" rel="noopener">FAASafety.gov and WINGS</a> <span class="res-desc">&mdash; Take FAA safety courses, attend seminars, and participate in the WINGS Pilot Proficiency Program.</span></li>
+            </ul>
+          </div>
 
-      <h3 class="res-sublabel">Pilot organizations</h3>
-      <ul class="res-list">
-        <li><a href="https://www.aopa.org/" target="_blank" rel="noopener">Aircraft Owners and Pilots Association (AOPA)</a> <span class="res-desc">— General aviation advocacy, training resources, flight-planning tools, publications, and pilot services.</span></li>
-        <li><a href="https://www.eaa.org/" target="_blank" rel="noopener">Experimental Aircraft Association (EAA)</a> <span class="res-desc">— Pilot education, homebuilt-aircraft resources, local chapters, Young Eagles, proficiency programs, and AirVenture.</span></li>
-      </ul>
+          <div>
+            <h3 class="cat-label">Flight-training operations</h3>
+            <ul class="res-items">
+              <li><a href="https://www.flightcircle.com/" target="_blank" rel="noopener">FlightCircle</a> <span class="res-desc">&mdash; Schedule aircraft and instructors and access flight-school or flying-club management functions.</span></li>
+              <li><a href="https://www.sportys.com/" target="_blank" rel="noopener">Sporty&#8217;s</a> <span class="res-desc">&mdash; Online pilot training courses, test prep, and aviation gear from Sporty&#8217;s Pilot Shop.</span></li>
+            </ul>
+          </div>
 
-      <h2 class="sec-label">Publications</h2>
+          <div>
+            <h3 class="cat-label">Pilot organizations</h3>
+            <ul class="res-items">
+              <li><a href="https://www.aopa.org/" target="_blank" rel="noopener">Aircraft Owners and Pilots Association (AOPA)</a> <span class="res-desc">&mdash; General aviation advocacy, training resources, flight-planning tools, publications, and pilot services.</span></li>
+              <li><a href="https://www.eaa.org/" target="_blank" rel="noopener">Experimental Aircraft Association (EAA)</a> <span class="res-desc">&mdash; Pilot education, homebuilt-aircraft resources, local chapters, Young Eagles, proficiency programs, and AirVenture.</span></li>
+            </ul>
+          </div>
 
-      <h3 class="res-sublabel">Certification standards &amp; testing</h3>
-      <ul class="res-list">
-        <li><a href="https://www.faa.gov/training_testing/testing/acs/acs_companion_guide_pilots.pdf" target="_blank" rel="noopener">FAA-G-ACS-2 — ACS Companion Guide for Pilots</a> <span class="res-desc">— Explains the ACS framework, codes, testing procedures, and supporting guidance.</span></li>
-        <li><a href="https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf" target="_blank" rel="noopener">FAA-S-ACS-6C — Private Pilot for Airplane Category</a> <span class="res-desc">— Defines the knowledge, risk-management, and flight-proficiency standards for the private-pilot airplane practical test.</span></li>
-        <li><a href="https://www.faa.gov/sites/faa.gov/files/training_testing/testing/acs/acs_faq.pdf" target="_blank" rel="noopener">ACS Frequently Asked Questions</a> <span class="res-desc">— Answers common questions about ACS development, codes, knowledge testing, and practical-test use.</span></li>
-        <li><a href="https://www.faa.gov/sites/faa.gov/files/training_testing/testing/supplements/sport_rec_private_akts.pdf" target="_blank" rel="noopener">FAA-CT-8080-2H — Airman Knowledge Testing Supplement</a> <span class="res-desc">— Contains figures, charts, maps, tables, and performance information used during the private-pilot knowledge test.</span></li>
-      </ul>
+        </div>
+      </div>
+    </section>
 
-      <h3 class="res-sublabel">Core pilot handbooks</h3>
-      <ul class="res-list">
-        <li><a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/FAA-H-8083-1.pdf" target="_blank" rel="noopener">FAA-H-8083-1B — Aircraft Weight and Balance Handbook</a> <span class="res-desc">— Explains aircraft weight-and-balance terminology, calculations, loading, center of gravity, and performance effects.</span></li>
-        <li><a href="https://www.faa.gov/sites/faa.gov/files/2022-06/risk_management_handbook_2A.pdf" target="_blank" rel="noopener">FAA-H-8083-2A — Risk Management Handbook</a> <span class="res-desc">— Covers aeronautical decision-making, hazard identification, risk assessment, and risk mitigation.</span></li>
-        <li><a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/00_afh_full.pdf" target="_blank" rel="noopener">FAA-H-8083-3C — Airplane Flying Handbook</a> <span class="res-desc">— Explains airplane maneuvers, procedures, flight techniques, and common pilot errors.</span></li>
-        <li><a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf" target="_blank" rel="noopener">FAA-H-8083-25C — Pilot's Handbook of Aeronautical Knowledge</a> <span class="res-desc">— The FAA's primary ground-study textbook covering aerodynamics, aircraft systems, weather, navigation, performance, and operations.</span></li>
-        <li><a href="https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf" target="_blank" rel="noopener">FAA-H-8083-28B — Aviation Weather Handbook</a> <span class="res-desc">— Comprehensive FAA reference covering aviation weather theory, hazards, weather products, and weather-related decision-making.</span></li>
-        <li><a href="https://www.faasafety.gov/files/events/EA/EA03/2018/EA0382619/FAA_P-8740-02_DensityAltitude%5Bhi-res%5D_branded.pdf" target="_blank" rel="noopener">FAA-P-8740-2 — Density Altitude</a> <span class="res-desc">— FAA safety publication explaining density altitude and its effect on aircraft and engine performance.</span></li>
-      </ul>
+    <section class="band" id="publications" aria-labelledby="publications-h">
+      <div class="wrap">
+        <div class="sec-head"><span class="sec-num">03</span><span class="sec-line" aria-hidden="true"></span><span class="sec-count">5 CATEGORIES &middot; 19 DOCUMENTS</span></div>
+        <h2 id="publications-h">Publications</h2>
+        <div class="cat-grid">
 
-      <h3 class="res-sublabel">Charts, procedures &amp; terminology</h3>
-      <ul class="res-list">
-        <li><a href="https://aeronav.faa.gov/user_guide/cug-complete_20260122.pdf" target="_blank" rel="noopener">Aeronautical Chart User's Guide</a> <span class="res-desc">— Explains FAA chart symbols, colors, airspace depictions, airport data, obstacles, and chart conventions.</span></li>
-        <li><a href="https://www.faa.gov/air_traffic/publications/media/AIM_Basic_w_Chg_1_and_2_dtd_1-22-26_FINAL_1.pdf" target="_blank" rel="noopener">Aeronautical Information Manual (AIM)</a> <span class="res-desc">— FAA guide to flight information, operating practices, air traffic control procedures, and the National Airspace System.</span></li>
-        <li><a href="https://www.faa.gov/air_traffic/publications/media/PCG_Bsc_w_Chg_1_and_2_dtd_1-22-26.pdf" target="_blank" rel="noopener">Pilot/Controller Glossary</a> <span class="res-desc">— Defines standardized terminology and phraseology used in pilot-controller communications.</span></li>
-        <li><a href="https://www.nato.int/en/about-us/nato-history/history-by-theme/symbols-of-nato/nato-phonetic-alphabet" target="_blank" rel="noopener">NATO Phonetic Alphabet</a> <span class="res-desc">— The Alfa-through-Zulu spelling alphabet used in aviation radio communications.</span></li>
-      </ul>
+          <div>
+            <h3 class="cat-label">Certification standards &amp; testing</h3>
+            <ul class="res-items pub-items">
+              <li><span class="chip">FAA-G-ACS-2</span><a href="https://www.faa.gov/training_testing/testing/acs/acs_companion_guide_pilots.pdf" target="_blank" rel="noopener">ACS Companion Guide for Pilots</a><span class="pub-desc">Explains the ACS framework, codes, testing procedures, and supporting guidance.</span></li>
+              <li><span class="chip">FAA-S-ACS-6C</span><a href="https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf" target="_blank" rel="noopener">Private Pilot for Airplane Category</a><span class="pub-desc">Defines the knowledge, risk-management, and flight-proficiency standards for the private-pilot airplane practical test.</span></li>
+              <li><a href="https://www.faa.gov/sites/faa.gov/files/training_testing/testing/acs/acs_faq.pdf" target="_blank" rel="noopener">ACS Frequently Asked Questions</a><span class="pub-desc">Answers common questions about ACS development, codes, knowledge testing, and practical-test use.</span></li>
+              <li><span class="chip">FAA-CT-8080-2H</span><a href="https://www.faa.gov/sites/faa.gov/files/training_testing/testing/supplements/sport_rec_private_akts.pdf" target="_blank" rel="noopener">Airman Knowledge Testing Supplement</a><span class="pub-desc">Contains figures, charts, maps, tables, and performance information used during the private-pilot knowledge test.</span></li>
+            </ul>
+          </div>
 
-      <h3 class="res-sublabel">Advisory circulars</h3>
-      <ul class="res-list">
-        <li><a href="https://www.faa.gov/documentlibrary/media/advisory_circular/ac_61-65K.pdf" target="_blank" rel="noopener">AC 61-65K — Certification: Pilots and Flight and Ground Instructors</a> <span class="res-desc">— Provides certification guidance, knowledge-test procedures, and recommended sample logbook endorsements.</span></li>
-        <li><a href="https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_90-66C.pdf" target="_blank" rel="noopener">AC 90-66C — Non-Towered Airport Flight Operations</a> <span class="res-desc">— Provides recommended operating and communication procedures at airports without operating control towers.</span></li>
-        <li><a href="https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentNumber/91-73B" target="_blank" rel="noopener">AC 91-73B — Parts 91 and 135 Single Pilot, Flight School Procedures During Taxi Operations</a> <span class="res-desc">— Recommended standard operating procedures for taxi operations, aimed at preventing runway incursions.</span></li>
-      </ul>
+          <div>
+            <h3 class="cat-label">Core pilot handbooks</h3>
+            <ul class="res-items pub-items">
+              <li><span class="chip">FAA-H-8083-1B</span><a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/FAA-H-8083-1.pdf" target="_blank" rel="noopener">Aircraft Weight and Balance Handbook</a><span class="pub-desc">Explains aircraft weight-and-balance terminology, calculations, loading, center of gravity, and performance effects.</span></li>
+              <li><span class="chip">FAA-H-8083-2A</span><a href="https://www.faa.gov/sites/faa.gov/files/2022-06/risk_management_handbook_2A.pdf" target="_blank" rel="noopener">Risk Management Handbook</a><span class="pub-desc">Covers aeronautical decision-making, hazard identification, risk assessment, and risk mitigation.</span></li>
+              <li><span class="chip">FAA-H-8083-3C</span><a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/00_afh_full.pdf" target="_blank" rel="noopener">Airplane Flying Handbook</a><span class="pub-desc">Explains airplane maneuvers, procedures, flight techniques, and common pilot errors.</span></li>
+              <li><span class="chip">FAA-H-8083-25C</span><a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf" target="_blank" rel="noopener">Pilot&#39;s Handbook of Aeronautical Knowledge</a><span class="pub-desc">The FAA&#39;s primary ground-study textbook covering aerodynamics, aircraft systems, weather, navigation, performance, and operations.</span></li>
+              <li><span class="chip">FAA-H-8083-28B</span><a href="https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf" target="_blank" rel="noopener">Aviation Weather Handbook</a><span class="pub-desc">Comprehensive FAA reference covering aviation weather theory, hazards, weather products, and weather-related decision-making.</span></li>
+              <li><span class="chip">FAA-P-8740-2</span><a href="https://www.faasafety.gov/files/events/EA/EA03/2018/EA0382619/FAA_P-8740-02_DensityAltitude%5Bhi-res%5D_branded.pdf" target="_blank" rel="noopener">Density Altitude</a><span class="pub-desc">FAA safety publication explaining density altitude and its effect on aircraft and engine performance.</span></li>
+            </ul>
+          </div>
 
-      <h3 class="res-sublabel">FAA orders</h3>
-      <ul class="res-list">
-        <li><a href="https://www.faa.gov/documentLibrary/media/Order/7110.65BB_Bsc_w_Chg_1_and_2_dtd_1-22-26_Final.pdf" target="_blank" rel="noopener">JO 7110.65BB — Air Traffic Control</a> <span class="res-desc">— Prescribes air traffic control procedures, responsibilities, separation standards, and phraseology used by controllers.</span></li>
-        <li><a href="https://www.faa.gov/documentlibrary/media/order/order_jo_7900.5e.pdf" target="_blank" rel="noopener">JO 7900.5E — Surface Weather Observing</a> <span class="res-desc">— Prescribes procedures for aviation surface weather observations, including METAR and SPECI coding.</span></li>
-      </ul>
-    </div>
+          <div>
+            <h3 class="cat-label">Charts, procedures &amp; terminology</h3>
+            <ul class="res-items pub-items">
+              <li><a href="https://aeronav.faa.gov/user_guide/cug-complete_20260122.pdf" target="_blank" rel="noopener">Aeronautical Chart User&#39;s Guide</a><span class="pub-desc">Explains FAA chart symbols, colors, airspace depictions, airport data, obstacles, and chart conventions.</span></li>
+              <li><a href="https://www.faa.gov/air_traffic/publications/media/AIM_Basic_w_Chg_1_and_2_dtd_1-22-26_FINAL_1.pdf" target="_blank" rel="noopener">Aeronautical Information Manual (AIM)</a><span class="pub-desc">FAA guide to flight information, operating practices, air traffic control procedures, and the National Airspace System.</span></li>
+              <li><a href="https://www.faa.gov/air_traffic/publications/media/PCG_Bsc_w_Chg_1_and_2_dtd_1-22-26.pdf" target="_blank" rel="noopener">Pilot/Controller Glossary</a><span class="pub-desc">Defines standardized terminology and phraseology used in pilot-controller communications.</span></li>
+              <li><a href="https://www.nato.int/en/about-us/nato-history/history-by-theme/symbols-of-nato/nato-phonetic-alphabet" target="_blank" rel="noopener">NATO Phonetic Alphabet</a><span class="pub-desc">The Alfa-through-Zulu spelling alphabet used in aviation radio communications.</span></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="cat-label">Advisory circulars</h3>
+            <ul class="res-items pub-items">
+              <li><span class="chip">AC 61-65K</span><a href="https://www.faa.gov/documentlibrary/media/advisory_circular/ac_61-65K.pdf" target="_blank" rel="noopener">Certification: Pilots and Flight and Ground Instructors</a><span class="pub-desc">Provides certification guidance, knowledge-test procedures, and recommended sample logbook endorsements.</span></li>
+              <li><span class="chip">AC 90-66C</span><a href="https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_90-66C.pdf" target="_blank" rel="noopener">Non-Towered Airport Flight Operations</a><span class="pub-desc">Provides recommended operating and communication procedures at airports without operating control towers.</span></li>
+              <li><span class="chip">AC 91-73B</span><a href="https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentNumber/91-73B" target="_blank" rel="noopener">Parts 91 and 135 Single Pilot, Flight School Procedures During Taxi Operations</a><span class="pub-desc">Recommended standard operating procedures for taxi operations, aimed at preventing runway incursions.</span></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="cat-label">FAA orders</h3>
+            <ul class="res-items pub-items">
+              <li><span class="chip">JO 7110.65BB</span><a href="https://www.faa.gov/documentLibrary/media/Order/7110.65BB_Bsc_w_Chg_1_and_2_dtd_1-22-26_Final.pdf" target="_blank" rel="noopener">Air Traffic Control</a><span class="pub-desc">Prescribes air traffic control procedures, responsibilities, separation standards, and phraseology used by controllers.</span></li>
+              <li><span class="chip">JO 7900.5E</span><a href="https://www.faa.gov/documentlibrary/media/order/order_jo_7900.5e.pdf" target="_blank" rel="noopener">Surface Weather Observing</a><span class="pub-desc">Prescribes procedures for aviation surface weather observations, including METAR and SPECI coding.</span></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer><div class="copyright"><div class="wrap">&copy; <span id="yr"></span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></div></div></footer>
+  <footer class="site-foot">
+    <div class="wrap">
+      <span class="left">&copy; <span id="yr">2026</span> PilotDECODER | by <a href="https://zanewubbena.com/" target="_blank" rel="noopener">Zane Wubbena</a></span>
+      <a class="totop" href="#top">BACK TO TOP &uarr;</a>
+    </div>
+  </footer>
 
-<script src="assets/site.js?v=1"></script>
+<script>
+(function () {
+  "use strict";
+  document.getElementById("yr").textContent = new Date().getFullYear();
+
+  var btn = document.getElementById("mode-btn");
+  function apply(dark) {
+    if (dark) document.documentElement.setAttribute("data-theme", "dark");
+    else document.documentElement.removeAttribute("data-theme");
+    btn.setAttribute("aria-pressed", String(dark));
+    btn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+  }
+  apply(document.documentElement.getAttribute("data-theme") === "dark");
+  btn.addEventListener("click", function () {
+    var dark = document.documentElement.getAttribute("data-theme") !== "dark";
+    apply(dark);
+    try { localStorage.setItem("pd-home-theme", dark ? "dark" : "light"); } catch (e) {}
+  });
+})();
+</script>
 </body>
 </html>
