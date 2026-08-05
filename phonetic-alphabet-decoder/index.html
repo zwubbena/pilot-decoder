@@ -89,6 +89,7 @@
   .feedback .say { font-family: var(--mono); font-weight: 700; }
 
   .act-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+  .reset-row { display: flex; justify-content: flex-end; margin: 8px 0 0; }
 
   /* ---------- callsign drill ---------- */
   .slots { display: flex; flex-wrap: wrap; gap: 6px; min-height: 46px; align-items: center; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); padding: 8px; margin: 12px 0 0; }
@@ -149,6 +150,9 @@
         <div class="stat"><div class="lab">Score</div><div class="val" id="st-score">0/0</div></div>
         <div class="stat"><div class="lab">Streak</div><div class="val" id="st-streak">0</div></div>
         <div class="stat"><div class="lab">Accuracy</div><div class="val" id="st-acc">&ndash;</div></div>
+      </div>
+      <div class="reset-row">
+        <button type="button" class="btn-secondary btn-sm" id="btn-reset" disabled>Reset score</button>
       </div>
       <div id="qarea"></div>
       <p id="q-status" role="status" class="sr-only"></p>
@@ -299,6 +303,8 @@ function announce(msg){
 }
 function drawStats(){
   $("st-score").textContent = S.score + "/" + S.tries;
+  const rb = $("btn-reset");
+  if (rb) rb.disabled = S.tries === 0;
   const st = $("st-streak");
   st.textContent = S.streak;
   st.classList.toggle("hot", S.streak >= 3);
@@ -423,6 +429,14 @@ $("modes").addEventListener("click", e => {
   if (S.qt === "call"){ S.call = genCall(S.seenCall ? null : HOME_TAIL); S.seenCall = true; S.sel = []; S.done = null; }
   else { S.q = S.qt === "fake" ? genFake() : genMCQ(); S.picked = null; }
   drawQuiz();
+});
+
+$("btn-reset").addEventListener("click", () => {
+  S.score = 0; S.tries = 0; S.streak = 0;
+  drawStats();
+  announce("Score reset.");
+  const v = $("views").querySelector('[aria-pressed="true"]');
+  if (v) v.focus();          /* the reset button just disabled itself, so move focus off it */
 });
 
 buildRef();
