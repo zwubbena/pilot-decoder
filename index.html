@@ -76,7 +76,7 @@ try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.s
   .hero{background:var(--surface)}
   /* longhand: a `padding` shorthand here would zero out .wrap's side padding
      (same element carries both classes) — that bug shipped once already */
-  .hero-inner{padding-top:72px;padding-bottom:56px}
+  .hero-inner{padding-top:72px;padding-bottom:32px}
   .crumb{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted);margin:0 0 18px}
   h1{font-size:46px;font-weight:700;letter-spacing:-1px;line-height:1.1;color:var(--ink);margin:0 0 18px}
   .intro{font-size:17px;line-height:1.65;max-width:640px;margin:0;color:var(--body)}
@@ -91,6 +91,7 @@ try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.s
 
   /* ---------- shared section furniture ---------- */
   .band{padding:72px 0 84px}
+  #tools{padding-top:36px}  /* first band under the hero rule sits closer to it */
   #resources{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
   .sec-head{display:flex;align-items:baseline;gap:14px}
   .sec-num{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent2)}
@@ -137,8 +138,9 @@ try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.s
   @media (max-width:640px){
     .wrap{padding:0 20px}
     h1{font-size:34px}
-    .hero-inner{padding-top:52px;padding-bottom:44px}
+    .hero-inner{padding-top:52px;padding-bottom:24px}
     .band{padding:52px 0 60px}
+    #tools{padding-top:26px}
   }
 </style>
 </head>
