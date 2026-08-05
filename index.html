@@ -78,7 +78,11 @@ try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.s
   .hero-text{flex:1 1 auto;min-width:0}
   .hero-art{flex:0 1 400px;margin:0}
   .hero-art img{display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 10px 28px var(--shadow)}
-  @media (max-width:860px){ .hero-art{display:none} }
+  /* on narrow screens the photo stacks below the actions row instead of hiding */
+  @media (max-width:860px){
+    .hero-inner{flex-direction:column;align-items:flex-start;gap:26px}
+    .hero-art{flex:none;width:100%;max-width:480px}
+  }
   /* longhand: a `padding` shorthand here would zero out .wrap's side padding
      (same element carries both classes) — that bug shipped once already */
   .hero-inner{padding-top:72px;padding-bottom:32px}
