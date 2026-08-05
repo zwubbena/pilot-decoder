@@ -256,10 +256,32 @@ if (reduced) {
 (function () {
   const $ = id => document.getElementById(id);
 
-  /* no animation to control under prefers-reduced-motion */
-  if (!window.sketchCtl) { const a = $("btn-pause"), b = $("btn-restart"); if (a) a.hidden = true; if (b) b.hidden = true; }
-  if ($("btn-pause"))   $("btn-pause").addEventListener("click", () => window.sketchCtl && window.sketchCtl.toggle());
-  if ($("btn-restart")) $("btn-restart").addEventListener("click", () => window.sketchCtl && window.sketchCtl.restart());
+  /* this script runs inside the stage, BEFORE the buttons exist in the DOM —
+     wiring must wait for the parser to reach them (this bug shipped once:
+     null-guards made the missed wiring silent) */
+  function wireButtons() {
+    if (!window.sketchCtl) { const a = $("btn-pause"), b = $("btn-restart"); if (a) a.hidden = true; if (b) b.hidden = true; }
+    if ($("btn-pause"))   $("btn-pause").addEventListener("click", () => window.sketchCtl && window.sketchCtl.toggle());
+    if ($("btn-restart")) $("btn-restart").addEventListener("click", () => window.sketchCtl && window.sketchCtl.restart());
+    if ($("btn-save")) $("btn-save").addEventListener("click", () => {
+      window.buildPngBlob().then(r => {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(r.blob); a.download = r.name;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+      }).catch(() => alert("Could not build the image in this browser."));
+    });
+    if ($("btn-print")) $("btn-print").addEventListener("click", () => {
+      const w = window.open("", "_blank");
+      if (!w) return;
+      w.document.write(window.buildPrintDoc());
+      w.document.close();
+      w.focus();
+      setTimeout(() => w.print(), 350);
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wireButtons);
+  else wireButtons();
 
   /* the-lone-eagle_YYYY-MM-DD_THHMM.ext — same convention as the Cloud Decoder PDF */
   function stampName(ext) {
@@ -318,23 +340,6 @@ if (reduced) {
       "</body></html>";
   };
 
-  if ($("btn-save")) $("btn-save").addEventListener("click", () => {
-    window.buildPngBlob().then(r => {
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(r.blob); a.download = r.name;
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-    }).catch(() => alert("Could not build the image in this browser."));
-  });
-
-  if ($("btn-print")) $("btn-print").addEventListener("click", () => {
-    const w = window.open("", "_blank");
-    if (!w) return;
-    w.document.write(window.buildPrintDoc());
-    w.document.close();
-    w.focus();
-    setTimeout(() => w.print(), 350);
-  });
 })();
 </script>
     </div>
