@@ -78,6 +78,9 @@ try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.s
   .hero-text{flex:1 1 auto;min-width:0}
   .hero-art{flex:0 1 400px;margin:0}
   .hero-art img{display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 10px 28px var(--shadow)}
+  .hero-art figcaption{margin-top:10px;text-align:center}
+  .hero-art figcaption a{font-family:var(--mono);font-size:12px;letter-spacing:1px;color:var(--accent);text-decoration:none}
+  .hero-art figcaption a:hover{text-decoration:underline;text-underline-offset:3px}
   /* on narrow screens the photo stacks below the actions row instead of hiding */
   @media (max-width:860px){
     .hero-inner{flex-direction:column;align-items:flex-start;gap:26px}
@@ -180,6 +183,7 @@ try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.s
       </div>
       <figure class="hero-art">
         <img src="/assets/spirit-of-st-louis.jpg" alt="Nose and propeller of the Spirit of St. Louis, the Ryan NYP Charles Lindbergh flew solo across the Atlantic in 1927" width="671" height="501" decoding="async" />
+        <figcaption><a href="/lindbergh/">Learn about &ldquo;The Lone Eagle&rdquo; &rarr;</a></figcaption>
       </figure>
     </div>
     <div class="hero-rule" aria-hidden="true"></div>
