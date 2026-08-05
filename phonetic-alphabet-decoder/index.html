@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Phonetic Alphabet Decoder | PilotDECODER</title>
-<meta name="description" content="The ICAO phonetic alphabet exactly as the FAA publishes it in AIM Table 4-2-2, with pronunciations, plus three drills: letter to word, spot the fake, and callsign readback." />
+<meta name="description" content="The ICAO phonetic alphabet exactly as the FAA publishes it in AIM Table 4-2-2, with pronunciations, plus four drills: character to word, fill in the blank, spot the fake, and callsign readback." />
 <meta name="keywords" content="phonetic alphabet, ICAO phonetic alphabet, NATO alphabet, aviation alphabet, Alfa Bravo Charlie, AIM 4-2-7, TBL 4-2-2, callsign readback, radio communications, CTAF, student pilot, private pilot, ground school, flight training, PilotDECODER" />
 <meta name="author" content="Zane Wubbena" />
 <meta name="robots" content="index, follow" />
@@ -13,10 +13,10 @@
 <meta property="og:url" content="https://pilotdecoder.com/phonetic-alphabet-decoder/" />
 <meta property="og:site_name" content="PilotDECODER" />
 <meta property="og:title" content="Phonetic Alphabet Decoder | PilotDECODER" />
-<meta property="og:description" content="The ICAO phonetic alphabet as published in AIM Table 4-2-2, with pronunciations and three practice drills." />
+<meta property="og:description" content="The ICAO phonetic alphabet as published in AIM Table 4-2-2, with pronunciations and four practice drills." />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Phonetic Alphabet Decoder | PilotDECODER" />
-<meta name="twitter:description" content="The ICAO phonetic alphabet as published in AIM Table 4-2-2, with pronunciations and three practice drills." />
+<meta name="twitter:description" content="The ICAO phonetic alphabet as published in AIM Table 4-2-2, with pronunciations and four practice drills." />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -93,6 +93,17 @@
   .feedback .say { font-family: var(--mono); font-weight: 700; }
 
   .act-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+
+  /* ---------- fill in the blank ---------- */
+  .fill-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+  /* 16px keeps iOS from zooming the viewport when the field takes focus */
+  .fill-input { flex: 1 1 220px; min-width: 0; font-family: var(--mono); font-size: 16px; font-weight: 600;
+    color: var(--input-ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 11px 12px; }
+  .fill-input::placeholder { color: var(--placeholder); font-weight: 400; }
+  .fill-input:focus { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
+  .fill-input[disabled] { background: color-mix(in srgb, var(--wash) 50%, var(--surface)); }
+  .fill-input.correct { border-color: #3B6D11; background: #EAF3DE; color: #27500A; }
+  .fill-input.wrong { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
   .reset-row { display: flex; justify-content: flex-end; margin: 8px 0 0; }
 
   /* ---------- callsign drill ---------- */
@@ -142,6 +153,7 @@
         <span class="panel-label sub">Drill</span>
         <div class="switch-row" id="modes" role="group" aria-label="Choose a drill">
           <button type="button" class="btn-secondary btn-sm" data-qt="l2w" aria-pressed="true">Character to word</button>
+          <button type="button" class="btn-secondary btn-sm" data-qt="fill" aria-pressed="false">Fill in the blank</button>
           <button type="button" class="btn-secondary btn-sm" data-qt="fake" aria-pressed="false">Spot the fake</button>
           <button type="button" class="btn-secondary btn-sm" data-qt="call" aria-pressed="false">Callsign readback</button>
         </div>
@@ -292,6 +304,25 @@ function genFake(){
    from all digits and letters produced tails that cannot legally exist. */
 const REG_FIRST = DIGITS.filter(d => d[0] !== "0");
 const REG_LETTERS = LETTERS.filter(l => l[0] !== "I" && l[0] !== "O");
+function genFill(){
+  const item = pick(poolFor());
+  return { char:item[0], answer:item[1], pron:item[2] };
+}
+/* Forgiving on case, spacing and hyphens, so "x ray" and "X-Ray" both pass for
+   Xray. Deliberately NOT forgiving on spelling: Alpha and Juliet are the exact
+   mistakes this drill exists to catch, so they are wrong and say why. */
+function normalize(v){ return String(v).toLowerCase().trim().replace(/[\s\-.]/g, ""); }
+function fillVerdict(raw, q){
+  const n = normalize(raw);
+  if (!n) return { ok:false, msg:"Type an answer first." };
+  if (n === normalize(q.answer)) return { ok:true, msg:`Correct. Say it <span class="say">${esc(q.pron)}</span>.` };
+  if (q.pron.split(" or ").some(pr => normalize(pr) === n))
+    return { ok:false, msg:`That is the pronunciation. The AIM writes it <b>${esc(q.answer)}</b> and says it <span class="say">${esc(q.pron)}</span>.` };
+  const near = (FAKES[q.char] || []).find(f => normalize(f) === n);
+  if (near)
+    return { ok:false, msg:`Close. The AIM spells it <b>${esc(q.answer)}</b>, not ${esc(near)}.` };
+  return { ok:false, msg:`${esc(q.char)} is <b>${esc(q.answer)}</b>, said <span class="say">${esc(q.pron)}</span>.` };
+}
 function genCall(seed){
   let chars;
   if (seed){ chars = seed.split("").map(c => LOOK[c]).filter(Boolean); }
@@ -312,7 +343,7 @@ function genCall(seed){
 /* ---------------- state ---------------- */
 /* q is filled in after S exists: genMCQ now reads S.pool, and calling it
    inside this initializer would hit the temporal dead zone and throw. */
-const S = { qt:"l2w", pool:"both", q:null, picked:null, score:0, tries:0, streak:0, call:null, sel:[], done:null, seenCall:false };
+const S = { qt:"l2w", pool:"both", q:null, fill:null, typed:"", fillDone:null, fillMsg:"", picked:null, score:0, tries:0, streak:0, call:null, sel:[], done:null, seenCall:false };
 S.q = genMCQ();
 const $ = id => document.getElementById(id);
 
@@ -338,6 +369,7 @@ function drawStats(){
 /* ---------------- multiple choice ---------------- */
 function drawQuiz(){
   if (S.qt === "call"){ drawCall(); return; }
+  if (S.qt === "fill"){ drawFill(); return; }
   const el = $("qarea"), q = S.q, picked = S.picked;
   const status = o => picked === null ? "" : o === q.answer ? "correct" : o === picked ? "wrong" : "dim";
   let h = q.prompt
@@ -373,6 +405,49 @@ function drawQuiz(){
     S.picked = null;
     drawQuiz();
   });
+}
+
+/* ---------------- fill in the blank ---------------- */
+function drawFill(){
+  const el = $("qarea"), q = S.fill, done = S.fillDone;
+  let h = `<div class="qcard"><p class="qsub">Type the phonetic word</p><div class="qglyph">${esc(q.char)}</div></div>`;
+  h += `<div class="fill-row">` +
+       `<label class="sr-only" for="fill-input">Phonetic word for ${esc(q.char)}</label>` +
+       `<input id="fill-input" class="fill-input${done === null ? "" : (done ? " correct" : " wrong")}" type="text" ` +
+       `autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" ` +
+       `placeholder="Your answer" value="${esc(S.typed)}"${done === null ? "" : " disabled"}>` +
+       (done === null ? `<button type="button" class="btn-primary" id="btn-check">Check</button>` : ``) +
+       `</div>`;
+  if (done !== null){
+    h += `<div class="feedback ${done ? "good" : "bad"}">${S.fillMsg}</div>`;
+    h += `<div class="act-row"><button type="button" class="btn-primary" id="btn-next-fill">Next</button></div>`;
+  }
+  el.innerHTML = h;
+  announce(done === null ? "" : S.fillMsg.replace(/<[^>]*>/g, ""));
+
+  const input = $("fill-input");
+  function submit(){
+    if (S.fillDone !== null) return;
+    const v = fillVerdict(input.value, q);
+    if (!normalize(input.value)) { announce(v.msg); input.focus(); return; }  /* empty: nudge, do not score */
+    S.typed = input.value;
+    S.fillDone = v.ok;
+    S.fillMsg = v.msg;
+    onScore(v.ok);
+    drawFill();
+    const n = $("btn-next-fill"); if (n) n.focus();
+  }
+  if (done === null){
+    input.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); submit(); } });
+    $("btn-check").addEventListener("click", submit);
+    input.focus();
+  } else {
+    $("btn-next-fill").addEventListener("click", () => {
+      S.fill = genFill(); S.typed = ""; S.fillDone = null; S.fillMsg = "";
+      drawFill();
+      const i = $("fill-input"); if (i) i.focus();
+    });
+  }
 }
 
 /* ---------------- callsign readback ---------------- */
@@ -454,6 +529,7 @@ $("modes").addEventListener("click", e => {
      not apply to the readback drill */
   $("pool-block").hidden = S.qt === "call";
   if (S.qt === "call"){ S.call = genCall(S.seenCall ? null : HOME_TAIL); S.seenCall = true; S.sel = []; S.done = null; }
+  else if (S.qt === "fill"){ S.fill = genFill(); S.typed = ""; S.fillDone = null; S.fillMsg = ""; }
   else { S.q = S.qt === "fake" ? genFake() : genMCQ(); S.picked = null; }
   drawQuiz();
 });
@@ -471,8 +547,8 @@ $("pools").addEventListener("click", e => {
   if (!b || S.qt === "call") return;
   setPressed($("pools"), b);
   S.pool = b.dataset.pool;
-  S.q = S.qt === "fake" ? genFake() : genMCQ();
-  S.picked = null;
+  if (S.qt === "fill"){ S.fill = genFill(); S.typed = ""; S.fillDone = null; S.fillMsg = ""; }
+  else { S.q = S.qt === "fake" ? genFake() : genMCQ(); S.picked = null; }
   drawQuiz();
 });
 
