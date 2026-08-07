@@ -67,6 +67,14 @@
   .group-head { font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); margin: 22px 0 0; }
 
   /* ---------- practice ---------- */
+  .deck-progress { margin: 14px 0 0; }
+  .deck-progress[hidden] { display: none; }
+  .deck-bar { height: 6px; border-radius: 999px; background: var(--wash); border: 1px solid var(--rule); overflow: hidden; }
+  .deck-bar span { display: block; height: 100%; width: 0; background: var(--brand); transition: width .25s ease; }
+  .deck-label { margin: 6px 0 0; font-family: var(--mono); font-size: 11.5px; letter-spacing: .05em; color: var(--ink-soft); text-align: right; }
+  .done-card { text-align: center; }
+  .done-card .done-big { font-family: var(--sans); font-size: 20px; font-weight: 700; color: var(--brand); margin: 0 0 6px; }
+  .done-card .done-sub { font-size: 14.5px; color: var(--ink); margin: 0; }
   .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0 0; }
   .stat { border: 1px solid var(--rule); border-radius: 8px; background: color-mix(in srgb, var(--wash) 40%, var(--surface)); padding: 7px 6px; text-align: center; }
   .stat .lab { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
@@ -165,6 +173,11 @@
             <button type="button" class="btn-secondary btn-sm" data-pool="letters" aria-pressed="false">Letters</button>
             <button type="button" class="btn-secondary btn-sm" data-pool="numbers" aria-pressed="false">Numbers</button>
           </div>
+          <span class="panel-label sub">Order</span>
+          <div class="switch-row" id="orders" role="group" aria-label="Choose the order of the deck">
+            <button type="button" class="btn-secondary btn-sm" data-order="seq" aria-pressed="true">In order</button>
+            <button type="button" class="btn-secondary btn-sm" data-order="rnd" aria-pressed="false">Random</button>
+          </div>
         </div>
       </div>
     </div>
@@ -174,13 +187,17 @@
     <section id="view-ref" aria-label="Phonetic alphabet reference"></section>
 
     <section id="view-quiz" hidden aria-label="Practice drills">
+      <div class="deck-progress" id="deck-progress">
+        <div class="deck-bar"><span id="deck-fill"></span></div>
+        <p class="deck-label" id="deck-label"></p>
+      </div>
       <div class="stat-row">
         <div class="stat"><div class="lab">Score</div><div class="val" id="st-score">0/0</div></div>
         <div class="stat"><div class="lab">Streak</div><div class="val" id="st-streak">0</div></div>
         <div class="stat"><div class="lab">Accuracy</div><div class="val" id="st-acc">&ndash;</div></div>
       </div>
       <div class="reset-row">
-        <button type="button" class="btn-secondary btn-sm" id="btn-reset" disabled>Reset score</button>
+        <button type="button" class="btn-secondary btn-sm" id="btn-reset">Start over</button>
       </div>
       <div id="qarea"></div>
       <p id="q-status" role="status" class="sr-only"></p>
@@ -281,15 +298,52 @@ function shuffle(a){
 function poolFor(){
   return S.pool === "letters" ? LETTERS : S.pool === "numbers" ? DIGITS : ALL;
 }
-function genMCQ(){
-  const item = pick(poolFor());
+function poolNoun(){
+  return S.pool === "letters" ? "letters" : S.pool === "numbers" ? "numbers" : "characters";
+}
+/* ---------- the deck ----------
+   A round covers every character in the chosen pool exactly once. Answer one
+   correctly and it leaves the deck for good; miss it and it stays in, coming
+   back after the rest of the pass. "Random" shuffles the deck up front rather
+   than drawing at random each turn, which is what keeps a missed character
+   from repeating twice in a row while still guaranteeing it returns. */
+function buildDeck(){
+  const chars = poolFor().map(x => x[0]);
+  S.remaining = S.order === "rnd" ? shuffle(chars) : chars.slice();
+  S.cursor = 0;
+  S.deckSize = chars.length;
+  S.deckDone = false;
+}
+function currentChar(){
+  return S.remaining.length ? S.remaining[S.cursor % S.remaining.length] : null;
+}
+function markResult(ok){
+  const ch = currentChar();
+  if (ch === null) return;
+  if (ok) {
+    const i = S.remaining.indexOf(ch);
+    if (i >= 0) S.remaining.splice(i, 1);   /* cursor stays: the next card slides into place */
+  } else {
+    S.cursor++;                              /* keep it in the deck, revisit later in the pass */
+  }
+  if (!S.remaining.length) S.deckDone = true;
+}
+function newQuestion(){
+  const ch = currentChar();
+  if (ch === null) { S.deckDone = true; return; }
+  if (S.qt === "fill") { S.fill = genFill(ch); S.typed = ""; S.fillDone = null; S.fillMsg = ""; }
+  else { S.q = S.qt === "fake" ? genFake(ch) : genMCQ(ch); S.picked = null; }
+}
+function startDeck(){ buildDeck(); newQuestion(); }
+function genMCQ(ch){
+  const item = LOOK[ch];
   return { prompt:item[0], sub:"What is the phonetic word?",
            options: shuffle([item[1], ...shuffle(FAKES[item[0]]).slice(0, 3)]),
            answer:item[1], pron:item[2] };
 }
-function genFake(){
+function genFake(ch){
   const pool = poolFor();
-  const host = pick(pool);
+  const host = LOOK[ch];
   const fake = pick(FAKES[host[0]]);
   const reals = new Map();
   while (reals.size < 3){
@@ -305,8 +359,8 @@ function genFake(){
    from all digits and letters produced tails that cannot legally exist. */
 const REG_FIRST = DIGITS.filter(d => d[0] !== "0");
 const REG_LETTERS = LETTERS.filter(l => l[0] !== "I" && l[0] !== "O");
-function genFill(){
-  const item = pick(poolFor());
+function genFill(ch){
+  const item = LOOK[ch];
   return { char:item[0], answer:item[1], pron:item[2] };
 }
 /* Forgiving on case, spacing and hyphens, so "x ray" and "X-Ray" both pass for
@@ -344,8 +398,10 @@ function genCall(seed){
 /* ---------------- state ---------------- */
 /* q is filled in after S exists: genMCQ now reads S.pool, and calling it
    inside this initializer would hit the temporal dead zone and throw. */
-const S = { qt:"l2w", pool:"both", q:null, fill:null, typed:"", fillDone:null, fillMsg:"", picked:null, score:0, tries:0, streak:0, call:null, sel:[], done:null, seenCall:false };
-S.q = genMCQ();
+const S = { qt:"l2w", pool:"both", order:"seq", q:null, fill:null, typed:"", fillDone:null, fillMsg:"", picked:null,
+            score:0, tries:0, streak:0, call:null, sel:[], done:null, seenCall:false,
+            remaining:[], cursor:0, deckSize:0, deckDone:false };
+startDeck();
 const $ = id => document.getElementById(id);
 
 function onScore(ok){
@@ -353,23 +409,50 @@ function onScore(ok){
   if (ok){ S.score++; S.streak++; } else S.streak = 0;
   drawStats();
 }
+function drawProgress(){
+  const wrap = $("deck-progress");
+  if (!wrap) return;
+  wrap.hidden = S.qt === "call";            /* the readback drill has no deck */
+  if (wrap.hidden) return;
+  const done = S.deckSize - S.remaining.length;
+  const pct = S.deckSize ? Math.round(done / S.deckSize * 100) : 0;
+  $("deck-fill").style.width = pct + "%";
+  $("deck-label").textContent = done + " of " + S.deckSize + " " + poolNoun() + " complete";
+}
 function announce(msg){
   const el = $("q-status");
   if (el) el.textContent = msg || "";
 }
 function drawStats(){
   $("st-score").textContent = S.score + "/" + S.tries;
-  const rb = $("btn-reset");
-  if (rb) rb.disabled = S.tries === 0;
+  drawProgress();
   const st = $("st-streak");
   st.textContent = S.streak;
   st.classList.toggle("hot", S.streak >= 3);
   $("st-acc").textContent = S.tries ? Math.round(100 * S.score / S.tries) + "%" : "–";
 }
 
+/* ---------------- deck complete ---------------- */
+function drawDone(){
+  const el = $("qarea");
+  const acc = S.tries ? Math.round(100 * S.score / S.tries) : 0;
+  el.innerHTML =
+    `<div class="qcard done-card">` +
+      `<p class="qsub">Deck complete</p>` +
+      `<p class="done-big">All ${S.deckSize} ${esc(poolNoun())} answered correctly.</p>` +
+      `<p class="done-sub">${S.score} right out of ${S.tries} attempts, ${acc}% accuracy.</p>` +
+    `</div>` +
+    `<div class="act-row"><button type="button" class="btn-primary" id="btn-again">Practice again</button></div>`;
+  announce("Deck complete. All " + S.deckSize + " " + poolNoun() + " answered correctly.");
+  const again = $("btn-again");
+  again.addEventListener("click", () => { startDeck(); drawQuiz(); });
+  again.focus();
+}
+
 /* ---------------- multiple choice ---------------- */
 function drawQuiz(){
   if (S.qt === "call"){ drawCall(); return; }
+  if (S.deckDone){ drawDone(); return; }
   if (S.qt === "fill"){ drawFill(); return; }
   const el = $("qarea"), q = S.q, picked = S.picked;
   const status = o => picked === null ? "" : o === q.answer ? "correct" : o === picked ? "wrong" : "dim";
@@ -396,16 +479,14 @@ function drawQuiz(){
   el.querySelectorAll(".choice").forEach(b => b.addEventListener("click", () => {
     if (S.picked !== null) return;
     S.picked = b.dataset.o;
-    onScore(S.picked === S.q.answer);
+    const ok = S.picked === S.q.answer;
+    onScore(ok);
+    markResult(ok);
     drawQuiz();
     const n = $("btn-next"); if (n) n.focus();   /* innerHTML swap drops focus to body */
   }));
   const nx = $("btn-next");
-  if (nx) nx.addEventListener("click", () => {
-    S.q = S.qt === "fake" ? genFake() : genMCQ();
-    S.picked = null;
-    drawQuiz();
-  });
+  if (nx) nx.addEventListener("click", () => { newQuestion(); drawQuiz(); });
 }
 
 /* ---------------- fill in the blank ---------------- */
@@ -435,6 +516,8 @@ function drawFill(){
     S.fillDone = v.ok;
     S.fillMsg = v.msg;
     onScore(v.ok);
+    markResult(v.ok);
+    if (S.deckDone) { drawQuiz(); return; }
     drawFill();
     const n = $("btn-next-fill"); if (n) n.focus();
   }
@@ -444,7 +527,8 @@ function drawFill(){
     input.focus();
   } else {
     $("btn-next-fill").addEventListener("click", () => {
-      S.fill = genFill(); S.typed = ""; S.fillDone = null; S.fillMsg = "";
+      newQuestion();
+      if (S.deckDone) { drawQuiz(); return; }
       drawFill();
       const i = $("fill-input"); if (i) i.focus();
     });
@@ -530,17 +614,17 @@ $("modes").addEventListener("click", e => {
      not apply to the readback drill */
   $("pool-block").hidden = S.qt === "call";
   if (S.qt === "call"){ S.call = genCall(S.seenCall ? null : HOME_TAIL); S.seenCall = true; S.sel = []; S.done = null; }
-  else if (S.qt === "fill"){ S.fill = genFill(); S.typed = ""; S.fillDone = null; S.fillMsg = ""; }
-  else { S.q = S.qt === "fake" ? genFake() : genMCQ(); S.picked = null; }
+  else startDeck();
+  drawStats();
   drawQuiz();
 });
 
 $("btn-reset").addEventListener("click", () => {
   S.score = 0; S.tries = 0; S.streak = 0;
+  if (S.qt !== "call") startDeck();
   drawStats();
-  announce("Score reset.");
-  const v = $("views").querySelector('[aria-pressed="true"]');
-  if (v) v.focus();          /* the reset button just disabled itself, so move focus off it */
+  drawQuiz();
+  announce("Started over.");
 });
 
 $("pools").addEventListener("click", e => {
@@ -548,8 +632,18 @@ $("pools").addEventListener("click", e => {
   if (!b || S.qt === "call") return;
   setPressed($("pools"), b);
   S.pool = b.dataset.pool;
-  if (S.qt === "fill"){ S.fill = genFill(); S.typed = ""; S.fillDone = null; S.fillMsg = ""; }
-  else { S.q = S.qt === "fake" ? genFake() : genMCQ(); S.picked = null; }
+  startDeck();
+  drawStats();
+  drawQuiz();
+});
+
+$("orders").addEventListener("click", e => {
+  const b = e.target.closest("button[data-order]");
+  if (!b || S.qt === "call") return;
+  setPressed($("orders"), b);
+  S.order = b.dataset.order;
+  startDeck();
+  drawStats();
   drawQuiz();
 });
 
