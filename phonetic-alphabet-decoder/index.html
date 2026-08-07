@@ -122,10 +122,14 @@
   .feedback.bad { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
   .feedback .say { font-family: var(--mono); font-weight: 700; }
 
-  /* forward actions (Next, New callsign, Practice again) sit right, where the
-     eye lands after reading the feedback; Undo stays left as a back action */
+  /* Forward actions (Next, New callsign, Practice again) span the full row.
+     After answering, the pointer is wherever the choice was, so a full-width
+     target needs no aiming; it is also a comfortable thumb target on a phone.
+     The button takes focus on render, so Enter or Space advances hands-free.
+     Undo stays left and small: it is a back action, not the happy path. */
   .act-row { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
   .act-row.act-left { justify-content: flex-start; }
+  .act-row .btn-primary { flex: 1 1 100%; padding: 13px 16px; font-size: 15px; }
 
   /* ---------- fill in the blank ---------- */
   .fill-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
