@@ -111,7 +111,10 @@
   .feedback.bad { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
   .feedback .say { font-family: var(--mono); font-weight: 700; }
 
-  .act-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+  /* forward actions (Next, New callsign, Practice again) sit right, where the
+     eye lands after reading the feedback; Undo stays left as a back action */
+  .act-row { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+  .act-row.act-left { justify-content: flex-start; }
 
   /* ---------- fill in the blank ---------- */
   .fill-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
@@ -563,7 +566,7 @@ function drawCall(){
           `<div class="qglyph" style="letter-spacing:.1em;font-size:34px">${esc(q.label)}</div></div>` +
           `<div class="slots">${slots}</div><div class="bank">${bank}</div>`;
   if (S.done === null){
-    h += `<div class="act-row"><button type="button" class="btn-secondary" id="btn-undo"${S.sel.length === 0 ? " disabled" : ""}>Undo last</button></div>`;
+    h += `<div class="act-row act-left"><button type="button" class="btn-secondary" id="btn-undo"${S.sel.length === 0 ? " disabled" : ""}>Undo last</button></div>`;
   } else {
     h += S.done
       ? `<div class="feedback good">Readback correct.</div>`
