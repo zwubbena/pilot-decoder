@@ -60,10 +60,17 @@
 
   /* ---------- reference grid ---------- */
   .ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
-  .ref-cell { display: flex; align-items: baseline; gap: 12px; border: 1px solid var(--rule); border-radius: 8px; background: color-mix(in srgb, var(--wash) 40%, var(--surface)); padding: 9px 12px; }
+  /* Card color is the F4F-3 Wildcat's light blue-grey, sampled from the
+     airframe in Zane's photo (fuselage #B5C8BA, overall mean #BFD3C6).
+     Fixed rather than tokenized: it is a specific aircraft's paint. */
+  .ref-cell { display: flex; align-items: baseline; gap: 12px; border: 1px solid #A5BCAB; border-radius: 8px; background: #BFD3C6; padding: 9px 12px; }
+  [data-theme="dark"] .ref-cell { background: #23342E; border-color: #35493E; }
   .ref-char { flex: none; width: 1.5em; font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--brand); }
   .ref-word { font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--ink); display: block; }
-  .ref-pron { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); display: block; letter-spacing: .02em; }
+  /* --ink-soft only reaches 3.26:1 on the Wildcat blue-grey; this darker
+     slate clears AA at 4.93:1. Dark mode keeps the token (5.04:1). */
+  .ref-pron { font-family: var(--mono); font-size: 12px; color: #46536a; display: block; letter-spacing: .02em; }
+  [data-theme="dark"] .ref-pron { color: var(--ink-soft); }
   .group-head { font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); margin: 22px 0 0; }
 
   /* ---------- practice ---------- */
