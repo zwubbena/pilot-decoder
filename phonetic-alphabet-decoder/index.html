@@ -47,10 +47,12 @@
   /* ============ PAGE-SPECIFIC: phonetic alphabet ============ */
   /* Tokens, chrome, buttons and panels come from /assets/site.css */
 
-  /* One green family for every "correct / progress" signal on this page.
-     All five values are the same grass-green hue (100deg) at different
-     lightness, so the progress bar and the correct-answer highlight read as
-     one color. They were previously hand-picked and had drifted 17deg apart. */
+  /* The "correct answer" green, used by the choice buttons, the feedback panel,
+     the callsign slots and the fill-in field. All three are the same grass-green
+     hue (100deg) at different lightness so they read as one color; they were
+     hand-picked once and had drifted apart. Text clears AA on the background at
+     7.36:1. (The progress bar is NOT green — it carries the site hero gradient,
+     see .deck-bar below.) */
   :root {
     --ok-bg:   #E5F2DE;   /* answer + feedback background */
     --ok-line: #418321;   /* answer + feedback border     */
