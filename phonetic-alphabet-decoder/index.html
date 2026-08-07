@@ -445,7 +445,7 @@ function drawDone(){
     `<div class="act-row"><button type="button" class="btn-primary" id="btn-again">Practice again</button></div>`;
   announce("Deck complete. All " + S.deckSize + " " + poolNoun() + " answered correctly.");
   const again = $("btn-again");
-  again.addEventListener("click", () => { startDeck(); drawQuiz(); });
+  again.addEventListener("click", () => { startDeck(); drawStats(); drawQuiz(); });
   again.focus();
 }
 
