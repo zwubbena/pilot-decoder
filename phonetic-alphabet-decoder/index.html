@@ -77,10 +77,10 @@
   .deck-progress { margin: 14px 0 0; }
   .deck-progress[hidden] { display: none; }
   .deck-bar { height: 6px; border-radius: 999px; background: var(--wash); border: 1px solid var(--rule); overflow: hidden; }
-  /* green reads as "progress/correct", matching the answer feedback colors,
-     so it stays fixed across light and dark rather than following --brand */
-  .deck-bar span { display: block; height: 100%; width: 0; background: #3B6D11; transition: width .25s ease; }
-  [data-theme="dark"] .deck-bar span { background: #6FA83A; }
+  /* green reads as "progress/correct"; brighter than the answer-feedback green
+     so a 6px sliver still registers. Fixed across light and dark. */
+  .deck-bar span { display: block; height: 100%; width: 0; background: #4FA82A; transition: width .25s ease; }
+  [data-theme="dark"] .deck-bar span { background: #86D14A; }
   .deck-label { margin: 6px 0 0; font-family: var(--mono); font-size: 11.5px; letter-spacing: .05em; color: var(--ink-soft); text-align: right; }
   .done-card { text-align: center; }
   .done-card .done-big { font-family: var(--sans); font-size: 20px; font-weight: 700; color: var(--brand); margin: 0 0 6px; }
