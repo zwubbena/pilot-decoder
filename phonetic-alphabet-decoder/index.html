@@ -480,8 +480,8 @@ function drawQuiz(){
     if (S.picked !== null) return;
     S.picked = b.dataset.o;
     const ok = S.picked === S.q.answer;
+    markResult(ok);   /* before onScore: onScore redraws the progress bar */
     onScore(ok);
-    markResult(ok);
     drawQuiz();
     const n = $("btn-next"); if (n) n.focus();   /* innerHTML swap drops focus to body */
   }));
@@ -515,8 +515,8 @@ function drawFill(){
     S.typed = input.value;
     S.fillDone = v.ok;
     S.fillMsg = v.msg;
+    markResult(v.ok);   /* before onScore: onScore redraws the progress bar */
     onScore(v.ok);
-    markResult(v.ok);
     if (S.deckDone) { drawQuiz(); return; }
     drawFill();
     const n = $("btn-next-fill"); if (n) n.focus();
