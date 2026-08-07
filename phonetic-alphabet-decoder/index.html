@@ -55,9 +55,7 @@
     --ok-bg:   #E5F2DE;   /* answer + feedback background */
     --ok-line: #418321;   /* answer + feedback border     */
     --ok-text: #27570F;   /* answer + feedback text       */
-    --ok-bar:  #57B22A;   /* progress fill                */
   }
-  [data-theme="dark"] { --ok-bar: #7ED454; }
   /* main carries class="wrap", and .wrap sets `padding: 0 20px` in site.css.
      A bare `main` selector loses to that on specificity, so these have to be
      longhand on main.wrap or they are silently ignored. */
@@ -89,9 +87,21 @@
   .deck-progress { margin: 14px 0 0; }
   .deck-progress[hidden] { display: none; }
   .deck-bar { height: 6px; border-radius: 999px; background: var(--wash); border: 1px solid var(--rule); overflow: hidden; }
-  /* green reads as "progress/correct"; brighter than the answer-feedback green
-     so a 6px sliver still registers. Fixed across light and dark. */
-  .deck-bar span { display: block; height: 100%; width: 0; background: var(--ok-bar); transition: width .25s ease; }
+  /* The fill carries the site's hero rule, blue through red. background-size is
+     set from JS to (100/pct)% so the gradient always spans the FULL track and is
+     revealed as you advance — otherwise the whole blue-to-red would be squeezed
+     into whatever sliver is filled. The rule's near-white tail (#f4dcdf) is
+     dropped: on a progress bar it would read as empty at 100%. */
+  .deck-bar span {
+    display: block; height: 100%; width: 0;
+    background-image: linear-gradient(90deg, #16294f 0%, #3a5ca8 45%, #b3273a 100%);
+    background-repeat: no-repeat;
+    transition: width .25s ease;
+  }
+  /* lifted off the dark track, ending on the site's dark red token */
+  [data-theme="dark"] .deck-bar span {
+    background-image: linear-gradient(90deg, #3a5ca8 0%, #6f86cf 45%, #ee8a96 100%);
+  }
   .deck-label { margin: 6px 0 0; font-family: var(--mono); font-size: 11.5px; letter-spacing: .05em; color: var(--ink-soft); text-align: right; }
   .done-card { text-align: center; }
   .done-card .done-big { font-family: var(--sans); font-size: 20px; font-weight: 700; color: var(--brand); margin: 0 0 6px; }
@@ -444,7 +454,10 @@ function drawProgress(){
   if (wrap.hidden) return;
   const done = S.deckSize - S.remaining.length;
   const pct = S.deckSize ? Math.round(done / S.deckSize * 100) : 0;
-  $("deck-fill").style.width = pct + "%";
+  const fill = $("deck-fill");
+  fill.style.width = pct + "%";
+  /* stretch the gradient so it spans the whole track, not just the filled part */
+  fill.style.backgroundSize = (pct > 0 ? 10000 / pct : 100) + "% 100%";
   $("deck-label").textContent = done + " of " + S.deckSize + " " + poolNoun() + " complete";
 }
 function announce(msg){
