@@ -46,6 +46,18 @@
 <style>
   /* ============ PAGE-SPECIFIC: phonetic alphabet ============ */
   /* Tokens, chrome, buttons and panels come from /assets/site.css */
+
+  /* One green family for every "correct / progress" signal on this page.
+     All five values are the same grass-green hue (100deg) at different
+     lightness, so the progress bar and the correct-answer highlight read as
+     one color. They were previously hand-picked and had drifted 17deg apart. */
+  :root {
+    --ok-bg:   #E5F2DE;   /* answer + feedback background */
+    --ok-line: #418321;   /* answer + feedback border     */
+    --ok-text: #27570F;   /* answer + feedback text       */
+    --ok-bar:  #57B22A;   /* progress fill                */
+  }
+  [data-theme="dark"] { --ok-bar: #7ED454; }
   /* main carries class="wrap", and .wrap sets `padding: 0 20px` in site.css.
      A bare `main` selector loses to that on specificity, so these have to be
      longhand on main.wrap or they are silently ignored. */
@@ -79,8 +91,7 @@
   .deck-bar { height: 6px; border-radius: 999px; background: var(--wash); border: 1px solid var(--rule); overflow: hidden; }
   /* green reads as "progress/correct"; brighter than the answer-feedback green
      so a 6px sliver still registers. Fixed across light and dark. */
-  .deck-bar span { display: block; height: 100%; width: 0; background: #4FA82A; transition: width .25s ease; }
-  [data-theme="dark"] .deck-bar span { background: #86D14A; }
+  .deck-bar span { display: block; height: 100%; width: 0; background: var(--ok-bar); transition: width .25s ease; }
   .deck-label { margin: 6px 0 0; font-family: var(--mono); font-size: 11.5px; letter-spacing: .05em; color: var(--ink-soft); text-align: right; }
   .done-card { text-align: center; }
   .done-card .done-big { font-family: var(--sans); font-size: 20px; font-weight: 700; color: var(--brand); margin: 0 0 6px; }
@@ -102,12 +113,12 @@
   .choice:hover:not(:disabled) { border-color: var(--mid); color: var(--brand); }
   .choice:disabled { cursor: default; }
   /* result colors are semantic, so they stay fixed across both themes */
-  .choice.correct { border-color: #3B6D11; background: #EAF3DE; color: #27500A; }
+  .choice.correct { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok-text); }
   .choice.wrong { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
   .choice.dim { opacity: .5; }
 
   .feedback { border: 1px solid; border-radius: 8px; padding: 11px 14px; margin: 12px 0 0; font-family: var(--sans); font-size: 14.5px; line-height: 1.5; }
-  .feedback.good { border-color: #3B6D11; background: #EAF3DE; color: #27500A; }
+  .feedback.good { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok-text); }
   .feedback.bad { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
   .feedback .say { font-family: var(--mono); font-weight: 700; }
 
@@ -124,7 +135,7 @@
   .fill-input::placeholder { color: var(--placeholder); font-weight: 400; }
   .fill-input:focus { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
   .fill-input[disabled] { background: color-mix(in srgb, var(--wash) 50%, var(--surface)); }
-  .fill-input.correct { border-color: #3B6D11; background: #EAF3DE; color: #27500A; }
+  .fill-input.correct { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok-text); }
   .fill-input.wrong { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
   .reset-row { display: flex; justify-content: flex-end; margin: 8px 0 0; }
 
@@ -133,7 +144,7 @@
   .slot { font-family: var(--mono); font-size: 13.5px; font-weight: 600; border: 1px solid; border-radius: 6px; padding: 5px 10px; }
   .slot.empty { border-style: dashed; border-color: var(--card-bd); color: var(--placeholder); }
   .slot.pend { border-color: var(--mid); background: var(--wash); color: var(--brand); }
-  .slot.ok { border-color: #3B6D11; background: #EAF3DE; color: #27500A; }
+  .slot.ok { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok-text); }
   .slot.bad { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
   .bank { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 8px; margin: 10px 0 0; }
   .bankbtn { font-family: var(--mono); font-size: 13.5px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 10px 6px; cursor: pointer; touch-action: manipulation; }
