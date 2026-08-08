@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://pilotdecoder.com/sitemap.xml
+
+# personal reference documents, not site content
+Disallow: /files/
