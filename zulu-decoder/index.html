@@ -835,26 +835,18 @@ function mean12(k){    /* "630pm" -> {h:18,m:30} */
 }
 function mean24(k){ return { h: parseInt(k.slice(0, 2), 10), m: parseInt(k.slice(2), 10) }; }
 
-/* ---- time sampling: weight the hours people actually get wrong ---- */
-var HOURS = [];
-(function(){
-  var h;
-  for (h = 13; h <= 23; h++){ HOURS.push(h); HOURS.push(h); }  /* the conversion range, double weight */
-  for (h = 1; h <= 11; h++) HOURS.push(h);
-  HOURS.push(0); HOURS.push(0); HOURS.push(12); HOURS.push(12); /* midnight + noon, the classic traps */
-})();
+/* ---- a round covers every hour of the day exactly once ---- */
+/* One question per hour, 0000 through 2300 with varied minutes, shuffled.
+   Miss one and it circles back until answered right, so finishing a round
+   means all 24 conversions were made correctly even if accuracy is lower. */
 var MINS = [0, 15, 30, 45];
-function sampleTime(){
-  var m = Math.random() < 0.55 ? pick(MINS) : rand(60);
-  return { h: pick(HOURS), m: m };
-}
-function buildRound(n){
-  var seen = {}, out = [], t, k;
-  while (out.length < n){
-    t = sampleTime(); k = fmt24(t.h, t.m);
-    if (!seen[k]){ seen[k] = 1; out.push(t); }
+function buildRound(){
+  var out = [], h, m;
+  for (h = 0; h < 24; h++){
+    m = Math.random() < 0.55 ? pick(MINS) : rand(60);
+    out.push({ h: h, m: m });
   }
-  return out;
+  return shuffle(out);
 }
 
 /* ---- distractors: the mistakes people actually make ---- */
@@ -891,14 +883,13 @@ function opts24(t){
 }
 
 /* ---- state ---- */
-var ROUND = 10;
 var S = { dir: "to12", ans: "mcq",
           deck: [], cursor: 0, size: 0, done: false,
           score: 0, tries: 0, streak: 0,
           q: null, picked: null, typed: "", typeDone: null, typeMsg: "" };
 
 function startRound(){
-  S.deck = buildRound(ROUND); S.cursor = 0; S.size = ROUND; S.done = false;
+  S.deck = buildRound(); S.cursor = 0; S.size = S.deck.length; S.done = false;
   newQuestion();
 }
 function current(){ return S.deck.length ? S.deck[S.cursor % S.deck.length] : null; }
@@ -965,8 +956,8 @@ function drawDone(){
   el.innerHTML =
     '<div class="qcard done-card">' +
       '<p class="qsub">Round complete</p>' +
-      '<p class="done-big">All ' + S.size + ' times converted correctly.</p>' +
-      '<p class="done-sub">' + S.score + ' right out of ' + S.tries + ' attempts, ' + acc + '% accuracy.</p>' +
+      '<p class="done-big">All ' + S.size + ' hours converted correctly.</p>' +
+      '<p class="done-sub">Every hour of the clock, answered right at least once &mdash; ' + S.score + ' right out of ' + S.tries + ' attempts, ' + acc + '% accuracy.</p>' +
     '</div>' +
     '<div class="act-row"><button type="button" class="btn-primary" id="zp-again">Practice again</button></div>';
   announce("Round complete.");
