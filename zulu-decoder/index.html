@@ -318,6 +318,63 @@ main { padding-bottom: 26px; }  /* board margin alone left only 14px above the f
   .cell--zone{grid-column:1 / -1}
   .cell{min-height:52px}
 }
+
+  /* ---------- practice view (24h <-> 12h drills) ---------- */
+  /* the same "correct" green family used by the site's other drills */
+  :root { --ok-bg: #E5F2DE; --ok-line: #418321; --ok-text: #27570F; }
+  [data-theme="dark"] { --ok-bg: #1E3317; --ok-line: #5FA13C; --ok-text: #BFE3AC; }
+  .switch-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .switch-row[hidden] { display: none; }        /* display:flex would defeat [hidden] */
+  .switch-row + .switch-row { margin-top: 12px; }
+  .panel-label.sub { margin-top: 16px; }
+  #view-practice { padding-top: 8px; padding-bottom: 44px; }
+  #view-practice[hidden] { display: none; }
+
+  .deck-progress { margin: 14px 0 0; }
+  .deck-progress[hidden] { display: none; }
+  .deck-bar { height: 6px; border-radius: 999px; background: var(--wash); border: 1px solid var(--rule); overflow: hidden; }
+  /* hero rule, revealed as the round advances; backgroundSize set from JS */
+  .deck-bar span { display: block; height: 100%; width: 0;
+    background-image: linear-gradient(90deg, #16294f 0%, #3a5ca8 45%, #b3273a 100%);
+    background-repeat: no-repeat; transition: width .25s ease; }
+  [data-theme="dark"] .deck-bar span {
+    background-image: linear-gradient(90deg, #3a5ca8 0%, #6f86cf 45%, #ee8a96 100%); }
+  .deck-label { margin: 6px 0 0; font-family: var(--mono); font-size: 11.5px; letter-spacing: .05em; color: var(--ink-soft); text-align: right; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0 0; }
+  .stat { border: 1px solid var(--rule); border-radius: 8px; background: color-mix(in srgb, var(--wash) 40%, var(--surface)); padding: 7px 6px; text-align: center; }
+  .stat .lab { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+  .stat .val { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--brand); }
+  .stat .val.hot { color: #8A5510; }
+  [data-theme="dark"] .stat .val.hot { color: #E8B464; }
+  .reset-row { display: flex; justify-content: flex-end; margin: 8px 0 0; }
+
+  .qcard { margin: 14px 0 0; border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 10px; background: color-mix(in srgb, var(--wash) 55%, var(--surface)); padding: 16px 18px; text-align: center; }
+  .qsub { margin: 0 0 6px; font-family: var(--sans); font-size: 11.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+  .qglyph { font-family: var(--mono); font-size: clamp(28px, 7vw, 44px); font-weight: 700; color: var(--ink); letter-spacing: .04em; }
+  .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 12px 0 0; }
+  .choice { font-family: var(--mono); font-size: 16px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 13px 10px; cursor: pointer; touch-action: manipulation; }
+  .choice:hover { border-color: var(--mid); }
+  .choice.correct { background: var(--ok-bg); border-color: var(--ok-line); color: var(--ok-text); }
+  .choice.wrong { background: var(--err-bg); border-color: var(--err-fg); color: var(--err-fg); }
+  .choice.dim { opacity: .55; }
+  .choice:disabled { cursor: default; }
+  .feedback { margin: 12px 0 0; border-radius: 8px; padding: 11px 14px; font-size: 14.5px; line-height: 1.55; }
+  .feedback.good { background: var(--ok-bg); border: 1px solid var(--ok-line); color: var(--ok-text); }
+  .feedback.bad { background: var(--err-bg); border: 1px solid var(--err-fg); color: var(--err-fg); }
+  .feedback .say { font-family: var(--mono); font-weight: 700; }
+  .act-row { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+  .act-row .btn-primary { flex: 1 1 100%; padding: 13px 16px; font-size: 15px; }
+  .fill-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+  .fill-input { flex: 1 1 200px; font-family: var(--mono); font-size: 16px; color: var(--input-ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 12px 14px; min-width: 0; }
+  .fill-input::placeholder { color: var(--placeholder); }
+  .fill-input:focus-visible { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
+  .fill-input.correct { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok-text); }
+  .fill-input.wrong { border-color: var(--err-fg); background: var(--err-bg); color: var(--err-fg); }
+  .done-card { text-align: center; }
+  .done-card .done-big { font-family: var(--sans); font-size: 20px; font-weight: 700; color: var(--brand); margin: 0 0 6px; }
+  .done-card .done-sub { font-size: 14.5px; color: var(--ink); margin: 0; }
+  .hint { margin: 10px 0 0; font-size: 13px; color: var(--ink-soft); }
 </style>
 </head>
 <body>
@@ -333,8 +390,30 @@ main { padding-bottom: 26px; }  /* board margin alone left only 14px above the f
     </div>
   </header>
 
+  <section class="panel">
+    <div class="wrap">
+      <span class="panel-label">View</span>
+      <div class="switch-row" id="zp-views" role="group" aria-label="Choose a view">
+        <button type="button" class="btn-secondary btn-sm" data-view="convert" aria-pressed="true">Converter</button>
+        <button type="button" class="btn-secondary btn-sm" data-view="practice" aria-pressed="false">Practice</button>
+      </div>
+      <div id="zp-controls" hidden>
+        <span class="panel-label sub">Convert</span>
+        <div class="switch-row" id="zp-dirs" role="group" aria-label="Choose the direction">
+          <button type="button" class="btn-secondary btn-sm" data-dir="to12" aria-pressed="true">24-hour &rarr; 12-hour</button>
+          <button type="button" class="btn-secondary btn-sm" data-dir="to24" aria-pressed="false">12-hour &rarr; 24-hour</button>
+        </div>
+        <span class="panel-label sub">Answer</span>
+        <div class="switch-row" id="zp-answers" role="group" aria-label="Choose how to answer">
+          <button type="button" class="btn-secondary btn-sm" data-ans="mcq" aria-pressed="true">Three choices</button>
+          <button type="button" class="btn-secondary btn-sm" data-ans="type" aria-pressed="false">Type it</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <main>
-  <div class="wrap">
+  <div class="wrap" id="view-convert">
   <details class="plain">
     <summary>What is Zulu time?</summary>
     <div class="plain__body">
@@ -452,6 +531,23 @@ main { padding-bottom: 26px; }  /* board margin alone left only 14px above the f
 
   </div>
   </div>
+
+  <section id="view-practice" class="wrap" hidden aria-label="Conversion practice">
+    <div class="deck-progress">
+      <div class="deck-bar"><span id="zp-fill"></span></div>
+      <p class="deck-label" id="zp-decklabel"></p>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="lab">Score</div><div class="val" id="zp-score">0/0</div></div>
+      <div class="stat"><div class="lab">Streak</div><div class="val" id="zp-streak">0</div></div>
+      <div class="stat"><div class="lab">Accuracy</div><div class="val" id="zp-acc">&ndash;</div></div>
+    </div>
+    <div class="reset-row">
+      <button type="button" class="btn-secondary btn-sm" id="zp-reset">Start over</button>
+    </div>
+    <div id="zp-qarea"></div>
+    <p id="zp-status" role="status" class="sr-only"></p>
+  </section>
   </main>
 
   <footer><div class="wrap"><p class="disclaimer"><b>Disclaimer:</b> Educational reference only. Conversions rely on your browser's time zone data; verify official times against an authoritative source before operational use. The Pilot in Command remains solely responsible for flight safety and official verification.</p></div><div class="copyright"><div class="wrap"><span>&copy; <span id="yr"></span> PilotDECODER</span><a class="totop" href="#top">BACK TO TOP &uarr;</a></div></div></footer>
@@ -685,6 +781,326 @@ main { padding-bottom: 26px; }  /* board margin alone left only 14px above the f
   document.getElementById("entry").addEventListener("submit", function(e){ e.preventDefault(); render(); });
 
   loadSystemClock();
+})();
+</script>
+<script>
+/* ============================================================
+   Practice: 24-hour <-> 12-hour conversion drills.
+   A round is a deck of 10 times. Answer one correctly and it
+   leaves the deck; miss it and it comes back later in the pass,
+   so a round ends only when every time has been converted right.
+   Self-contained IIFE; ids are unique to the practice view.
+   ============================================================ */
+(function(){
+"use strict";
+var $ = function(id){ return document.getElementById(id); };
+function pad2(n){ return (n < 10 ? "0" : "") + n; }
+function fmt24(h, m){ return pad2(h) + pad2(m); }
+function hr12(h){ return ((h + 11) % 12) + 1; }
+function fmt12(h, m){ return hr12(h) + ":" + pad2(m) + " " + (h < 12 ? "AM" : "PM"); }
+function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function rand(n){ return Math.floor(Math.random() * n); }
+function pick(a){ return a[rand(a.length)]; }
+function shuffle(a){ var b = a.slice(), i, j, t; for (i = b.length - 1; i > 0; i--){ j = rand(i + 1); t = b[i]; b[i] = b[j]; b[j] = t; } return b; }
+
+/* ---- answer normalizers ---- */
+/* "6:30 PM", "630pm", "06.30 p.m." all become "630pm"; "noon"/"midnight" pass through */
+function norm12(v){
+  var t = String(v).toLowerCase().replace(/[\s.]/g, "").replace(/:/g, "");
+  if (t === "noon" || t === "midnight") return t;
+  var m = t.match(/^0?(\d{1,2})(\d{2})(am|pm|a|p)$/);
+  if (!m) return null;
+  var h = parseInt(m[1], 10), mm = m[2], per = m[3][0] === "a" ? "am" : "pm";
+  if (h < 1 || h > 12 || parseInt(mm, 10) > 59) return null;
+  return h + mm + per;
+}
+function key12(h, m){ return hr12(h) + pad2(m) + (h < 12 ? "am" : "pm"); }
+/* "18:30", "1830z", "630" (as 0630) all become "1830" */
+function norm24(v){
+  var t = String(v).toLowerCase().replace(/[\s:]/g, "").replace(/z$/, "");
+  if (!/^\d{3,4}$/.test(t)) return null;
+  if (t.length === 3) t = "0" + t;
+  var h = parseInt(t.slice(0, 2), 10), m = parseInt(t.slice(2), 10);
+  if (h > 23 || m > 59) return null;
+  return t;
+}
+
+/* ---- what a typed or picked answer actually means, for the feedback line ---- */
+function mean12(k){    /* "630pm" -> {h:18,m:30} */
+  if (k === "noon") return { h: 12, m: 0 };
+  if (k === "midnight") return { h: 0, m: 0 };
+  var m = k.match(/^(\d{1,2})(\d{2})(am|pm)$/); if (!m) return null;
+  var h = parseInt(m[1], 10) % 12; if (m[3] === "pm") h += 12;
+  return { h: h, m: parseInt(m[2], 10) };
+}
+function mean24(k){ return { h: parseInt(k.slice(0, 2), 10), m: parseInt(k.slice(2), 10) }; }
+
+/* ---- time sampling: weight the hours people actually get wrong ---- */
+var HOURS = [];
+(function(){
+  var h;
+  for (h = 13; h <= 23; h++){ HOURS.push(h); HOURS.push(h); }  /* the conversion range, double weight */
+  for (h = 1; h <= 11; h++) HOURS.push(h);
+  HOURS.push(0); HOURS.push(0); HOURS.push(12); HOURS.push(12); /* midnight + noon, the classic traps */
+})();
+var MINS = [0, 15, 30, 45];
+function sampleTime(){
+  var m = Math.random() < 0.55 ? pick(MINS) : rand(60);
+  return { h: pick(HOURS), m: m };
+}
+function buildRound(n){
+  var seen = {}, out = [], t, k;
+  while (out.length < n){
+    t = sampleTime(); k = fmt24(t.h, t.m);
+    if (!seen[k]){ seen[k] = 1; out.push(t); }
+  }
+  return out;
+}
+
+/* ---- distractors: the mistakes people actually make ---- */
+function opts12(t){
+  var right = fmt12(t.h, t.m), set = {}, out = [right], cands = [];
+  set[right] = 1;
+  cands.push(fmt12((t.h + 12) % 24, t.m));                 /* AM/PM flip */
+  if (t.h >= 13 && t.h <= 21) cands.push(fmt12(t.h - 10, t.m)); /* 1830 read as 8:30 */
+  cands.push(fmt12((t.h + 1) % 24, t.m));                  /* off by one hour */
+  cands.push(fmt12((t.h + 23) % 24, t.m));
+  cands.push(fmt12(t.h, (t.m + 30) % 60));                 /* minutes slip */
+  var i, c;
+  cands = shuffle(cands);
+  for (i = 0; i < cands.length && out.length < 3; i++){
+    c = cands[i];
+    if (!set[c]){ set[c] = 1; out.push(c); }
+  }
+  return shuffle(out);
+}
+function opts24(t){
+  var right = fmt24(t.h, t.m), set = {}, out = [right], cands = [];
+  set[right] = 1;
+  cands.push(fmt24((t.h + 12) % 24, t.m));                 /* forgot the +12 (or added it) */
+  cands.push(fmt24((t.h + 1) % 24, t.m));
+  cands.push(fmt24((t.h + 23) % 24, t.m));
+  cands.push(fmt24(t.h, (t.m + 30) % 60));
+  var i, c;
+  cands = shuffle(cands);
+  for (i = 0; i < cands.length && out.length < 3; i++){
+    c = cands[i];
+    if (!set[c]){ set[c] = 1; out.push(c); }
+  }
+  return shuffle(out);
+}
+
+/* ---- state ---- */
+var ROUND = 10;
+var S = { dir: "to12", ans: "mcq",
+          deck: [], cursor: 0, size: 0, done: false,
+          score: 0, tries: 0, streak: 0,
+          q: null, picked: null, typed: "", typeDone: null, typeMsg: "" };
+
+function startRound(){
+  S.deck = buildRound(ROUND); S.cursor = 0; S.size = ROUND; S.done = false;
+  newQuestion();
+}
+function current(){ return S.deck.length ? S.deck[S.cursor % S.deck.length] : null; }
+function markResult(ok){
+  var t = current(); if (!t) return;
+  if (ok) S.deck.splice(S.deck.indexOf(t), 1);
+  else S.cursor++;
+  if (!S.deck.length) S.done = true;
+}
+function newQuestion(){
+  var t = current();
+  if (!t){ S.done = true; return; }
+  S.picked = null; S.typed = ""; S.typeDone = null; S.typeMsg = "";
+  S.q = {
+    t: t,
+    prompt: S.dir === "to12" ? fmt24(t.h, t.m) : fmt12(t.h, t.m),
+    answer: S.dir === "to12" ? fmt12(t.h, t.m) : fmt24(t.h, t.m),
+    options: S.dir === "to12" ? opts12(t) : opts24(t)
+  };
+}
+
+/* ---- feedback: name what the wrong answer would have been ---- */
+function explain(pickedStr){
+  var t = S.q.t, msg;
+  if (S.dir === "to12"){
+    msg = '<span class="say">' + esc(fmt24(t.h, t.m)) + '</span> is <span class="say">' + esc(fmt12(t.h, t.m)) + '</span>.';
+    var k = norm12(pickedStr), w = k && mean12(k);
+    if (w) msg += ' <span class="say">' + esc(pickedStr) + '</span> would be <span class="say">' + esc(fmt24(w.h, w.m)) + '</span>.';
+  } else {
+    msg = '<span class="say">' + esc(fmt12(t.h, t.m)) + '</span> is <span class="say">' + esc(fmt24(t.h, t.m)) + '</span>.';
+    var k2 = norm24(pickedStr), w2 = k2 && mean24(k2);
+    if (w2) msg += ' <span class="say">' + esc(pickedStr) + '</span> is <span class="say">' + esc(fmt12(w2.h, w2.m)) + '</span>.';
+  }
+  if (S.dir === "to12" && t.h >= 13) msg += " Hours 1300 through 2300: subtract 12.";
+  if (S.dir === "to24" && t.h >= 13) msg += " PM hours other than 12: add 12.";
+  return msg;
+}
+
+/* ---- rendering ---- */
+function announce(m){ var el = $("zp-status"); if (el) el.textContent = m || ""; }
+function plain(h){ return String(h).replace(/<[^>]*>/g, ""); }
+function drawProgress(){
+  var doneN = S.size - S.deck.length, pct = S.size ? Math.round(doneN / S.size * 100) : 0;
+  var fill = $("zp-fill");
+  fill.style.width = pct + "%";
+  fill.style.backgroundSize = (pct > 0 ? 10000 / pct : 100) + "% 100%";
+  $("zp-decklabel").textContent = doneN + " of " + S.size + " times converted";
+}
+function drawStats(){
+  $("zp-score").textContent = S.score + "/" + S.tries;
+  var st = $("zp-streak");
+  st.textContent = S.streak;
+  st.classList.toggle("hot", S.streak >= 3);
+  $("zp-acc").textContent = S.tries ? Math.round(100 * S.score / S.tries) + "%" : "–";
+  drawProgress();
+}
+function onScore(ok){
+  S.tries++;
+  if (ok){ S.score++; S.streak++; } else S.streak = 0;
+  drawStats();
+}
+function drawDone(){
+  var el = $("zp-qarea"), acc = S.tries ? Math.round(100 * S.score / S.tries) : 0;
+  el.innerHTML =
+    '<div class="qcard done-card">' +
+      '<p class="qsub">Round complete</p>' +
+      '<p class="done-big">All ' + S.size + ' times converted correctly.</p>' +
+      '<p class="done-sub">' + S.score + ' right out of ' + S.tries + ' attempts, ' + acc + '% accuracy.</p>' +
+    '</div>' +
+    '<div class="act-row"><button type="button" class="btn-primary" id="zp-again">Practice again</button></div>';
+  announce("Round complete.");
+  var again = $("zp-again");
+  again.addEventListener("click", function(){ startRound(); drawStats(); draw(); });
+  again.focus();
+}
+function subLine(){
+  return S.dir === "to12" ? "Convert to 12-hour time" : "Convert to 24-hour time";
+}
+function drawMCQ(){
+  var el = $("zp-qarea"), q = S.q, picked = S.picked;
+  var h = '<div class="qcard"><p class="qsub">' + subLine() + '</p><div class="qglyph">' + esc(q.prompt) + '</div></div>';
+  h += '<div class="choices">' + q.options.map(function(o, i){
+    var cls = "";
+    if (picked !== null) cls = o === q.answer ? "correct" : (i === picked ? "wrong" : "dim");
+    return '<button type="button" class="choice ' + cls + '" data-i="' + i + '"' + (picked !== null ? " disabled" : "") + '>' + esc(o) + '</button>';
+  }).join("") + '</div>';
+  if (picked !== null){
+    var good = q.options[picked] === q.answer;
+    var msg = good ? 'Correct. <span class="say">' + esc(q.prompt) + '</span> is <span class="say">' + esc(q.answer) + '</span>.' : explain(q.options[picked]);
+    h += '<div class="feedback ' + (good ? "good" : "bad") + '">' + msg + '</div>';
+    h += '<div class="act-row"><button type="button" class="btn-primary" id="zp-next">Next</button></div>';
+  }
+  el.innerHTML = h;
+  announce(picked === null ? "" : plain(el.querySelector(".feedback").innerHTML));
+  el.querySelectorAll(".choice").forEach(function(b){
+    b.addEventListener("click", function(){
+      if (S.picked !== null) return;
+      S.picked = Number(b.dataset.i);
+      var ok = S.q.options[S.picked] === S.q.answer;
+      markResult(ok);   /* before onScore: onScore redraws the progress bar */
+      onScore(ok);
+      draw();
+      var n = $("zp-next"); if (n) n.focus();
+    });
+  });
+  var nx = $("zp-next");
+  if (nx) nx.addEventListener("click", function(){ newQuestion(); draw(); });
+}
+function typeVerdict(raw){
+  var t = S.q.t;
+  if (S.dir === "to12"){
+    var k = norm12(raw);
+    if (k === null) return { ok: null, msg: 'Use a form like <span class="say">6:30 PM</span> — the AM or PM matters.' };
+    var want = key12(t.h, t.m);
+    var okNoon = (k === "noon" && t.h === 12 && t.m === 0) || (k === "midnight" && t.h === 0 && t.m === 0);
+    if (k === want || okNoon) return { ok: true, msg: 'Correct. <span class="say">' + esc(S.q.prompt) + '</span> is <span class="say">' + esc(S.q.answer) + '</span>.' };
+    return { ok: false, msg: explain(raw) };
+  }
+  var k2 = norm24(raw);
+  if (k2 === null) return { ok: null, msg: 'Use four digits, like <span class="say">1830</span>.' };
+  if (k2 === fmt24(t.h, t.m)) return { ok: true, msg: 'Correct. <span class="say">' + esc(S.q.prompt) + '</span> is <span class="say">' + esc(S.q.answer) + '</span>.' };
+  return { ok: false, msg: explain(raw) };
+}
+function drawType(){
+  var el = $("zp-qarea"), q = S.q, done = S.typeDone;
+  var h = '<div class="qcard"><p class="qsub">' + subLine() + '</p><div class="qglyph">' + esc(q.prompt) + '</div></div>';
+  h += '<div class="fill-row">' +
+       '<label class="sr-only" for="zp-input">' + subLine() + ' for ' + esc(q.prompt) + '</label>' +
+       '<input id="zp-input" class="fill-input' + (done === null ? "" : (done ? " correct" : " wrong")) + '" type="text" ' +
+       'autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" ' +
+       'placeholder="' + (S.dir === "to12" ? "6:30 PM" : "1830") + '" value="' + esc(S.typed) + '"' + (done === null ? "" : " disabled") + '>' +
+       (done === null ? '<button type="button" class="btn-primary" id="zp-check" style="flex:0 1 auto">Check</button>' : '') +
+       '</div>';
+  if (done === null) h += '<p class="hint">' + (S.dir === "to12" ? "Formats like 6:30 PM or 630pm both count." : "18:30, 1830 and 1830Z all count.") + '</p>';
+  if (done !== null){
+    h += '<div class="feedback ' + (done ? "good" : "bad") + '">' + S.typeMsg + '</div>';
+    h += '<div class="act-row"><button type="button" class="btn-primary" id="zp-next">Next</button></div>';
+  }
+  el.innerHTML = h;
+  announce(done === null ? "" : plain(S.typeMsg));
+  var input = $("zp-input");
+  function submit(){
+    if (S.typeDone !== null) return;
+    var v = typeVerdict(input.value);
+    if (v.ok === null){ S.typeMsg = v.msg; announce(plain(v.msg));
+      el.querySelector(".hint").innerHTML = plain(v.msg);
+      input.focus(); return; }
+    S.typed = input.value; S.typeDone = v.ok; S.typeMsg = v.msg;
+    markResult(v.ok);   /* before onScore: onScore redraws the progress bar */
+    onScore(v.ok);
+    draw();
+    var n = $("zp-next"); if (n) n.focus();
+  }
+  if (done === null){
+    input.addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); submit(); } });
+    $("zp-check").addEventListener("click", submit);
+    input.focus();
+  } else {
+    $("zp-next").addEventListener("click", function(){ newQuestion(); draw(); });
+  }
+}
+function draw(){
+  if (S.done){ drawDone(); return; }
+  if (S.ans === "type") drawType(); else drawMCQ();
+}
+
+/* ---- wiring ---- */
+function setPressed(group, el){
+  group.querySelectorAll("button").forEach(function(b){ b.setAttribute("aria-pressed", String(b === el)); });
+}
+$("zp-views").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-view]");
+  if (!b) return;
+  setPressed($("zp-views"), b);
+  var practice = b.dataset.view === "practice";
+  $("view-convert").hidden = practice;
+  $("view-practice").hidden = !practice;
+  $("zp-controls").hidden = !practice;
+});
+$("zp-dirs").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-dir]");
+  if (!b) return;
+  setPressed($("zp-dirs"), b);
+  S.dir = b.dataset.dir;
+  startRound(); drawStats(); draw();
+});
+$("zp-answers").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-ans]");
+  if (!b) return;
+  setPressed($("zp-answers"), b);
+  S.ans = b.dataset.ans;
+  startRound(); drawStats(); draw();
+});
+$("zp-reset").addEventListener("click", function(){
+  S.score = 0; S.tries = 0; S.streak = 0;
+  startRound(); drawStats(); draw();
+  announce("Started over.");
+});
+
+startRound();
+drawStats();
+draw();
 })();
 </script>
 <script src="../assets/site.js?v=2"></script>
