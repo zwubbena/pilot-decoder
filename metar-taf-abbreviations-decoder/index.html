@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>METAR/TAF Abbreviations Decoder | PilotDECODER</title>
+<meta name="description" content="Every abbreviation and acronym from the FAA METAR/TAF decode key, transcribed as published, plus four drills: code to meaning, type the code, spot the fake, and decode a METAR." />
+<meta name="keywords" content="METAR abbreviations, TAF abbreviations, METAR decode key, METAR remarks, BKN, OVC, SCT, FEW, AO2, PRESFR, SNINCR, aviation weather, surface weather observations, FMH-1, student pilot, private pilot, ground school, flight training, PilotDECODER" />
+<meta name="author" content="Zane Wubbena" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://pilotdecoder.com/metar-taf-abbreviations-decoder/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pilotdecoder.com/metar-taf-abbreviations-decoder/" />
+<meta property="og:site_name" content="PilotDECODER" />
+<meta property="og:title" content="METAR/TAF Abbreviations Decoder | PilotDECODER" />
+<meta property="og:description" content="The METAR/TAF list of abbreviations and acronyms as published in the FAA decode key, with a searchable reference and four practice drills." />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="METAR/TAF Abbreviations Decoder | PilotDECODER" />
+<meta name="twitter:description" content="The METAR/TAF list of abbreviations and acronyms as published in the FAA decode key, with a searchable reference and four practice drills." />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PilotDECODER",
+  "alternateName": "METAR/TAF Abbreviations Decoder",
+  "url": "https://pilotdecoder.com/metar-taf-abbreviations-decoder/",
+  "description": "Searchable reference and practice drills for the METAR/TAF list of abbreviations and acronyms as published in the FAA decode key.",
+  "applicationCategory": "Aviation weather utility",
+  "operatingSystem": "Any (web browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": {
+    "@type": "Person",
+    "name": "Zane Wubbena",
+    "url": "https://zanewubbena.com/",
+    "sameAs": [
+      "https://txstate.academia.edu/ZaneWubbena",
+      "https://scholar.google.com/citations?user=qr2mU1oAAAAJ&hl=en",
+      "https://www.researchgate.net/profile/Zane-Wubbena"
+    ]
+  }
+}
+</script>
+<script>try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2316294f'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="../assets/site.css?v=18" />
+<style>
+  /* ============ PAGE-SPECIFIC: METAR/TAF abbreviations ============ */
+
+  /* The "correct answer" green shared with the rest of the site's drills:
+     one grass-green hue at three lightnesses so answer buttons, feedback
+     panels, slots and the fill-in field all read as one color. Result colors
+     are semantic, so they stay fixed across both themes. */
+  :root {
+    --ok-bg:   #E5F2DE;   /* answer + feedback background */
+    --ok-line: #418321;   /* answer + feedback border     */
+    --ok-text: #27570F;   /* answer + feedback text       */
+  }
+  main.wrap { padding-top: 8px; padding-bottom: 44px; }
+
+  /* view + mode switches */
+  .switch-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .switch-row[hidden] { display: none; }
+  .switch-row + .switch-row { margin-top: 12px; }
+  .panel-label.sub { margin-top: 16px; }
+
+  /* ---------- reference grid ---------- */
+  /* Codes run from one character ($) to nine (ACFT MSHP) and the meanings
+     from one word to a sentence, so the cell is a code column that never
+     wraps beside a meaning that does. Card color is the F4F-3 Wildcat's
+     light blue-grey, same as the phonetic page's reference cells. */
+  .ref-head { display: flex; gap: 10px; align-items: center; margin: 16px 0 0; }
+  .ref-count { flex: none; font-family: var(--mono); font-size: 11.5px; letter-spacing: .04em; color: var(--ink-soft); }
+  .ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
+  .ref-cell { display: flex; align-items: baseline; gap: 12px; border: 1px solid #A5BCAB; border-radius: 8px; background: #BFD3C6; padding: 9px 12px; }
+  [data-theme="dark"] .ref-cell { background: #23342E; border-color: #35493E; }
+  .ref-char { flex: none; min-width: 3.1em; white-space: nowrap; font-family: var(--mono); font-size: 16px; font-weight: 700; color: #16294f; }
+  [data-theme="dark"] .ref-char { color: #9db4ee; }
+  /* --ink-soft only reaches 3.26:1 on the Wildcat blue-grey; this darker
+     slate clears AA. Dark mode keeps the token. */
+  .ref-word { font-family: var(--sans); font-size: 13.5px; font-weight: 600; line-height: 1.4; color: #2a3242; display: block; }
+  [data-theme="dark"] .ref-word { color: var(--ink); }
+  .group-head { font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); margin: 22px 0 0; }
+
+  /* ---------- practice ---------- */
+  .deck-progress { margin: 14px 0 0; }
+  .deck-progress[hidden] { display: none; }
+  .deck-bar { height: 6px; border-radius: 999px; background: var(--wash); border: 1px solid var(--rule); overflow: hidden; }
+  /* The fill carries the site's hero rule, blue through red. background-size
+     is set from JS to (100/pct)% so the gradient always spans the FULL track
+     and is revealed as you advance. The rule's near-white tail is dropped:
+     on a progress bar it would read as empty at 100%. */
+  .deck-bar span {
+    display: block; height: 100%; width: 0;
+    background-image: linear-gradient(90deg, #16294f 0%, #3a5ca8 45%, #b3273a 100%);
+    background-repeat: no-repeat;
+    transition: width .25s ease;
+  }
+  [data-theme="dark"] .deck-bar span {
+    background-image: linear-gradient(90deg, #3a5ca8 0%, #6f86cf 45%, #ee8a96 100%);
+  }
+  .deck-label { margin: 6px 0 0; font-family: var(--mono); font-size: 11.5px; letter-spacing: .05em; color: var(--ink-soft); text-align: right; }
+  .done-card { text-align: center; }
+  .done-card .done-big { font-family: var(--sans); font-size: 20px; font-weight: 700; color: var(--brand); margin: 0 0 6px; }
+  .done-card .done-sub { font-size: 14.5px; color: var(--ink); margin: 0; }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0 0; }
+  .stat { border: 1px solid var(--rule); border-radius: 8px; background: color-mix(in srgb, var(--wash) 40%, var(--surface)); padding: 7px 6px; text-align: center; }
+  .stat .lab { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+  .stat .val { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--brand); }
+  .stat .val.hot { color: #8A5510; }
+  [data-theme="dark"] .stat .val.hot { color: #E8B464; }
+
+  .qcard { border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 8px; background: color-mix(in srgb, var(--wash) 45%, var(--surface)); padding: 20px 18px; text-align: center; margin: 16px 0 0; }
+  .qsub { font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); margin: 0 0 6px; }
+  .qglyph { font-family: var(--mono); font-size: clamp(26px, 8vw, 42px); font-weight: 700; color: var(--ink); line-height: 1.15; overflow-wrap: anywhere; }
+  .qlead { font-family: var(--sans); font-size: 15.5px; font-weight: 600; color: var(--ink); margin: 0; }
+  /* the fill drill prompts with a meaning, not a glyph */
+  .qmean { font-family: var(--sans); font-size: 19px; font-weight: 700; color: var(--ink); line-height: 1.4; margin: 0; }
+
+  /* Meanings are phrases, so the choice buttons run in the sans face; the
+     code half of a pair keeps the mono face so codes read as codes. */
+  .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; margin: 12px 0 0; }
+  .choice { font-family: var(--sans); font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 12px 10px; cursor: pointer; text-align: center; touch-action: manipulation; transition: border-color .15s ease, background .15s ease; }
+  .choice .cc { font-family: var(--mono); font-weight: 700; }
+  .choice:hover:not(:disabled) { border-color: var(--mid); color: var(--brand); }
+  .choice:disabled { cursor: default; }
+  .choice.correct { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok-text); }
+  .choice.wrong { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
+  .choice.dim { opacity: .5; }
+
+  .feedback { border: 1px solid; border-radius: 8px; padding: 11px 14px; margin: 12px 0 0; font-family: var(--sans); font-size: 14.5px; line-height: 1.5; }
+  .feedback.good { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok-text); }
+  .feedback.bad { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
+  .feedback .say { font-family: var(--mono); font-weight: 700; }
+
+  /* Forward actions span the full row: after answering, the pointer is
+     wherever the choice was, so a full-width target needs no aiming, and it
+     is a comfortable thumb target on a phone. Undo stays left and small. */
+  .act-row { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+  .act-row.act-left { justify-content: flex-start; }
+  .act-row .btn-primary { flex: 1 1 100%; padding: 13px 16px; font-size: 15px; }
+
+  /* ---------- type the code ---------- */
+  .fill-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+  /* 16px keeps iOS from zooming the viewport when the field takes focus */
+  .fill-input { flex: 1 1 220px; min-width: 0; font-family: var(--mono); font-size: 16px; font-weight: 600;
+    color: var(--input-ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 11px 12px; }
+  .fill-input::placeholder { color: var(--placeholder); font-weight: 400; text-transform: none; }
+  .fill-input:focus { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
+  .fill-input[disabled] { background: color-mix(in srgb, var(--wash) 50%, var(--surface)); }
+  .fill-input.code { text-transform: uppercase; }
+  .fill-input.correct { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok-text); }
+  .fill-input.wrong { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
+  .reset-row { display: flex; justify-content: flex-end; margin: 8px 0 0; }
+
+  /* ---------- decode a METAR ---------- */
+  .slots { display: flex; flex-wrap: wrap; gap: 6px; min-height: 46px; align-items: center; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); padding: 8px; margin: 12px 0 0; }
+  .slot { font-family: var(--sans); font-size: 13px; font-weight: 600; border: 1px solid; border-radius: 6px; padding: 5px 10px; }
+  .slot.empty { border-style: dashed; border-color: var(--card-bd); color: var(--placeholder); }
+  .slot.pend { border-color: var(--mid); background: var(--wash); color: var(--brand); }
+  .slot.ok { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok-text); }
+  .slot.bad { border-color: #A32D2D; background: #FCEBEB; color: #791F1F; }
+  .bank { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin: 10px 0 0; }
+  .bankbtn { font-family: var(--sans); font-size: 13px; font-weight: 600; line-height: 1.35; color: var(--ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 10px 8px; cursor: pointer; touch-action: manipulation; }
+  .bankbtn:hover:not(:disabled) { border-color: var(--mid); color: var(--brand); }
+  .bankbtn:disabled { opacity: .4; cursor: default; }
+
+  /* ---------- source quote ---------- */
+  .aim { margin: 28px 0 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); }
+  .aim summary { cursor: pointer; padding: 12px 14px; font-family: var(--sans); font-weight: 700; font-size: 14px; color: var(--brand); }
+  .aim[open] summary { border-bottom: 1px solid var(--rule); }
+  .aim-body { padding: 12px 16px 16px; }
+  .aim-body p { margin: 0 0 10px; font-size: 14.5px; line-height: 1.6; color: var(--ink); }
+  .aim-body p:last-of-type { margin-bottom: 0; }
+  .aim-cite { margin: 10px 0 0 !important; font-size: 13px !important; color: var(--ink-soft) !important; }
+  .note { margin: 16px 0 0; border: 1px solid var(--rule); border-radius: 8px; background: color-mix(in srgb, var(--wash) 40%, var(--surface)); padding: 12px 14px; font-size: 13.5px; line-height: 1.6; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="wrap"><a class="brand" href="https://pilotdecoder.com/">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme" title="Color theme"><span class="knob"></span></button></div>
+  </header>
+
+  <header class="masthead">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="https://pilotdecoder.com/">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">METAR/TAF Abbreviations Decoder</span></nav>
+      <h1 class="eyebrow"><strong>METAR/TAF Abbreviations Decoder</strong></h1>
+      <p class="masthead-desc">Every entry from the METAR/TAF List of Abbreviations and Acronyms, transcribed as the FAA publishes it in the METAR/TAF decode key &mdash; all 155 of them, from <b>$</b> to <b>Z</b>. Use the reference to look a code up, or the drills to make the shorthand read like plain language before the next briefing.</p>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="wrap">
+      <span class="panel-label">View</span>
+      <div class="switch-row" id="views" role="group" aria-label="Choose a view">
+        <button type="button" class="btn-secondary btn-sm" data-view="ref" aria-pressed="true">Reference</button>
+        <button type="button" class="btn-secondary btn-sm" data-view="quiz" aria-pressed="false">Practice</button>
+      </div>
+      <div id="practice-controls" hidden>
+        <span class="panel-label sub">Drill</span>
+        <div class="switch-row" id="modes" role="group" aria-label="Choose a drill">
+          <button type="button" class="btn-secondary btn-sm" data-qt="c2m" aria-pressed="true">Code to meaning</button>
+          <button type="button" class="btn-secondary btn-sm" data-qt="fill" aria-pressed="false">Type the code</button>
+          <button type="button" class="btn-secondary btn-sm" data-qt="fake" aria-pressed="false">Spot the fake</button>
+          <button type="button" class="btn-secondary btn-sm" data-qt="dec" aria-pressed="false">Decode a METAR</button>
+        </div>
+        <div id="pool-block">
+          <span class="panel-label sub">Abbreviations</span>
+          <div class="switch-row" id="pools" role="group" aria-label="Choose which abbreviations to drill">
+            <button type="button" class="btn-secondary btn-sm" data-pool="all" aria-pressed="true">All</button>
+            <button type="button" class="btn-secondary btn-sm" data-pool="af" aria-pressed="false">$&ndash;F</button>
+            <button type="button" class="btn-secondary btn-sm" data-pool="gr" aria-pressed="false">G&ndash;R</button>
+            <button type="button" class="btn-secondary btn-sm" data-pool="sz" aria-pressed="false">S&ndash;Z</button>
+            <button type="button" class="btn-secondary btn-sm" data-pool="core" aria-pressed="false">Core weather</button>
+          </div>
+          <span class="panel-label sub">Order</span>
+          <div class="switch-row" id="orders" role="group" aria-label="Choose the order of the deck">
+            <button type="button" class="btn-secondary btn-sm" data-order="seq" aria-pressed="true">In order</button>
+            <button type="button" class="btn-secondary btn-sm" data-order="rnd" aria-pressed="false">Random</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section id="view-ref" aria-label="Abbreviation reference">
+      <div class="ref-head">
+        <label class="sr-only" for="ref-filter">Filter the list by code or meaning</label>
+        <input id="ref-filter" class="fill-input" type="search" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Filter by code or meaning&hellip;" />
+        <span class="ref-count" id="ref-count"></span>
+      </div>
+      <div id="ref-list"></div>
+      <p class="note">A few habits of this list are worth knowing before you drill it. Several single letters carry more than one meaning depending on where they appear in a report: <b>E</b> is east, ended, or an estimated ceiling; <b>S</b> is snow or south; <b>SW</b> is a snow shower or southwest; <b>R</b> is right or runway; <b>IC</b> is ice crystals or in-cloud lightning. Two codes share one meaning: <b>V</b> and <b>VRB</b> both read variable. And in the body of a report, weather-group intensity is carried by the bare symbols &mdash; <b>-</b> for light, <b>+</b> for heavy, and no prefix at all for moderate &mdash; while descriptors and phenomena chain into single groups: <b>-FZDZ</b> is light freezing drizzle, <b>BLSN</b> is blowing snow. That chaining is what the Decode a METAR drill practices.</p>
+    </section>
+
+    <section id="view-quiz" hidden aria-label="Practice drills">
+      <div class="deck-progress" id="deck-progress">
+        <div class="deck-bar"><span id="deck-fill"></span></div>
+        <p class="deck-label" id="deck-label"></p>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="lab">Score</div><div class="val" id="st-score">0/0</div></div>
+        <div class="stat"><div class="lab">Streak</div><div class="val" id="st-streak">0</div></div>
+        <div class="stat"><div class="lab">Accuracy</div><div class="val" id="st-acc">&ndash;</div></div>
+      </div>
+      <div class="reset-row">
+        <button type="button" class="btn-secondary btn-sm" id="btn-reset">Start over</button>
+      </div>
+      <div id="qarea"></div>
+      <p id="q-status" role="status" class="sr-only"></p>
+    </section>
+
+    <details class="aim">
+      <summary>About this list</summary>
+      <div class="aim-body">
+        <p>The list gathers every abbreviation and acronym used across the METAR/TAF decode key &mdash; not just the codes that appear inside a raw observation. Report codes like BKN, RA and VRB sit alongside remark-section markers (AO2, PRESFR, SNINCR), sensor-status flags (PNO, FZRANO, VISNO), runway and visibility terms (RVR, DVR), and the agencies and handbooks behind the format (NWS, ICAO, FMH-1). If a code ever shows up in a report, its remarks, or the paperwork around them, it is here.</p>
+        <p>The governing document for METAR coding in the United States is Federal Meteorological Handbook No. 1, <i>Surface Weather Observations and Reports</i> (FMH-1); the decode key condenses it to one card. Entries are transcribed exactly as printed, including the key's own quirks &mdash; KT is expanded as KNOTS, cd, max and min run lowercase, and AO1/AO2 sit slightly out of alphabetical order. The one departure: the card prints HLSTO&#39;s code twice; it appears once here.</p>
+        <p class="aim-cite">Transcribed from &ldquo;METAR/TAF List of Abbreviations and Acronyms,&rdquo; FAA METAR/TAF weather conversion card (alaska.faa.gov, metcont.htm, retrieved December 24, 2008). The same key circulates as the NWS Western Region METAR decode packet.</p>
+      </div>
+    </details>
+  </main>
+
+  <footer><div class="wrap"><div class="source"><b>References:</b>
+<ul class="source-list">
+<li>Abbreviations and acronyms: <a href="http://www.alaska.faa.gov/fai/afss/metar%20taf/metcont.htm" target="_blank" rel="noopener">FAA Alaska Region METAR/TAF weather conversion card, METAR/TAF List of Abbreviations and Acronyms (metcont.htm, retrieved Dec 24, 2008)</a></li>
+<li>Same key as compiled by the National Weather Service Western Region: <a href="https://www.weather.gov/media/wrh/mesowest/metar_decode_key.pdf" target="_blank" rel="noopener">METAR decode key (PDF), weather.gov</a></li>
+</ul>
+</div>
+<p class="disclaimer"><b>Disclaimer:</b> Educational only. Not an official source; always work from current publications (FMH-1 and the AIM). The Pilot in Command remains solely responsible for flight safety and official verification.</p></div><div class="copyright"><div class="wrap"><span>&copy; <span id="yr"></span> PilotDECODER</span><a class="totop" href="#top">BACK TO TOP &uarr;</a></div></div></footer>
+
+<script>
+/* ============================================================
+   Data is transcribed from the METAR/TAF List of Abbreviations and
+   Acronyms as printed on the FAA METAR/TAF weather conversion card
+   (metcont.htm). Order and wording follow the source exactly, reading
+   each row left pair then right pair, including its quirks: AO1/AO2
+   land between ACSL and ALP, PRES sits before PR, KT is expanded as
+   KNOTS, and cd, max and min run lowercase; the card prints "HLSTO HLSTO
+   hailstone" and the doubled code appears once here. Do not "fix" these; the
+   deck's "in order" mode is a walk through the card as published.
+   ============================================================ */
+const DATA = [
+  ["$","maintenance check indicator"],
+  ["-","light intensity"],
+  ["+","heavy intensity"],
+  ["/","indicator that visual range data follows; separator between temperature and dew point data."],
+  ["ACC","altocumulus castellanus"],
+  ["ACFT MSHP","aircraft mishap"],
+  ["ACSL","altocumulus standing lenticular cloud"],
+  ["AO1","automated station without precipitation discriminator"],
+  ["AO2","automated station with precipitation discriminator"],
+  ["ALP","airport location point"],
+  ["APCH","approach"],
+  ["APRNT","apparent"],
+  ["APRX","approximately"],
+  ["ATCT","airport traffic control tower"],
+  ["AUTO","fully automated report"],
+  ["B","began"],
+  ["BC","patches"],
+  ["BKN","broken"],
+  ["BL","blowing"],
+  ["BR","mist"],
+  ["C","center (with reference to runway designation)"],
+  ["CA","cloud-air lightning"],
+  ["CB","cumulonimbus cloud"],
+  ["CBMAM","cumulonimbus mammatus cloud"],
+  ["CC","cloud-cloud lightning"],
+  ["CCSL","cirrocumulus standing lenticular cloud"],
+  ["cd","candela"],
+  ["CG","cloud-ground lightning"],
+  ["CHI","cloud-height indicator"],
+  ["CHINO","sky condition at secondary location not available"],
+  ["CIG","ceiling"],
+  ["CLR","clear"],
+  ["CONS","continuous"],
+  ["COR","correction to a previously disseminated observation"],
+  ["DOC","Department of Commerce"],
+  ["DOD","Department of Defense"],
+  ["DOT","Department of Transportation"],
+  ["DR","low drifting"],
+  ["DS","duststorm"],
+  ["DSIPTG","dissipating"],
+  ["DSNT","distant"],
+  ["DU","widespread dust"],
+  ["DVR","dispatch visual range"],
+  ["DZ","drizzle"],
+  ["E","east, ended, estimated ceiling (SAO)"],
+  ["FAA","Federal Aviation Administration"],
+  ["FC","funnel cloud"],
+  ["FEW","few clouds"],
+  ["FG","fog"],
+  ["FIBI","filed but impracticable to transmit"],
+  ["FIRST","first observation after a break in coverage at manual station"],
+  ["FMH-1","Federal Meteorological Handbook No.1, Surface Weather Observations & Reports (METAR)"],
+  ["FMH2","Federal Meteorological Handbook No.2, Surface Synoptic Codes"],
+  ["FRQ","frequent"],
+  ["FROPA","frontal passage"],
+  ["FT","feet"],
+  ["FU","smoke"],
+  ["FZ","freezing"],
+  ["FZRANO","freezing rain sensor not available"],
+  ["G","gust"],
+  ["GR","hail"],
+  ["GS","small hail and/or snow pellets"],
+  ["HLSTO","hailstone"],
+  ["HZ","haze"],
+  ["IC","ice crystals, in-cloud lightning"],
+  ["ICAO","International Civil Aviation Organization"],
+  ["INCRG","increasing"],
+  ["INTMT","intermittent"],
+  ["KT","KNOTS"],
+  ["L","left (with reference to runway designation)"],
+  ["LAST","last observation before a break in coverage at a manual station"],
+  ["LST","Local Standard Time"],
+  ["LTG","lightning"],
+  ["LWR","lower"],
+  ["M","minus, less than"],
+  ["max","maximum"],
+  ["METAR","routine weather report provided at fixed intervals"],
+  ["MI","shallow"],
+  ["min","minimum"],
+  ["MOV","moved/moving/movement"],
+  ["MT","mountains"],
+  ["N","north"],
+  ["N/A","not applicable"],
+  ["NCDC","National Climatic Data Center"],
+  ["NE","northeast"],
+  ["NOS","National Ocean Survey"],
+  ["NOSPECI","no SPECI reports are taken at the station"],
+  ["NOTAM","Notice to Airmen"],
+  ["NW","northwest"],
+  ["NWS","National Weather Service"],
+  ["OCNL","occasional"],
+  ["OFCM","Office of the Federal Coordinator for Meteorology"],
+  ["OHD","overhead"],
+  ["OVC","overcast"],
+  ["OVR","over"],
+  ["P","indicates greater than the highest reportable value"],
+  ["PCPN","precipitation"],
+  ["PL","ice pellets"],
+  ["PK WND","peak wind"],
+  ["PNO","precipitation amount not available"],
+  ["PO","dust/sand whirls (dust devils)"],
+  ["PRES","pressure"],
+  ["PR","partial"],
+  ["PRESFR","pressure falling rapidly"],
+  ["PRESRR","pressure rising rapidly"],
+  ["PWINO","precipitation identifier sensor not available"],
+  ["PY","spray"],
+  ["R","right (with reference to runway designation), runway"],
+  ["RA","rain"],
+  ["RTD","Routine Delayed (late) observation"],
+  ["RV","reportable value"],
+  ["RVR","Runway Visual Range"],
+  ["RVRNO","RVR system values not available"],
+  ["RY","runway"],
+  ["S","snow, south"],
+  ["SA","sand"],
+  ["SCSL","stratocumulus standing lenticular cloud"],
+  ["SCT","scattered"],
+  ["SE","southeast"],
+  ["SFC","surface"],
+  ["SG","snow grains"],
+  ["SH","shower(s)"],
+  ["SKC","sky clear"],
+  ["SLP","sea-level pressure"],
+  ["SLPNO","sea-level pressure not available"],
+  ["SM","statute miles"],
+  ["SN","snow"],
+  ["SNINCR","snow increasing rapidly"],
+  ["SP","snow pellets"],
+  ["SPECI","an unscheduled report taken when certain criteria have been met"],
+  ["SQ","squalls"],
+  ["SS","sandstorm"],
+  ["STN","station"],
+  ["SW","snow shower, southwest"],
+  ["TCU","towering cumulus"],
+  ["TS","thunderstorm"],
+  ["TSNO","thunderstorm information not available"],
+  ["TWR","tower"],
+  ["UNKN","unknown"],
+  ["UP","unknown precipitation"],
+  ["UTC","Coordinated Universal Time"],
+  ["V","variable"],
+  ["VA","volcanic ash"],
+  ["VC","in the vicinity"],
+  ["VIS","visibility"],
+  ["VISNO","visibility at secondary location not available"],
+  ["VR","visual range"],
+  ["VRB","variable"],
+  ["VV","vertical visibility"],
+  ["W","west"],
+  ["WG/SO","Working Group for Surface Observations"],
+  ["WMO","World Meteorological Organization"],
+  ["WND","wind"],
+  ["WSHFT","wind shift"],
+  ["Z","zulu, i.e., Coordinated Universal Time"]
+];
+const LOOK = Object.fromEntries(DATA.map(x => [x[0], x]));
+
+/* The high-value study set: the intensity/proximity marks, descriptors,
+   precipitation, obscurations, "other" phenomena and sky-condition codes.
+   A curated subset of the list above, not a separate source. */
+const CORE = new Set(["-","+","VC","MI","PR","BC","DR","BL","SH","TS","FZ",
+  "DZ","RA","SN","SG","IC","PL","GR","GS","UP",
+  "BR","FG","FU","VA","DU","SA","HZ","PY",
+  "PO","SQ","FC","SS","DS",
+  "SKC","CLR","FEW","SCT","BKN","OVC","VV","CB","TCU"]);
+
+/* ---------------- helpers ---------------- */
+const rand = n => Math.floor(Math.random() * n);
+const pick = a => a[rand(a.length)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function shuffle(a){
+  const b = [...a];
+  for (let i = b.length - 1; i > 0; i--){ const j = rand(i + 1); [b[i], b[j]] = [b[j], b[i]]; }
+  return b;
+}
+/* the character a code files under: its first letter, lowercased;
+   the four symbols file under themselves */
+function keyChar(code){
+  return code[0].toLowerCase();
+}
+/* Forgiving on case, spacing, hyphens, periods and slashes, so "n/a",
+   "NA", "fmh1" and "pk wnd" all land. Pure-symbol codes ($ - + /) would
+   normalize to nothing, so they compare as typed. */
+function normCode(v){
+  const t = String(v).toLowerCase().trim();
+  const r = t.replace(/[\s\-.\/]/g, "");
+  return r === "" ? t : r;
+}
+/* feedback HTML flattened for the screen-reader status line */
+function plain(h){
+  return String(h).replace(/<[^>]*>/g, "")
+    .replace(/&mdash;/g, "—").replace(/&ldquo;|&rdquo;/g, '"')
+    .replace(/&middot;/g, "·").replace(/&amp;/g, "&");
+}
+
+/* ---------------- question generators ---------------- */
+/* Which abbreviations the drills draw from. The letter splits carve the
+   155 entries into decks of roughly a study-session's size (59/55/41);
+   "core" is the weather-and-sky subset defined above. */
+function poolFor(){
+  if (S.pool === "core") return DATA.filter(x => CORE.has(x[0]));
+  if (S.pool === "af") return DATA.filter(x => !/[g-z]/.test(keyChar(x[0])));
+  if (S.pool === "gr") return DATA.filter(x => /[g-r]/.test(keyChar(x[0])));
+  if (S.pool === "sz") return DATA.filter(x => /[s-z]/.test(keyChar(x[0])));
+  return DATA;
+}
+function poolNoun(){
+  return S.pool === "core" ? "core weather codes" : "abbreviations";
+}
+/* ---------- the deck ----------
+   A round covers every abbreviation in the chosen pool exactly once.
+   Answer one correctly and it leaves the deck for good; miss it and it
+   stays in, coming back after the rest of the pass. "Random" shuffles the
+   deck up front rather than drawing at random each turn, which is what
+   keeps a missed code from repeating twice in a row while still
+   guaranteeing it returns. */
+function buildDeck(){
+  const codes = poolFor().map(x => x[0]);
+  S.remaining = S.order === "rnd" ? shuffle(codes) : codes.slice();
+  S.cursor = 0;
+  S.deckSize = codes.length;
+  S.deckDone = false;
+}
+function currentChar(){
+  return S.remaining.length ? S.remaining[S.cursor % S.remaining.length] : null;
+}
+function markResult(ok){
+  const ch = currentChar();
+  if (ch === null) return;
+  if (ok) {
+    const i = S.remaining.indexOf(ch);
+    if (i >= 0) S.remaining.splice(i, 1);   /* cursor stays: the next card slides into place */
+  } else {
+    S.cursor++;                              /* keep it in the deck, revisit later in the pass */
+  }
+  if (!S.remaining.length) S.deckDone = true;
+}
+function newQuestion(){
+  const ch = currentChar();
+  if (ch === null) { S.deckDone = true; return; }
+  if (S.qt === "fill") { S.fill = genFill(ch); S.typed = ""; S.fillDone = null; S.fillMsg = ""; }
+  else { S.q = S.qt === "fake" ? genFake(ch) : genMCQ(ch); S.picked = null; }
+}
+function startDeck(){ buildDeck(); newQuestion(); }
+
+/* Distractors come from the list itself, weighted toward codes that file
+   under the same first character: for BKN that surfaces B (began),
+   BL (blowing), BR (mist), BC (patches) -- exactly the neighbors people
+   actually confuse. Nothing fabricated, so every wrong option is still a
+   real meaning worth reading. Meanings are deduped by string so V and VRB
+   ("variable" twice) can never produce two identical buttons. */
+function distractorsFor(item, n){
+  const first = keyChar(item[0]);
+  const cands = shuffle(DATA.filter(x => x[0] !== item[0] && x[1] !== item[1]));
+  const ordered = [...cands.filter(x => keyChar(x[0]) === first),
+                   ...cands.filter(x => keyChar(x[0]) !== first)];
+  const out = [], seen = new Set([item[1]]);
+  for (const x of ordered){
+    if (out.length >= n) break;
+    if (seen.has(x[1])) continue;
+    seen.add(x[1]);
+    out.push(x[1]);
+  }
+  return out;
+}
+function genMCQ(ch){
+  const item = LOOK[ch];
+  return { code:item[0], prompt:item[0], sub:"What does this code mean?",
+           options: shuffle([item[1], ...distractorsFor(item, 3)]),
+           answer:item[1] };
+}
+/* Spot the fake: three pairs straight from the key plus one real code
+   wearing a stolen meaning -- BKN dressed as "blowing", SN as "snow
+   grains". Both halves of the impostor are real; only the pairing is
+   wrong, which is the mistake that actually happens mid-briefing. */
+function genFake(ch){
+  const host = LOOK[ch];
+  const donors = shuffle(DATA.filter(x => x[0] !== host[0] && x[1] !== host[1]));
+  const donor = donors.find(x => keyChar(x[0]) === keyChar(host[0])) || donors[0];
+  const reals = [];
+  const seen = new Set([host[1], donor[1]]);
+  for (const x of shuffle(poolFor())){
+    if (reals.length >= 3) break;
+    if (x[0] === host[0] || x[0] === donor[0] || seen.has(x[1])) continue;
+    seen.add(x[1]);
+    reals.push(x);
+  }
+  return { sub:"One of these pairs is not in the key. Tap the impostor.",
+           options: shuffle([{c:host[0], m:donor[1], fake:true},
+                             ...reals.map(x => ({c:x[0], m:x[1], fake:false}))]),
+           host:host[0], hostM:host[1], wrongM:donor[1], donor:donor[0] };
+}
+/* Type the code: the meaning string is the prompt, exactly as printed.
+   V and VRB share the meaning "variable", so acceptance runs against
+   every code whose meaning matches, not just the card that was drawn. */
+function genFill(ch){
+  const item = LOOK[ch];
+  return { code:item[0], meaning:item[1],
+           codes: DATA.filter(x => x[1] === item[1]).map(x => x[0]) };
+}
+function fillVerdict(raw, q){
+  const n = normCode(raw);
+  if (!n) return { ok:false, msg:"Type an answer first." };
+  const matched = q.codes.find(c => normCode(c) === n);
+  if (matched){
+    const msg = q.codes.length > 1
+      ? `Correct. The key lists both <span class="say">${q.codes.map(esc).join('</span> and <span class="say">')}</span> for ${esc(q.meaning)}.`
+      : `Correct. <span class="say">${esc(matched)}</span> &mdash; ${esc(q.meaning)}.`;
+    return { ok:true, msg };
+  }
+  const other = DATA.find(x => normCode(x[0]) === n);
+  if (other)
+    return { ok:false, msg:`<span class="say">${esc(other[0])}</span> is ${esc(other[1])}. The key lists <span class="say">${esc(q.code)}</span> for ${esc(q.meaning)}.` };
+  return { ok:false, msg:`${esc(q.meaning)} is <span class="say">${esc(q.code)}</span>.` };
+}
+
+/* ---------- decode a METAR ----------
+   Weather groups chain intensity, descriptor and phenomenon into one
+   token, so the combos below are curated to ones that actually occur
+   (-SHRA yes, +MIFG no). Sky patterns carry plausible heights; the
+   digits are shown for realism but only the letter codes are decoded. */
+const PRECIP = new Set(["RA","SN","DZ","PL","SG","GS","GR","UP"]);
+const WX = [
+  {r:"-RA",p:["-","RA"]},    {r:"RA",p:["RA"]},          {r:"+RA",p:["+","RA"]},
+  {r:"-SN",p:["-","SN"]},    {r:"SN",p:["SN"]},          {r:"+SN",p:["+","SN"]},
+  {r:"-DZ",p:["-","DZ"]},    {r:"DZ",p:["DZ"]},          {r:"-SHRA",p:["-","SH","RA"]},
+  {r:"SHRA",p:["SH","RA"]},  {r:"+SHRA",p:["+","SH","RA"]}, {r:"TSRA",p:["TS","RA"]},
+  {r:"+TSRA",p:["+","TS","RA"]}, {r:"-FZRA",p:["-","FZ","RA"]}, {r:"FZRA",p:["FZ","RA"]},
+  {r:"FZDZ",p:["FZ","DZ"]},  {r:"-FZDZ",p:["-","FZ","DZ"]}, {r:"BLSN",p:["BL","SN"]},
+  {r:"DRSN",p:["DR","SN"]},  {r:"BLDU",p:["BL","DU"]},   {r:"MIFG",p:["MI","FG"]},
+  {r:"BCFG",p:["BC","FG"]},  {r:"PRFG",p:["PR","FG"]},   {r:"FZFG",p:["FZ","FG"]},
+  {r:"VCSH",p:["VC","SH"]},  {r:"VCTS",p:["VC","TS"]},   {r:"SHSN",p:["SH","SN"]},
+  {r:"-SHSN",p:["-","SH","SN"]}, {r:"-PL",p:["-","PL"]}, {r:"PL",p:["PL"]},
+  {r:"TSGR",p:["TS","GR"]},  {r:"SG",p:["SG"]},          {r:"UP",p:["UP"]},
+  {r:"BR",p:["BR"]},         {r:"FG",p:["FG"]},          {r:"HZ",p:["HZ"]},
+  {r:"FU",p:["FU"]},         {r:"VA",p:["VA"]},          {r:"DU",p:["DU"]},
+  {r:"SA",p:["SA"]},         {r:"SQ",p:["SQ"]},          {r:"PO",p:["PO"]},
+  {r:"FC",p:["FC"]},         {r:"SS",p:["SS"]},          {r:"DS",p:["DS"]},
+  {r:"TS",p:["TS"]}
+];
+const SKY = [
+  {r:"BKN014 OVC030",p:["BKN","OVC"]},  {r:"SCT040 BKN080",p:["SCT","BKN"]},
+  {r:"FEW250",p:["FEW"]},               {r:"BKN008 OVC012",p:["BKN","OVC"]},
+  {r:"OVC005",p:["OVC"]},               {r:"VV002",p:["VV"]},
+  {r:"SCT025 BKN040CB",p:["SCT","BKN","CB"]}, {r:"BKN035TCU",p:["BKN","TCU"]},
+  {r:"FEW040 SCT100",p:["FEW","SCT"]},  {r:"BKN020 OVC035",p:["BKN","OVC"]}
+];
+/* the first exercise everyone sees: light rain showers, mist, two decks */
+const SEED_DEC = { label:"-SHRA BR BKN014 OVC030", parts:["-","SH","RA","BR","BKN","OVC"] };
+function genDec(seed){
+  let parts, label;
+  if (seed){ parts = [...seed.parts]; label = seed.label; }
+  else {
+    const wx = pick(WX);
+    parts = [...wx.p];
+    const raws = [wx.r];
+    /* precipitation often arrives with an obscuration in tow */
+    if (wx.p.some(c => PRECIP.has(c)) && Math.random() < 0.5){
+      const ob = pick(["BR","FG"]);
+      if (!parts.includes(ob)){ parts.push(ob); raws.push(ob); }
+    }
+    const sky = pick(SKY);
+    parts.push(...sky.p);
+    raws.push(sky.r);
+    label = raws.join(" ");
+  }
+  const target = parts.map(c => LOOK[c][1]);
+  /* traps: meanings of same-letter neighbors of the codes on display */
+  const traps = [...new Set(parts.flatMap(c =>
+    DATA.filter(x => keyChar(x[0]) === keyChar(c) && !parts.includes(x[0]) && !target.includes(x[1]))
+        .map(x => x[1])))];
+  const dis = shuffle(traps).slice(0, 4);
+  const extra = shuffle(DATA.map(x => x[1]).filter(m => !target.includes(m) && !dis.includes(m)));
+  while (dis.length < 4 && extra.length) dis.push(extra.pop());
+  return { label, target, bank: shuffle([...target, ...dis]).map((w, i) => ({ id:i, w })) };
+}
+
+/* ---------------- state ---------------- */
+const S = { qt:"c2m", pool:"all", order:"seq", q:null, fill:null, typed:"", fillDone:null, fillMsg:"", picked:null,
+            score:0, tries:0, streak:0, dec:null, sel:[], done:null, seenDec:false,
+            remaining:[], cursor:0, deckSize:0, deckDone:false };
+startDeck();
+const $ = id => document.getElementById(id);
+
+function onScore(ok){
+  S.tries++;
+  if (ok){ S.score++; S.streak++; } else S.streak = 0;
+  drawStats();
+}
+function drawProgress(){
+  const wrap = $("deck-progress");
+  if (!wrap) return;
+  wrap.hidden = S.qt === "dec";             /* the decode drill has no deck */
+  if (wrap.hidden) return;
+  const done = S.deckSize - S.remaining.length;
+  const pct = S.deckSize ? Math.round(done / S.deckSize * 100) : 0;
+  const fill = $("deck-fill");
+  fill.style.width = pct + "%";
+  /* stretch the gradient so it spans the whole track, not just the filled part */
+  fill.style.backgroundSize = (pct > 0 ? 10000 / pct : 100) + "% 100%";
+  $("deck-label").textContent = done + " of " + S.deckSize + " " + poolNoun() + " complete";
+}
+function announce(msg){
+  const el = $("q-status");
+  if (el) el.textContent = msg || "";
+}
+function drawStats(){
+  $("st-score").textContent = S.score + "/" + S.tries;
+  drawProgress();
+  const st = $("st-streak");
+  st.textContent = S.streak;
+  st.classList.toggle("hot", S.streak >= 3);
+  $("st-acc").textContent = S.tries ? Math.round(100 * S.score / S.tries) + "%" : "–";
+}
+
+/* ---------------- deck complete ---------------- */
+function drawDone(){
+  const el = $("qarea");
+  const acc = S.tries ? Math.round(100 * S.score / S.tries) : 0;
+  el.innerHTML =
+    `<div class="qcard done-card">` +
+      `<p class="qsub">Deck complete</p>` +
+      `<p class="done-big">All ${S.deckSize} ${esc(poolNoun())} answered correctly.</p>` +
+      `<p class="done-sub">${S.score} right out of ${S.tries} attempts, ${acc}% accuracy.</p>` +
+    `</div>` +
+    `<div class="act-row"><button type="button" class="btn-primary" id="btn-again">Practice again</button></div>`;
+  announce("Deck complete. All " + S.deckSize + " " + poolNoun() + " answered correctly.");
+  const again = $("btn-again");
+  again.addEventListener("click", () => { startDeck(); drawStats(); drawQuiz(); });
+  again.focus();
+}
+
+/* ---------------- multiple choice (code-to-meaning and spot-the-fake) ---------------- */
+function drawQuiz(){
+  if (S.qt === "dec"){ drawDec(); return; }
+  if (S.deckDone){ drawDone(); return; }
+  if (S.qt === "fill"){ drawFill(); return; }
+  const el = $("qarea"), q = S.q, picked = S.picked, isFake = S.qt === "fake";
+  const okAt = i => isFake ? q.options[i].fake : q.options[i] === q.answer;
+  const status = i => picked === null ? "" : okAt(i) ? "correct" : i === picked ? "wrong" : "dim";
+  const face = o => isFake ? `<span class="cc">${esc(o.c)}</span> &mdash; ${esc(o.m)}` : esc(o);
+  let h = isFake
+    ? `<div class="qcard"><p class="qlead">${esc(q.sub)}</p></div>`
+    : `<div class="qcard"><p class="qsub">${esc(q.sub)}</p><div class="qglyph">${esc(q.prompt)}</div></div>`;
+  h += `<div class="choices">` + q.options.map((o, i) =>
+        `<button type="button" class="choice ${status(i)}" data-i="${i}"${picked !== null ? " disabled" : ""}>${face(o)}</button>`
+       ).join("") + `</div>`;
+  if (picked !== null){
+    const good = okAt(picked);
+    let msg;
+    if (isFake){
+      const p = q.options[picked];
+      msg = good
+        ? `Impostor found. <span class="say">${esc(q.host)}</span> is ${esc(q.hostM)}, and &ldquo;${esc(q.wrongM)}&rdquo; belongs to <span class="say">${esc(q.donor)}</span>.`
+        : `<span class="say">${esc(p.c)}</span> &mdash; ${esc(p.m)} is straight from the key. The impostor was <span class="say">${esc(q.host)}</span>: it means ${esc(q.hostM)}, while &ldquo;${esc(q.wrongM)}&rdquo; is <span class="say">${esc(q.donor)}</span>.`;
+    } else {
+      const stray = DATA.find(x => x[1] === q.options[picked] && x[1] !== q.answer);
+      msg = good
+        ? `Correct. <span class="say">${esc(q.code)}</span> &mdash; ${esc(q.answer)}.`
+        : `<span class="say">${esc(q.code)}</span> is ${esc(q.answer)}.` +
+          (stray ? ` You picked the meaning of <span class="say">${esc(stray[0])}</span>.` : ``);
+    }
+    h += `<div class="feedback ${good ? "good" : "bad"}">${msg}</div>`;
+    h += `<div class="act-row"><button type="button" class="btn-primary" id="btn-next">Next</button></div>`;
+    el.innerHTML = h;
+    announce(plain(msg));
+  } else {
+    el.innerHTML = h;
+    announce("");
+  }
+  el.querySelectorAll(".choice").forEach(b => b.addEventListener("click", () => {
+    if (S.picked !== null) return;
+    S.picked = Number(b.dataset.i);
+    const ok = okAt(S.picked);
+    markResult(ok);   /* before onScore: onScore redraws the progress bar */
+    onScore(ok);
+    drawQuiz();
+    const n = $("btn-next"); if (n) n.focus();   /* innerHTML swap drops focus to body */
+  }));
+  const nx = $("btn-next");
+  if (nx) nx.addEventListener("click", () => { newQuestion(); drawQuiz(); });
+}
+
+/* ---------------- type the code ---------------- */
+function drawFill(){
+  const el = $("qarea"), q = S.fill, done = S.fillDone;
+  let h = `<div class="qcard"><p class="qsub">Type the code</p><p class="qmean">${esc(q.meaning)}</p></div>`;
+  h += `<div class="fill-row">` +
+       `<label class="sr-only" for="fill-input">Code for: ${esc(q.meaning)}</label>` +
+       `<input id="fill-input" class="fill-input code${done === null ? "" : (done ? " correct" : " wrong")}" type="text" ` +
+       `autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" ` +
+       `placeholder="Your answer" value="${esc(S.typed)}"${done === null ? "" : " disabled"}>` +
+       (done === null ? `<button type="button" class="btn-primary" id="btn-check">Check</button>` : ``) +
+       `</div>`;
+  if (done !== null){
+    h += `<div class="feedback ${done ? "good" : "bad"}">${S.fillMsg}</div>`;
+    h += `<div class="act-row"><button type="button" class="btn-primary" id="btn-next-fill">Next</button></div>`;
+  }
+  el.innerHTML = h;
+  announce(done === null ? "" : plain(S.fillMsg));
+
+  const input = $("fill-input");
+  function submit(){
+    if (S.fillDone !== null) return;
+    const v = fillVerdict(input.value, q);
+    if (!normCode(input.value)) { announce(v.msg); input.focus(); return; }  /* empty: nudge, do not score */
+    S.typed = input.value;
+    S.fillDone = v.ok;
+    S.fillMsg = v.msg;
+    markResult(v.ok);   /* before onScore: onScore redraws the progress bar */
+    onScore(v.ok);
+    if (S.deckDone) { drawQuiz(); return; }
+    drawFill();
+    const n = $("btn-next-fill"); if (n) n.focus();
+  }
+  if (done === null){
+    input.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); submit(); } });
+    $("btn-check").addEventListener("click", submit);
+    input.focus();
+  } else {
+    $("btn-next-fill").addEventListener("click", () => {
+      newQuestion();
+      if (S.deckDone) { drawQuiz(); return; }
+      drawFill();
+      const i = $("fill-input"); if (i) i.focus();
+    });
+  }
+}
+
+/* ---------------- decode a METAR ---------------- */
+function drawDec(){
+  const el = $("qarea"), q = S.dec;
+  const wordOf = id => q.bank.find(b => b.id === id).w;
+  const slots = q.target.map((w, i) => {
+    const id = S.sel[i];
+    if (id === undefined) return `<span class="slot empty">&middot;&middot;&middot;</span>`;
+    const cls = S.done === null ? "pend" : (wordOf(id) === w ? "ok" : "bad");
+    return `<span class="slot ${cls}">${esc(wordOf(id))}</span>`;
+  }).join("");
+  const bank = q.bank.map(b => {
+    const used = S.sel.includes(b.id) || S.done !== null;
+    return `<button type="button" class="bankbtn" data-id="${b.id}"${used ? " disabled" : ""}>${esc(b.w)}</button>`;
+  }).join("");
+  let h = `<div class="qcard"><p class="qsub">Decode the letter codes in order &mdash; ignore the numbers</p>` +
+          `<div class="qglyph" style="letter-spacing:.08em;font-size:clamp(20px,5.5vw,32px)">${esc(q.label)}</div></div>` +
+          `<div class="slots">${slots}</div><div class="bank">${bank}</div>`;
+  if (S.done === null){
+    h += `<div class="act-row act-left"><button type="button" class="btn-secondary" id="btn-undo"${S.sel.length === 0 ? " disabled" : ""}>Undo last</button></div>`;
+  } else {
+    h += S.done
+      ? `<div class="feedback good">Decode correct.</div>`
+      : `<div class="feedback bad">Correct decode: <span class="say">${esc(q.target.join(" · "))}</span></div>`;
+    h += `<div class="act-row"><button type="button" class="btn-primary" id="btn-new">New METAR</button></div>`;
+  }
+  el.innerHTML = h;
+  if (S.done !== null) announce(S.done ? "Decode correct." : "Correct decode: " + q.target.join(", "));
+  el.querySelectorAll(".bankbtn").forEach(b => b.addEventListener("click", () => {
+    const id = Number(b.dataset.id);
+    if (S.done !== null || S.sel.includes(id)) return;
+    S.sel.push(id);
+    if (S.sel.length === q.target.length){
+      const ok = S.sel.map(wordOf).every((w, i) => w === q.target[i]);
+      S.done = ok;
+      onScore(ok);
+    }
+    drawDec();
+    const nxt = $("btn-new") || el.querySelector(".bankbtn:not([disabled])");
+    if (nxt) nxt.focus();                        /* innerHTML swap drops focus to body */
+  }));
+  const un = $("btn-undo");
+  if (un) un.addEventListener("click", () => { if (S.done === null && S.sel.length){ S.sel.pop(); drawDec(); const u = $("btn-undo"); if (u && !u.disabled) u.focus(); } });
+  const nw = $("btn-new");
+  if (nw) nw.addEventListener("click", () => { S.dec = genDec(); S.sel = []; S.done = null; drawDec(); });
+}
+
+/* ---------------- reference ---------------- */
+/* Groups follow the card's own order: the four symbols up front, then the
+   letters. The filter matches codes and meanings alike, so "snow" pulls
+   SN, SG, SP, SNINCR and SW together on one screen. */
+function buildRef(query){
+  const q = (query || "").trim().toLowerCase();
+  const cell = ([c, w]) =>
+    `<li class="ref-cell"><span class="ref-char">${esc(c)}</span><span class="ref-word">${esc(w)}</span></li>`;
+  let html = "", cells = "", cur = null, shown = 0, firstHead = true;
+  const flush = () => {
+    if (!cells) return;
+    html += `<h2 class="group-head"${firstHead ? ` style="margin-top:14px"` : ``}>${cur}</h2>` +
+            `<ul class="ref-grid" role="list">${cells}</ul>`;
+    firstHead = false;
+    cells = "";
+  };
+  for (const item of DATA){
+    if (q && !item[0].toLowerCase().includes(q) && !item[1].toLowerCase().includes(q)) continue;
+    const kc = keyChar(item[0]);
+    const g = /[a-z]/.test(kc) ? kc.toUpperCase() : "Symbols";
+    if (g !== cur){ flush(); cur = g; }
+    cells += cell(item);
+    shown++;
+  }
+  flush();
+  if (!shown) html = `<p class="note" style="margin-top:14px">No entries match &ldquo;${esc(query)}&rdquo;. The filter checks codes and meanings alike.</p>`;
+  $("ref-list").innerHTML = html;
+  $("ref-count").textContent = shown + " of " + DATA.length;
+}
+
+/* ---------------- wiring ---------------- */
+function setPressed(group, el){
+  group.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b === el)));
+}
+$("views").addEventListener("click", e => {
+  const b = e.target.closest("button[data-view]");
+  if (!b) return;
+  setPressed($("views"), b);
+  const quiz = b.dataset.view === "quiz";
+  $("view-ref").hidden = quiz;
+  $("view-quiz").hidden = !quiz;
+  $("practice-controls").hidden = !quiz;
+});
+$("modes").addEventListener("click", e => {
+  const b = e.target.closest("button[data-qt]");
+  if (!b) return;
+  setPressed($("modes"), b);
+  S.qt = b.dataset.qt;
+  /* the decode drill always mixes weather and sky codes, so the pool and
+     order filters do not apply to it */
+  $("pool-block").hidden = S.qt === "dec";
+  if (S.qt === "dec"){ S.dec = genDec(S.seenDec ? null : SEED_DEC); S.seenDec = true; S.sel = []; S.done = null; }
+  else startDeck();
+  drawStats();
+  drawQuiz();
+});
+
+$("btn-reset").addEventListener("click", () => {
+  S.score = 0; S.tries = 0; S.streak = 0;
+  if (S.qt === "dec"){ S.dec = genDec(); S.sel = []; S.done = null; }
+  else startDeck();
+  drawStats();
+  drawQuiz();
+  announce("Started over.");
+});
+
+$("pools").addEventListener("click", e => {
+  const b = e.target.closest("button[data-pool]");
+  if (!b || S.qt === "dec") return;
+  setPressed($("pools"), b);
+  S.pool = b.dataset.pool;
+  startDeck();
+  drawStats();
+  drawQuiz();
+});
+
+$("orders").addEventListener("click", e => {
+  const b = e.target.closest("button[data-order]");
+  if (!b || S.qt === "dec") return;
+  setPressed($("orders"), b);
+  S.order = b.dataset.order;
+  startDeck();
+  drawStats();
+  drawQuiz();
+});
+
+$("ref-filter").addEventListener("input", e => buildRef(e.target.value));
+
+
+buildRef("");
+drawStats();
+drawQuiz();
+</script>
+<script src="../assets/site.js?v=2"></script>
+</body>
+</html>
