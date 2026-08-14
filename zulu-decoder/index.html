@@ -556,7 +556,7 @@ main { padding-bottom: 26px; }  /* board margin alone left only 14px above the f
         <span class="zp-key"><span class="zp-swatch sw-miss"></span>coming back</span>
         <span class="zp-key"><span class="zp-swatch sw-cur"></span>current</span>
       </span>
-      <span class="zp-line"><span id="zp-scoreline">score 0/0 &middot; streak 0</span><button type="button" class="btn-secondary btn-sm" id="zp-reset">Start over</button></span>
+      <span class="zp-line"><span id="zp-scoreline">score 0/0 &middot; streak 0 &middot; accuracy &ndash;</span><button type="button" class="btn-secondary btn-sm" id="zp-reset">Start over</button></span>
     </div>
     <div id="zp-qarea"></div>
     <p id="zp-status" role="status" class="sr-only"></p>
@@ -959,7 +959,7 @@ function drawHUD(){
   }
   $("zp-count").textContent = mastered;
   $("zp-scoreline").textContent = "score " + S.score + "/" + S.tries + " · streak " + S.streak +
-    (S.tries ? " · " + Math.round(100 * S.score / S.tries) + "%" : "");
+    " · accuracy " + (S.tries ? Math.round(100 * S.score / S.tries) + "%" : "–");
 }
 function onScore(ok){
   S.tries++;
