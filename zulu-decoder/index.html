@@ -348,14 +348,21 @@ main { padding-bottom: 26px; }  /* board margin alone left only 14px above the f
   .hnum { font-family: var(--mono); font-size: 10px; color: var(--ink-soft); text-align: center; }
   @media (max-width: 560px){ .zp-hours { grid-template-columns: repeat(12, 1fr); row-gap: 8px; } }
 
-  .zp-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+  .zp-hud { border: 1px solid var(--rule); border-radius: 10px; background: color-mix(in srgb, var(--wash) 40%, var(--surface)); padding: 14px 16px 12px; }
+  .zp-hud-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px 16px; flex-wrap: wrap; margin-top: 12px; border-top: 1px solid var(--rule); padding-top: 10px; }
+  .zp-stats { display: inline-flex; gap: 18px; flex-wrap: wrap; }
+  .zp-stat { display: inline-flex; align-items: baseline; gap: 6px; }
+  .zlab { font-family: var(--sans); font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+  .zval { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--brand); }
+  .zval.hot { color: #8A5510; }
+  [data-theme="dark"] .zval.hot { color: #E8B464; }
   .zp-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--ink-soft); }
   .zp-key { display: inline-flex; align-items: center; gap: 5px; }
   .zp-swatch { display: inline-block; width: 9px; height: 9px; border-radius: 50%; }
   .sw-done { background: var(--ok-line); }
   .sw-miss { background: var(--ifr); }
   .sw-cur { background: var(--zp-cur); }
-  .zp-line { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
+  .reset-row { display: flex; justify-content: flex-end; margin: 10px 0 0; }
 
   /* the question and its answers, side by side; stacked on phones */
   .zp-duo { display: flex; align-items: stretch; gap: 16px; margin: 16px 0 0; }
@@ -556,18 +563,23 @@ main { padding-bottom: 26px; }  /* board margin alone left only 14px above the f
   </div>
 
   <section id="view-practice" class="wrap" hidden aria-label="Conversion practice">
-    <div class="zp-prog">
+    <div class="zp-hud">
       <div class="zp-prog-head"><span class="zp-prog-cap">Round progress &mdash; every hour, answered right at least once</span><span class="zp-count"><b id="zp-count">0</b> of 24 hours</span></div>
       <div class="zp-hours" id="zp-hours"></div>
+      <div class="zp-hud-foot">
+        <span class="zp-stats">
+          <span class="zp-stat"><span class="zlab">Score</span><span class="zval" id="zp-score">0/0</span></span>
+          <span class="zp-stat"><span class="zlab">Streak</span><span class="zval" id="zp-streak">0</span></span>
+          <span class="zp-stat"><span class="zlab">Accuracy</span><span class="zval" id="zp-acc">&ndash;</span></span>
+        </span>
+        <span class="zp-legend">
+          <span class="zp-key"><span class="zp-swatch sw-done"></span>mastered</span>
+          <span class="zp-key"><span class="zp-swatch sw-miss"></span>coming back</span>
+          <span class="zp-key"><span class="zp-swatch sw-cur"></span>current</span>
+        </span>
+      </div>
     </div>
-    <div class="zp-meta">
-      <span class="zp-legend">
-        <span class="zp-key"><span class="zp-swatch sw-done"></span>mastered</span>
-        <span class="zp-key"><span class="zp-swatch sw-miss"></span>coming back</span>
-        <span class="zp-key"><span class="zp-swatch sw-cur"></span>current</span>
-      </span>
-      <span class="zp-line"><span id="zp-scoreline">score 0/0 &middot; streak 0 &middot; accuracy &ndash;</span><button type="button" class="btn-secondary btn-sm" id="zp-reset">Start over</button></span>
-    </div>
+    <div class="reset-row"><button type="button" class="btn-secondary btn-sm" id="zp-reset">Start over</button></div>
     <div id="zp-qarea"></div>
     <p id="zp-status" role="status" class="sr-only"></p>
   </section>
@@ -968,8 +980,11 @@ function drawHUD(){
     HCELLS[h].className = cls;
   }
   $("zp-count").textContent = mastered;
-  $("zp-scoreline").textContent = "score " + S.score + "/" + S.tries + " · streak " + S.streak +
-    " · accuracy " + (S.tries ? Math.round(100 * S.score / S.tries) + "%" : "–");
+  $("zp-score").textContent = S.score + "/" + S.tries;
+  var st = $("zp-streak");
+  st.textContent = S.streak;
+  st.classList.toggle("hot", S.streak >= 3);
+  $("zp-acc").textContent = S.tries ? Math.round(100 * S.score / S.tries) + "%" : "–";
 }
 function onScore(ok){
   S.tries++;
