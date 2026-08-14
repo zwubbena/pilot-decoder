@@ -109,9 +109,6 @@ main a:hover { color: var(--brand-deep); }
 .masthead p { margin: 0; max-width: 56ch; color: var(--ink-soft); font-size: 16px; }
 .masthead-desc { margin-top: 10px !important; font-size: 14px !important; }
 .eyebrow { font-family: var(--sans); font-size: clamp(24px, 5vw, 31px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; color: var(--ink); margin: 0 0 10px; }
-.intro-note { margin: 0; font-size: 15px; color: var(--ink); max-width: 62ch; line-height: 1.6; }
-.intro-note a { color: var(--mid); text-decoration: underline; text-underline-offset: 3px; }
-.intro-note a:hover { color: var(--brand-deep); }
 
 /* Footer */
 footer { flex-shrink: 0; background: var(--wash); border-top: 1px solid var(--rule); padding: 28px 0 0; font-size: 13px; color: var(--ink-soft); margin-top: auto; }
@@ -175,14 +172,6 @@ input[type="range"] { accent-color: var(--mid); }
 
 /* Cards */
 .card { background: var(--surface); border: 1px solid var(--card-bd); border-radius: 10px; padding: 14px 16px; }
-.tool-list { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.tool-card { position: relative; display: block; border: 1px solid var(--card-bd); border-radius: 10px; padding: 9px 44px 10px 14px; text-decoration: none; background: var(--surface); transition: border-color .15s ease, background .15s ease, box-shadow .15s ease; }
-.tool-card::after { content: "\2192"; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--ifr); transition: transform .15s ease; }
-.tool-card:hover { border-color: var(--mid); background: color-mix(in srgb, var(--wash) 45%, var(--surface)); box-shadow: 0 6px 16px var(--btn-shadow); }
-.tool-card:hover::after { transform: translateY(-50%) translateX(3px); }
-.tool-card:focus-visible { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
-.tool-name { font-family: var(--sans); font-weight: 700; font-size: 15.5px; color: var(--brand); margin: 0 0 1px; }
-.tool-desc { margin: 0; font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
 
 /* Framed figure (charts, instruments, diagrams) */
 .chart-frame { margin-top: 18px; border: 1px solid var(--rule); border-radius: 8px; padding: 14px 10px 8px; background: var(--surface); overflow-x: hidden; }
@@ -197,14 +186,7 @@ input[type="range"] { accent-color: var(--mid); }
 .summary-list li::before { content: ""; position: absolute; left: 2px; top: 15px; width: 7px; height: 7px; border-radius: 50%; background: var(--mid); }
 .note-line { margin: 10px 0 0; padding-left: 20px; list-style: disc outside; font-size: 12.5px; font-style: italic; color: var(--ink-soft); line-height: 1.5; }
 .note-line li { display: list-item; margin: 1px 0; }
-.res-list { list-style: disc outside; margin: 10px 0 0; padding: 0 0 0 22px; }
-.res-list li { padding: 4px 0; font-size: 14px; line-height: 1.55; }
-.res-list a { font-weight: 600; color: var(--ink); text-decoration: none; }
-.res-list a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .res-desc { color: var(--ink-soft); }
-.res-sublabel { font-family: var(--sans); font-size: 14.5px; font-weight: 700; color: var(--ink-soft); margin: 20px 0 0; }
-.res-sublabel:first-of-type { margin-top: 14px; }
-.res-sublabel + .res-list { margin-top: 4px; }
 
 /* Source hint under input panels */
 .metar-source-hint { margin: 14px 0 0; font-size: 13.5px; color: var(--ink-soft); font-family: var(--sans); }
@@ -218,5 +200,5 @@ input[type="range"] { accent-color: var(--mid); }
 
 /* ---------- MOTION ---------- */
 @media (prefers-reduced-motion: reduce) {
-  #theme-btn .knob, .tool-card, .tool-card::after, .btn-primary { transition: none; }
+  #theme-btn .knob, .btn-primary { transition: none; }
 }
