@@ -327,32 +327,41 @@ main { padding-bottom: 26px; }  /* board margin alone left only 14px above the f
   .switch-row[hidden] { display: none; }        /* display:flex would defeat [hidden] */
   .switch-row + .switch-row { margin-top: 12px; }
   .panel-label.sub { margin-top: 16px; }
-  #view-practice { padding-top: 8px; padding-bottom: 44px; }
+  #view-practice { padding-top: 18px; padding-bottom: 44px; }
   #view-practice[hidden] { display: none; }
 
-  .deck-progress { margin: 14px 0 0; }
-  .deck-progress[hidden] { display: none; }
-  .deck-bar { height: 6px; border-radius: 999px; background: var(--wash); border: 1px solid var(--rule); overflow: hidden; }
-  /* hero rule, revealed as the round advances; backgroundSize set from JS */
-  .deck-bar span { display: block; height: 100%; width: 0;
-    background-image: linear-gradient(90deg, #16294f 0%, #3a5ca8 45%, #b3273a 100%);
-    background-repeat: no-repeat; transition: width .25s ease; }
-  [data-theme="dark"] .deck-bar span {
-    background-image: linear-gradient(90deg, #3a5ca8 0%, #6f86cf 45%, #ee8a96 100%); }
-  .deck-label { margin: 6px 0 0; font-family: var(--mono); font-size: 11.5px; letter-spacing: .05em; color: var(--ink-soft); text-align: right; }
+  /* round progress: one segment per hour of the day, numbered */
+  .zp-prog-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .zp-prog-cap { font-family: var(--sans); font-size: 13px; color: var(--ink-soft); }
+  .zp-count { font-family: var(--mono); font-size: 13px; color: var(--ink-soft); }
+  .zp-count b { font-size: 20px; font-weight: 700; color: var(--ink); }
+  .zp-hours { display: grid; grid-template-columns: repeat(24, 1fr); gap: 3px; margin-top: 6px; }
+  .hcell { display: flex; flex-direction: column; gap: 3px; }
+  .seg { display: block; height: 14px; border-radius: 3px; background: var(--wash); border: 1px solid var(--rule); }
+  .seg.done { background: var(--ok-line); border-color: var(--ok-line); }
+  .seg.miss { background: var(--ifr); border-color: var(--ifr); }
+  .seg.cur { background: var(--brand); border-color: var(--brand); }
+  .hnum { font-family: var(--mono); font-size: 10px; color: var(--ink-soft); text-align: center; }
+  @media (max-width: 560px){ .zp-hours { grid-template-columns: repeat(12, 1fr); row-gap: 8px; } }
 
-  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0 0; }
-  .stat { border: 1px solid var(--rule); border-radius: 8px; background: color-mix(in srgb, var(--wash) 40%, var(--surface)); padding: 7px 6px; text-align: center; }
-  .stat .lab { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
-  .stat .val { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--brand); }
-  .stat .val.hot { color: #8A5510; }
-  [data-theme="dark"] .stat .val.hot { color: #E8B464; }
-  .reset-row { display: flex; justify-content: flex-end; margin: 8px 0 0; }
+  .zp-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+  .zp-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--ink-soft); }
+  .zp-key { display: inline-flex; align-items: center; gap: 5px; }
+  .zp-swatch { display: inline-block; width: 9px; height: 9px; border-radius: 2px; }
+  .sw-done { background: var(--ok-line); }
+  .sw-miss { background: var(--ifr); }
+  .sw-cur { background: var(--brand); }
+  .zp-line { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
 
-  .qcard { margin: 14px 0 0; border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 10px; background: color-mix(in srgb, var(--wash) 55%, var(--surface)); padding: 16px 18px; text-align: center; }
+  /* the question and its answers, side by side; stacked on phones */
+  .zp-duo { display: flex; align-items: stretch; gap: 16px; margin: 16px 0 0; }
+  .zp-duo .qcard { flex: 1 1 55%; margin: 0; display: flex; flex-direction: column; justify-content: center; }
+  .zp-ans { flex: 1 1 45%; display: flex; flex-direction: column; gap: 8px; justify-content: center; min-width: 0; }
+  @media (max-width: 640px){ .zp-duo { flex-direction: column; } }
+
+  .qcard { border: 1px solid var(--rule); border-left: 4px solid var(--brand); border-radius: 10px; background: color-mix(in srgb, var(--wash) 55%, var(--surface)); padding: 24px 18px; text-align: center; }
   .qsub { margin: 0 0 6px; font-family: var(--sans); font-size: 11.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
-  .qglyph { font-family: var(--mono); font-size: clamp(28px, 7vw, 44px); font-weight: 700; color: var(--ink); letter-spacing: .04em; }
-  .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 12px 0 0; }
+  .qglyph { font-family: var(--mono); font-size: clamp(30px, 7vw, 48px); font-weight: 700; color: var(--ink); letter-spacing: .04em; }
   .choice { font-family: var(--mono); font-size: 16px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 13px 10px; cursor: pointer; touch-action: manipulation; }
   .choice:hover { border-color: var(--mid); }
   .choice.correct { background: var(--ok-bg); border-color: var(--ok-line); color: var(--ok-text); }
@@ -365,16 +374,16 @@ main { padding-bottom: 26px; }  /* board margin alone left only 14px above the f
   .feedback .say { font-family: var(--mono); font-weight: 700; }
   .act-row { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
   .act-row .btn-primary { flex: 1 1 100%; padding: 13px 16px; font-size: 15px; }
-  .fill-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
-  .fill-input { flex: 1 1 200px; font-family: var(--mono); font-size: 16px; color: var(--input-ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 12px 14px; min-width: 0; }
+  .fill-input { width: 100%; font-family: var(--mono); font-size: 16px; color: var(--input-ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 12px 14px; min-width: 0; }
   .fill-input::placeholder { color: var(--placeholder); }
   .fill-input:focus-visible { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
   .fill-input.correct { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok-text); }
   .fill-input.wrong { border-color: var(--err-fg); background: var(--err-bg); color: var(--err-fg); }
-  .done-card { text-align: center; }
+  .zp-ans .btn-primary { padding: 12px 16px; font-size: 15px; }
+  .done-card { text-align: center; margin-top: 16px; }
   .done-card .done-big { font-family: var(--sans); font-size: 20px; font-weight: 700; color: var(--brand); margin: 0 0 6px; }
   .done-card .done-sub { font-size: 14.5px; color: var(--ink); margin: 0; }
-  .hint { margin: 10px 0 0; font-size: 13px; color: var(--ink-soft); }
+  .hint { margin: 0; font-size: 13px; color: var(--ink-soft); }
 </style>
 </head>
 <body>
@@ -533,17 +542,17 @@ main { padding-bottom: 26px; }  /* board margin alone left only 14px above the f
   </div>
 
   <section id="view-practice" class="wrap" hidden aria-label="Conversion practice">
-    <div class="deck-progress">
-      <div class="deck-bar"><span id="zp-fill"></span></div>
-      <p class="deck-label" id="zp-decklabel"></p>
+    <div class="zp-prog">
+      <div class="zp-prog-head"><span class="zp-prog-cap">Round progress &mdash; every hour, answered right at least once</span><span class="zp-count"><b id="zp-count">0</b> of 24 hours</span></div>
+      <div class="zp-hours" id="zp-hours"></div>
     </div>
-    <div class="stat-row">
-      <div class="stat"><div class="lab">Score</div><div class="val" id="zp-score">0/0</div></div>
-      <div class="stat"><div class="lab">Streak</div><div class="val" id="zp-streak">0</div></div>
-      <div class="stat"><div class="lab">Accuracy</div><div class="val" id="zp-acc">&ndash;</div></div>
-    </div>
-    <div class="reset-row">
-      <button type="button" class="btn-secondary btn-sm" id="zp-reset">Start over</button>
+    <div class="zp-meta">
+      <span class="zp-legend">
+        <span class="zp-key"><span class="zp-swatch sw-done"></span>mastered</span>
+        <span class="zp-key"><span class="zp-swatch sw-miss"></span>coming back</span>
+        <span class="zp-key"><span class="zp-swatch sw-cur"></span>current</span>
+      </span>
+      <span class="zp-line"><span id="zp-scoreline">score 0/0 &middot; streak 0</span><button type="button" class="btn-secondary btn-sm" id="zp-reset">Start over</button></span>
     </div>
     <div id="zp-qarea"></div>
     <p id="zp-status" role="status" class="sr-only"></p>
@@ -786,10 +795,11 @@ main { padding-bottom: 26px; }  /* board margin alone left only 14px above the f
 <script>
 /* ============================================================
    Practice: 24-hour <-> 12-hour conversion drills.
-   A round is a deck of 10 times. Answer one correctly and it
-   leaves the deck; miss it and it comes back later in the pass,
-   so a round ends only when every time has been converted right.
-   Self-contained IIFE; ids are unique to the practice view.
+   A round covers every hour of the day exactly once, shuffled.
+   Miss one and it circles back until answered right, so finishing
+   a round means all 24 conversions were made correctly even if
+   accuracy is lower. The hour strip up top shows each hour's
+   state: mastered, missed and coming back, or up right now.
    ============================================================ */
 (function(){
 "use strict";
@@ -803,8 +813,6 @@ function rand(n){ return Math.floor(Math.random() * n); }
 function pick(a){ return a[rand(a.length)]; }
 function shuffle(a){ var b = a.slice(), i, j, t; for (i = b.length - 1; i > 0; i--){ j = rand(i + 1); t = b[i]; b[i] = b[j]; b[j] = t; } return b; }
 
-/* ---- answer normalizers ---- */
-/* "6:30 PM", "630pm", "06.30 p.m." all become "630pm"; "noon"/"midnight" pass through */
 function norm12(v){
   var t = String(v).toLowerCase().replace(/[\s.]/g, "").replace(/:/g, "");
   if (t === "noon" || t === "midnight") return t;
@@ -815,7 +823,6 @@ function norm12(v){
   return h + mm + per;
 }
 function key12(h, m){ return hr12(h) + pad2(m) + (h < 12 ? "am" : "pm"); }
-/* "18:30", "1830z", "630" (as 0630) all become "1830" */
 function norm24(v){
   var t = String(v).toLowerCase().replace(/[\s:]/g, "").replace(/z$/, "");
   if (!/^\d{3,4}$/.test(t)) return null;
@@ -824,9 +831,7 @@ function norm24(v){
   if (h > 23 || m > 59) return null;
   return t;
 }
-
-/* ---- what a typed or picked answer actually means, for the feedback line ---- */
-function mean12(k){    /* "630pm" -> {h:18,m:30} */
+function mean12(k){
   if (k === "noon") return { h: 12, m: 0 };
   if (k === "midnight") return { h: 0, m: 0 };
   var m = k.match(/^(\d{1,2})(\d{2})(am|pm)$/); if (!m) return null;
@@ -835,10 +840,6 @@ function mean12(k){    /* "630pm" -> {h:18,m:30} */
 }
 function mean24(k){ return { h: parseInt(k.slice(0, 2), 10), m: parseInt(k.slice(2), 10) }; }
 
-/* ---- a round covers every hour of the day exactly once ---- */
-/* One question per hour, 0000 through 2300 with varied minutes, shuffled.
-   Miss one and it circles back until answered right, so finishing a round
-   means all 24 conversions were made correctly even if accuracy is lower. */
 var MINS = [0, 15, 30, 45];
 function buildRound(){
   var out = [], h, m;
@@ -849,15 +850,14 @@ function buildRound(){
   return shuffle(out);
 }
 
-/* ---- distractors: the mistakes people actually make ---- */
 function opts12(t){
   var right = fmt12(t.h, t.m), set = {}, out = [right], cands = [];
   set[right] = 1;
-  cands.push(fmt12((t.h + 12) % 24, t.m));                 /* AM/PM flip */
-  if (t.h >= 13 && t.h <= 21) cands.push(fmt12(t.h - 10, t.m)); /* 1830 read as 8:30 */
-  cands.push(fmt12((t.h + 1) % 24, t.m));                  /* off by one hour */
+  cands.push(fmt12((t.h + 12) % 24, t.m));
+  if (t.h >= 13 && t.h <= 21) cands.push(fmt12(t.h - 10, t.m));
+  cands.push(fmt12((t.h + 1) % 24, t.m));
   cands.push(fmt12((t.h + 23) % 24, t.m));
-  cands.push(fmt12(t.h, (t.m + 30) % 60));                 /* minutes slip */
+  cands.push(fmt12(t.h, (t.m + 30) % 60));
   var i, c;
   cands = shuffle(cands);
   for (i = 0; i < cands.length && out.length < 3; i++){
@@ -869,7 +869,7 @@ function opts12(t){
 function opts24(t){
   var right = fmt24(t.h, t.m), set = {}, out = [right], cands = [];
   set[right] = 1;
-  cands.push(fmt24((t.h + 12) % 24, t.m));                 /* forgot the +12 (or added it) */
+  cands.push(fmt24((t.h + 12) % 24, t.m));
   cands.push(fmt24((t.h + 1) % 24, t.m));
   cands.push(fmt24((t.h + 23) % 24, t.m));
   cands.push(fmt24(t.h, (t.m + 30) % 60));
@@ -882,19 +882,19 @@ function opts24(t){
   return shuffle(out);
 }
 
-/* ---- state ---- */
 var S = { dir: "to12", ans: "mcq",
-          deck: [], cursor: 0, size: 0, done: false,
+          deck: [], cursor: 0, size: 0, done: false, hourState: {},
           score: 0, tries: 0, streak: 0,
           q: null, picked: null, typed: "", typeDone: null, typeMsg: "" };
 
 function startRound(){
-  S.deck = buildRound(); S.cursor = 0; S.size = S.deck.length; S.done = false;
+  S.deck = buildRound(); S.cursor = 0; S.size = S.deck.length; S.done = false; S.hourState = {};
   newQuestion();
 }
 function current(){ return S.deck.length ? S.deck[S.cursor % S.deck.length] : null; }
 function markResult(ok){
   var t = current(); if (!t) return;
+  S.hourState[t.h] = ok ? "done" : "miss";
   if (ok) S.deck.splice(S.deck.indexOf(t), 1);
   else S.cursor++;
   if (!S.deck.length) S.done = true;
@@ -911,7 +911,6 @@ function newQuestion(){
   };
 }
 
-/* ---- feedback: name what the wrong answer would have been ---- */
 function explain(pickedStr){
   var t = S.q.t, msg;
   if (S.dir === "to12"){
@@ -928,28 +927,40 @@ function explain(pickedStr){
   return msg;
 }
 
-/* ---- rendering ---- */
 function announce(m){ var el = $("zp-status"); if (el) el.textContent = m || ""; }
 function plain(h){ return String(h).replace(/<[^>]*>/g, ""); }
-function drawProgress(){
-  var doneN = S.size - S.deck.length, pct = S.size ? Math.round(doneN / S.size * 100) : 0;
-  var fill = $("zp-fill");
-  fill.style.width = pct + "%";
-  fill.style.backgroundSize = (pct > 0 ? 10000 / pct : 100) + "% 100%";
-  $("zp-decklabel").textContent = doneN + " of " + S.size + " times converted";
-}
-function drawStats(){
-  $("zp-score").textContent = S.score + "/" + S.tries;
-  var st = $("zp-streak");
-  st.textContent = S.streak;
-  st.classList.toggle("hot", S.streak >= 3);
-  $("zp-acc").textContent = S.tries ? Math.round(100 * S.score / S.tries) + "%" : "–";
-  drawProgress();
+
+/* the hour strip: one segment per hour, built once, recolored on every draw */
+var HCELLS = [];
+(function(){
+  var host = $("zp-hours"), h, cell, seg, num;
+  for (h = 0; h < 24; h++){
+    cell = document.createElement("span"); cell.className = "hcell";
+    seg = document.createElement("span"); seg.className = "seg";
+    num = document.createElement("span"); num.className = "hnum"; num.textContent = pad2(h);
+    cell.appendChild(seg); cell.appendChild(num); host.appendChild(cell);
+    HCELLS.push(seg);
+  }
+})();
+function drawHUD(){
+  var mastered = 0, h, st, cls;
+  var cur = (!S.done && current()) ? current().h : -1;
+  for (h = 0; h < 24; h++){
+    st = S.hourState[h];
+    cls = "seg";
+    if (st === "done"){ cls += " done"; mastered++; }
+    else if (h === cur) cls += " cur";
+    else if (st === "miss") cls += " miss";
+    HCELLS[h].className = cls;
+  }
+  $("zp-count").textContent = mastered;
+  $("zp-scoreline").textContent = "score " + S.score + "/" + S.tries + " · streak " + S.streak +
+    (S.tries ? " · " + Math.round(100 * S.score / S.tries) + "%" : "");
 }
 function onScore(ok){
   S.tries++;
   if (ok){ S.score++; S.streak++; } else S.streak = 0;
-  drawStats();
+  drawHUD();
 }
 function drawDone(){
   var el = $("zp-qarea"), acc = S.tries ? Math.round(100 * S.score / S.tries) : 0;
@@ -960,9 +971,9 @@ function drawDone(){
       '<p class="done-sub">Every hour of the clock, answered right at least once &mdash; ' + S.score + ' right out of ' + S.tries + ' attempts, ' + acc + '% accuracy.</p>' +
     '</div>' +
     '<div class="act-row"><button type="button" class="btn-primary" id="zp-again">Practice again</button></div>';
-  announce("Round complete.");
+  announce("Round complete. All " + S.size + " hours converted correctly.");
   var again = $("zp-again");
-  again.addEventListener("click", function(){ startRound(); drawStats(); draw(); });
+  again.addEventListener("click", function(){ startRound(); drawHUD(); draw(); });
   again.focus();
 }
 function subLine(){
@@ -970,12 +981,13 @@ function subLine(){
 }
 function drawMCQ(){
   var el = $("zp-qarea"), q = S.q, picked = S.picked;
-  var h = '<div class="qcard"><p class="qsub">' + subLine() + '</p><div class="qglyph">' + esc(q.prompt) + '</div></div>';
-  h += '<div class="choices">' + q.options.map(function(o, i){
-    var cls = "";
-    if (picked !== null) cls = o === q.answer ? "correct" : (i === picked ? "wrong" : "dim");
-    return '<button type="button" class="choice ' + cls + '" data-i="' + i + '"' + (picked !== null ? " disabled" : "") + '>' + esc(o) + '</button>';
-  }).join("") + '</div>';
+  var h = '<div class="zp-duo">' +
+          '<div class="qcard"><p class="qsub">' + subLine() + '</p><div class="qglyph">' + esc(q.prompt) + '</div></div>' +
+          '<div class="zp-ans">' + q.options.map(function(o, i){
+            var cls = "";
+            if (picked !== null) cls = o === q.answer ? " correct" : (i === picked ? " wrong" : " dim");
+            return '<button type="button" class="choice' + cls + '" data-i="' + i + '"' + (picked !== null ? " disabled" : "") + '>' + esc(o) + '</button>';
+          }).join("") + '</div></div>';
   if (picked !== null){
     var good = q.options[picked] === q.answer;
     var msg = good ? 'Correct. <span class="say">' + esc(q.prompt) + '</span> is <span class="say">' + esc(q.answer) + '</span>.' : explain(q.options[picked]);
@@ -989,41 +1001,44 @@ function drawMCQ(){
       if (S.picked !== null) return;
       S.picked = Number(b.dataset.i);
       var ok = S.q.options[S.picked] === S.q.answer;
-      markResult(ok);   /* before onScore: onScore redraws the progress bar */
+      markResult(ok);   /* before onScore: onScore recolors the hour strip */
       onScore(ok);
       draw();
       var n = $("zp-next"); if (n) n.focus();
     });
   });
   var nx = $("zp-next");
-  if (nx) nx.addEventListener("click", function(){ newQuestion(); draw(); });
+  if (nx) nx.addEventListener("click", function(){ newQuestion(); drawHUD(); draw(); });
 }
 function typeVerdict(raw){
   var t = S.q.t;
   if (S.dir === "to12"){
     var k = norm12(raw);
-    if (k === null) return { ok: null, msg: 'Use a form like <span class="say">6:30 PM</span> — the AM or PM matters.' };
+    if (k === null) return { ok: null, msg: 'Use a form like 6:30 PM &mdash; the AM or PM matters.' };
     var want = key12(t.h, t.m);
     var okNoon = (k === "noon" && t.h === 12 && t.m === 0) || (k === "midnight" && t.h === 0 && t.m === 0);
     if (k === want || okNoon) return { ok: true, msg: 'Correct. <span class="say">' + esc(S.q.prompt) + '</span> is <span class="say">' + esc(S.q.answer) + '</span>.' };
     return { ok: false, msg: explain(raw) };
   }
   var k2 = norm24(raw);
-  if (k2 === null) return { ok: null, msg: 'Use four digits, like <span class="say">1830</span>.' };
+  if (k2 === null) return { ok: null, msg: 'Use four digits, like 1830.' };
   if (k2 === fmt24(t.h, t.m)) return { ok: true, msg: 'Correct. <span class="say">' + esc(S.q.prompt) + '</span> is <span class="say">' + esc(S.q.answer) + '</span>.' };
   return { ok: false, msg: explain(raw) };
 }
 function drawType(){
   var el = $("zp-qarea"), q = S.q, done = S.typeDone;
-  var h = '<div class="qcard"><p class="qsub">' + subLine() + '</p><div class="qglyph">' + esc(q.prompt) + '</div></div>';
-  h += '<div class="fill-row">' +
-       '<label class="sr-only" for="zp-input">' + subLine() + ' for ' + esc(q.prompt) + '</label>' +
-       '<input id="zp-input" class="fill-input' + (done === null ? "" : (done ? " correct" : " wrong")) + '" type="text" ' +
-       'autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" ' +
-       'placeholder="' + (S.dir === "to12" ? "6:30 PM" : "1830") + '" value="' + esc(S.typed) + '"' + (done === null ? "" : " disabled") + '>' +
-       (done === null ? '<button type="button" class="btn-primary" id="zp-check" style="flex:0 1 auto">Check</button>' : '') +
-       '</div>';
-  if (done === null) h += '<p class="hint">' + (S.dir === "to12" ? "Formats like 6:30 PM or 630pm both count." : "18:30, 1830 and 1830Z all count.") + '</p>';
+  var h = '<div class="zp-duo">' +
+          '<div class="qcard"><p class="qsub">' + subLine() + '</p><div class="qglyph">' + esc(q.prompt) + '</div></div>' +
+          '<div class="zp-ans">' +
+          '<label class="sr-only" for="zp-input">' + subLine() + ' for ' + esc(q.prompt) + '</label>' +
+          '<input id="zp-input" class="fill-input' + (done === null ? "" : (done ? " correct" : " wrong")) + '" type="text" ' +
+          'autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" ' +
+          'placeholder="' + (S.dir === "to12" ? "6:30 PM" : "1830") + '" value="' + esc(S.typed) + '"' + (done === null ? "" : " disabled") + '>' +
+          (done === null
+            ? '<button type="button" class="btn-primary" id="zp-check">Check</button>' +
+              '<p class="hint" id="zp-hint">' + (S.dir === "to12" ? "6:30 PM or 630pm both count." : "18:30, 1830 and 1830Z all count.") + '</p>'
+            : '') +
+          '</div></div>';
   if (done !== null){
     h += '<div class="feedback ' + (done ? "good" : "bad") + '">' + S.typeMsg + '</div>';
     h += '<div class="act-row"><button type="button" class="btn-primary" id="zp-next">Next</button></div>';
@@ -1034,11 +1049,13 @@ function drawType(){
   function submit(){
     if (S.typeDone !== null) return;
     var v = typeVerdict(input.value);
-    if (v.ok === null){ S.typeMsg = v.msg; announce(plain(v.msg));
-      el.querySelector(".hint").innerHTML = plain(v.msg);
-      input.focus(); return; }
+    if (v.ok === null){
+      $("zp-hint").textContent = plain(v.msg);
+      announce(plain(v.msg));
+      input.focus(); return;
+    }
     S.typed = input.value; S.typeDone = v.ok; S.typeMsg = v.msg;
-    markResult(v.ok);   /* before onScore: onScore redraws the progress bar */
+    markResult(v.ok);   /* before onScore: onScore recolors the hour strip */
     onScore(v.ok);
     draw();
     var n = $("zp-next"); if (n) n.focus();
@@ -1048,7 +1065,7 @@ function drawType(){
     $("zp-check").addEventListener("click", submit);
     input.focus();
   } else {
-    $("zp-next").addEventListener("click", function(){ newQuestion(); draw(); });
+    $("zp-next").addEventListener("click", function(){ newQuestion(); drawHUD(); draw(); });
   }
 }
 function draw(){
@@ -1056,7 +1073,6 @@ function draw(){
   if (S.ans === "type") drawType(); else drawMCQ();
 }
 
-/* ---- wiring ---- */
 function setPressed(group, el){
   group.querySelectorAll("button").forEach(function(b){ b.setAttribute("aria-pressed", String(b === el)); });
 }
@@ -1074,23 +1090,23 @@ $("zp-dirs").addEventListener("click", function(e){
   if (!b) return;
   setPressed($("zp-dirs"), b);
   S.dir = b.dataset.dir;
-  startRound(); drawStats(); draw();
+  startRound(); drawHUD(); draw();
 });
 $("zp-answers").addEventListener("click", function(e){
   var b = e.target.closest("button[data-ans]");
   if (!b) return;
   setPressed($("zp-answers"), b);
   S.ans = b.dataset.ans;
-  startRound(); drawStats(); draw();
+  startRound(); drawHUD(); draw();
 });
 $("zp-reset").addEventListener("click", function(){
   S.score = 0; S.tries = 0; S.streak = 0;
-  startRound(); drawStats(); draw();
+  startRound(); drawHUD(); draw();
   announce("Started over.");
 });
 
 startRound();
-drawStats();
+drawHUD();
 draw();
 })();
 </script>
