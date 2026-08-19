@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Part 830 Decoder | PilotDECODER</title>
+<meta name="description" content="49 CFR Part 830, the NTSB accident and incident rules, as an interactive study guide: a 95-question quiz, a decision flowchart, and a quick reference checked against the current eCFR text." />
+<meta name="keywords" content="49 CFR Part 830, NTSB Part 830, immediate notification, aircraft accident definition, serious injury definition, substantial damage, NTSB Form 6120.1/2, overdue aircraft, preservation of wreckage, aircraft incident reporting, private pilot, ground school, flight training, PilotDECODER" />
+<meta name="author" content="Zane Wubbena" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://pilotdecoder.com/part-830-decoder/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pilotdecoder.com/part-830-decoder/" />
+<meta property="og:site_name" content="PilotDECODER" />
+<meta property="og:title" content="Part 830 Decoder | PilotDECODER" />
+<meta property="og:description" content="When the NTSB must hear about it: Part 830 as a quiz, decision flowchart, and quick reference." />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Part 830 Decoder | PilotDECODER" />
+<meta name="twitter:description" content="When the NTSB must hear about it: Part 830 as a quiz, decision flowchart, and quick reference." />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PilotDECODER",
+  "alternateName": "Part 830 Decoder",
+  "url": "https://pilotdecoder.com/part-830-decoder/",
+  "description": "Interactive study guide for 49 CFR Part 830, the NTSB notification, preservation, and reporting rules: quiz, decision flowchart, and quick reference.",
+  "applicationCategory": "Aviation regulations utility",
+  "operatingSystem": "Any (web browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": {
+    "@type": "Person",
+    "name": "Zane Wubbena",
+    "url": "https://zanewubbena.com/",
+    "sameAs": [
+      "https://txstate.academia.edu/ZaneWubbena",
+      "https://scholar.google.com/citations?user=qr2mU1oAAAAJ&hl=en",
+      "https://www.researchgate.net/profile/Zane-Wubbena"
+    ]
+  }
+}
+</script>
+<script>try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2316294f'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="../assets/site.css?v=19" />
+<style>
+  :root {
+    --page: var(--surface);
+    --surface-2: color-mix(in srgb, var(--wash) 55%, var(--surface));
+    --ink-2: var(--ink);
+    --muted: var(--ink-soft);
+    --hair: var(--rule);
+    --hair-2: var(--rule);
+    --accent-ink: var(--brand);
+    --accent-soft: var(--wash);
+    --accent-track: var(--card-bd);
+    --good: #418321;
+    --good-ink: #27570F;
+    --good-soft: #E5F2DE;
+    --bad: var(--ifr);
+    --bad-ink: var(--err-fg);
+    --bad-soft: var(--err-bg);
+    --warn: #8A5510;
+    --warn-soft: #FAEEDA;
+    --violet: var(--brand);
+    --violet-soft: var(--wash);
+    --radius: 10px;
+    --shadow: none;
+  }
+  [data-theme="dark"] {
+    --good: #5FA13C;
+    --good-ink: #BFE3AC;
+    --good-soft: #1E3317;
+    --warn: #E8B464;
+    --warn-soft: #3d2f14;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--page); color: var(--ink); line-height: 1.5; font-size: 16px; font-family: var(--sans); }
+  a { color: var(--accent-ink); }
+  button { font: inherit; cursor: pointer; }
+  h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .5rem; }
+  p { margin: 0 0 .75rem; }
+
+  nav.tabs { display: flex; gap: 4px; padding: 6px 0 0; overflow-x: auto; }
+  nav.tabs button { background: transparent; border: 0; border-bottom: 3px solid transparent; padding: 10px 14px; color: var(--ink-2); font-weight: 600; border-radius: 8px 8px 0 0; white-space: nowrap; }
+  nav.tabs button:hover { background: var(--surface-2); color: var(--ink); }
+  nav.tabs button[aria-selected="true"] { color: var(--accent-ink); border-bottom-color: var(--mid); }
+  nav.tabs button .n { display: inline-block; margin-left: 6px; font-size: 12px; background: var(--accent-soft); color: var(--accent-ink); border-radius: 999px; padding: 0 7px; font-weight: 700; }
+
+  main { padding: 26px 0 60px; }
+  .tab { display: none; }
+  .tab.active { display: block; }
+  .card { background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; }
+  .card + .card { margin-top: 18px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 800px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* --- controls --- */
+  .field { margin-bottom: 20px; }
+  .field > label, .field > .lab { display: block; font-weight: 700; font-size: 14px; color: var(--ink-2); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 8px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { border: 1.5px solid var(--hair-2); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 8px 16px; font-weight: 600; transition: all .12s; }
+  .pill:hover { border-color: var(--mid); }
+  .pill[aria-pressed="true"] { background: var(--mid); border-color: var(--mid); color: var(--btn-ink); }
+  .checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px 18px; }
+  .checks label { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 10px; cursor: pointer; border: 1px solid transparent; }
+  .checks label:hover { background: var(--surface-2); border-color: var(--hair-2); }
+  .checks input { width: 18px; height: 18px; accent-color: var(--mid); flex: none; }
+  .checks .nm { display: block; font-weight: 600; line-height: 1.25; }
+  .checks .sub { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; white-space: nowrap; }
+  .linkbtn { background: none; border: 0; color: var(--accent-ink); font-weight: 600; padding: 4px 6px; text-decoration: underline; }
+  .btn { border: 1.5px solid var(--hair-2); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 11px 18px; font-weight: 700; }
+  .btn:hover { border-color: var(--mid); color: var(--accent-ink); }
+  .btn.primary { background: var(--mid); border-color: var(--mid); color: var(--btn-ink); }
+  .btn.primary:hover { background: var(--brand-deep); border-color: var(--brand-deep); color: var(--btn-ink); }
+  .btn.primary:disabled { background: var(--card-bd); border-color: var(--card-bd); cursor: not-allowed; }
+  .btn.ghost { border-color: transparent; color: var(--ink-2); }
+  .btn.ghost:hover { background: var(--surface-2); color: var(--ink); }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 18px; }
+  .actions .spacer { flex: 1; }
+  .hint { color: var(--muted); font-size: 13px; }
+  kbd { font-family: inherit; font-size: 12px; border: 1px solid var(--hair-2); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; background: var(--surface-2); }
+
+  /* --- quiz --- */
+  .qhead { margin-bottom: 14px; }
+  .progress { height: 6px; background: var(--accent-track); border-radius: 999px; overflow: hidden; }
+  .progress .bar { height: 100%; background: var(--mid); border-radius: 999px; transition: width .25s; }
+  .qmeta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 10px; font-size: 14px; color: var(--ink-2); }
+  .qmeta .score { margin-left: auto; font-variant-numeric: tabular-nums; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 2px 10px; font-size: 12.5px; font-weight: 700; }
+  .chip.sec { background: var(--accent-soft); color: var(--accent-ink); }
+  .chip.scen { background: var(--warn-soft); color: #6f4a00; }
+  .chip.cite { background: var(--violet-soft); color: var(--brand); }
+  .chip.ok { background: var(--good-soft); color: var(--good-ink); }
+  .chip.no { background: var(--bad-soft); color: var(--bad-ink); }
+  .qtext { font-size: 19px; font-weight: 600; line-height: 1.4; margin: 4px 0 18px; }
+  .options { display: grid; gap: 10px; }
+  .opt { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: 12px; text-align: left; width: 100%; background: var(--surface); border: 1.5px solid var(--hair-2); border-radius: 12px; padding: 12px 14px; color: var(--ink); line-height: 1.4; transition: border-color .12s, background .12s; }
+  .opt:hover:not(:disabled) { border-color: var(--mid); background: var(--surface-2); }
+  .opt:focus-visible { outline: 3px solid var(--accent-track); }
+  .opt .letter { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: var(--surface-2); border: 1px solid var(--hair-2); font-weight: 700; color: var(--ink-2); font-size: 14px; }
+  .opt:disabled { cursor: default; }
+  .opt.correct { border-color: var(--good); background: var(--good-soft); }
+  .opt.correct .letter { background: var(--good); border-color: var(--good); color: #fff; }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+  .opt.wrong .letter { background: var(--bad); border-color: var(--bad); color: #fff; }
+  .opt.dim { opacity: .62; }
+  .opt .mark { font-size: 13px; font-weight: 700; }
+  .opt.correct .mark { color: var(--good-ink); }
+  .opt.wrong .mark { color: var(--bad-ink); }
+  .feedback { margin-top: 18px; border-radius: 12px; padding: 16px 18px; border: 1px solid var(--hair-2); background: var(--surface-2); }
+  .feedback.ok { border-color: var(--good); background: var(--good-soft); }
+  .feedback.no { border-color: var(--bad); background: var(--bad-soft); }
+  .feedback .verdict { font-weight: 800; font-size: 16px; margin-bottom: 6px; }
+  .feedback.ok .verdict { color: var(--good-ink); }
+  .feedback.no .verdict { color: var(--bad-ink); }
+  .feedback .expl { color: var(--ink); margin-bottom: 8px; }
+  .feedback .expl q, .card q { quotes: "“" "”"; }
+
+  /* --- results --- */
+  .hero { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+  .hero .pct { font-size: 64px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+  .hero .sub { color: var(--ink-2); font-size: 16px; }
+  .hero .msg { font-size: 17px; font-weight: 600; max-width: 560px; }
+  .meter { height: 12px; background: var(--accent-track); border-radius: 999px; overflow: hidden; margin: 18px 0 8px; }
+  .meter .fill { height: 100%; background: var(--mid); border-radius: 999px; }
+  .bars { display: grid; grid-template-columns: max-content 1fr max-content; gap: 10px 14px; align-items: center; margin: 12px 0 4px; }
+  .bars .lab { font-size: 14px; color: var(--ink-2); }
+  .bars .track { height: 10px; background: var(--accent-track); border-radius: 0 999px 999px 0; position: relative; }
+  .bars .fill { height: 100%; background: var(--mid); border-radius: 0 999px 999px 0; }
+  .bars .val { font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .missed { display: grid; gap: 12px; margin-top: 8px; }
+  .mcard { border: 1px solid var(--hair-2); border-radius: 12px; padding: 14px 16px; background: var(--surface-2); }
+  .mcard .q { font-weight: 600; margin-bottom: 8px; }
+  .mcard .row { font-size: 14.5px; margin: 3px 0; }
+  .mcard .row b { font-weight: 700; }
+  .mcard .row.you b { color: var(--bad-ink); }
+  .mcard .row.ans b { color: var(--good-ink); }
+  .mcard .expl { font-size: 14.5px; color: var(--ink-2); margin-top: 6px; }
+  details { border: 1px solid var(--hair-2); border-radius: 12px; padding: 0 16px; background: var(--surface); }
+  details + details { margin-top: 10px; }
+  details summary { cursor: pointer; padding: 14px 0; font-weight: 700; list-style: none; display: flex; align-items: center; gap: 10px; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before { content: "▸"; color: var(--muted); transition: transform .15s; }
+  details[open] summary::before { transform: rotate(90deg); }
+  details .body { padding: 0 0 14px; }
+
+  /* --- answer key --- */
+  .kq { border-top: 1px solid var(--hair-2); padding: 14px 0; }
+  .kq .q { font-weight: 600; margin-bottom: 6px; }
+  .kq ol { margin: 0 0 8px; padding-left: 0; list-style: none; display: grid; gap: 4px; }
+  .kq ol li { padding: 6px 10px; border-radius: 8px; font-size: 14.5px; border: 1px solid transparent; }
+  .kq ol li.ans { background: var(--good-soft); border-color: #bfe3c6; font-weight: 600; }
+  .kq ol li .l { display: inline-block; width: 22px; color: var(--muted); font-weight: 700; }
+  .kq .expl { font-size: 14px; color: var(--ink-2); }
+  .kq .num { color: var(--muted); font-size: 13px; font-weight: 700; margin-right: 6px; }
+
+  /* --- flowchart --- */
+  .flowbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .flowwrap { overflow: auto; border-radius: 10px; border: 1px solid var(--hair-2); background: #ffffff; } /* the chart is a printed document; it stays paper-white in dark mode */
+  .flowwrap svg { display: block; width: 100%; height: auto; }
+  .flowwrap.actual svg { width: 1180px; max-width: none; }
+
+  /* --- reference --- */
+  .ref h2 { font-size: 20px; margin-top: 4px; }
+  .ref h3 { font-size: 16px; margin-top: 18px; color: var(--accent-ink); }
+  .ref table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  .ref th, .ref td { text-align: left; vertical-align: top; padding: 8px 10px; border-top: 1px solid var(--hair-2); }
+  .ref th { color: var(--ink-2); font-weight: 700; width: 190px; }
+  .ref ol, .ref ul { margin: 4px 0 8px; padding-left: 22px; }
+  .ref li { margin: 4px 0; font-size: 15px; }
+  .ref .note { font-size: 13.5px; color: var(--muted); }
+  .callout { border-left: 4px solid var(--mid); background: var(--accent-soft); padding: 10px 14px; border-radius: 8px; margin: 10px 0; font-size: 15px; }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+  footer { color: var(--muted); font-size: 12.5px; text-align: center; padding: 10px 20px 30px; }
+  .sr { position: absolute; left: -9999px; }
+  @media print { header.top nav, .actions, .flowbar { display: none !important; } .card { box-shadow: none; } }
+
+  .masthead a { color: var(--mid); text-decoration: underline; text-underline-offset: 3px; }
+  .masthead a:hover { color: var(--brand-deep); }
+  section.panel .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  main { padding-top: 6px; }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap"><a class="brand" href="/">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme" title="Color theme"><span class="knob"></span></button></div>
+  </header>
+
+  <header class="masthead">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">Part 830 Decoder</span></nav>
+      <h1 class="eyebrow"><strong>Part 830 Decoder</strong></h1>
+      <p class="masthead-desc">When the NTSB must hear about it: 49 CFR Part 830 covers notification of accidents and serious incidents, preservation of wreckage and records, and the reports that follow. A 95-question quiz, a decision flowchart, and a quick reference &mdash; checked against the <a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-VIII/part-830" target="_blank" rel="noopener">eCFR source text</a>, current as of Aug. 17, 2026.</p>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="wrap">
+      <span class="panel-label">Section</span>
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <button role="tab" data-tab="quiz" aria-selected="true" aria-controls="tab-quiz">Quiz</button>
+        <button role="tab" data-tab="flow" aria-selected="false" aria-controls="tab-flow">Flowchart</button>
+        <button role="tab" data-tab="ref" aria-selected="false" aria-controls="tab-ref">Quick reference</button>
+        <button role="tab" data-tab="bank" aria-selected="false" aria-controls="tab-bank">Answer key <span class="n">95</span></button>
+      </nav>
+    </div>
+  </section>
+
+<main class="wrap">
+
+  <!-- ============================ QUIZ ============================ -->
+  <section id="tab-quiz" class="tab active" role="tabpanel">
+
+    <div id="view-setup">
+      <div class="card">
+        <h2>Set up your quiz</h2>
+        <p class="hint" style="margin-bottom:18px">Pick how many questions you want and which parts of the regulation to cover. Each question gives instant feedback with the exact section it comes from.</p>
+
+        <div class="field">
+          <span class="lab">Number of questions</span>
+          <div class="pills" id="countPills" role="group" aria-label="Number of questions">
+            <button class="pill" data-count="10" aria-pressed="false">10</button>
+            <button class="pill" data-count="25" aria-pressed="true">25</button>
+            <button class="pill" data-count="50" aria-pressed="false">50</button>
+            <button class="pill" data-count="all" aria-pressed="false">All (<span id="allCount">95</span>)</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="lab">Sections to include <button class="linkbtn" id="selAll" type="button">all</button> · <button class="linkbtn" id="selNone" type="button">none</button></span>
+          <div class="checks" id="sectionChecks"></div>
+        </div>
+
+        <div class="field">
+          <span class="lab">Question order</span>
+          <div class="pills" id="orderPills" role="group" aria-label="Question order">
+            <button class="pill" data-order="grouped" aria-pressed="true">Grouped by section</button>
+            <button class="pill" data-order="shuffled" aria-pressed="false">Shuffled</button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" id="startBtn">Start quiz →</button>
+          <span class="hint" id="poolNote"></span>
+          <span class="spacer"></span>
+          <span class="hint">Answer choices are shuffled every time. Keyboard: <kbd>1</kbd>–<kbd>4</kbd> to answer, <kbd>Enter</kbd> for next.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-question" hidden>
+      <div class="qhead">
+        <div class="progress" aria-hidden="true"><div class="bar" id="progBar" style="width:0%"></div></div>
+        <div class="qmeta">
+          <span id="qCounter">Question 1 of 25</span>
+          <span class="chip sec" id="qSection"></span>
+          <span class="chip scen" id="qScen" hidden>Scenario</span>
+          <span class="score" id="qScore"></span>
+        </div>
+      </div>
+      <div class="card">
+        <p class="qtext" id="qText" tabindex="-1" style="outline:none"></p>
+        <div class="options" id="qOptions"></div>
+        <div class="feedback" id="qFeedback" hidden aria-live="polite">
+          <div class="verdict" id="fbVerdict"></div>
+          <p class="expl" id="fbExpl"></p>
+          <span class="chip cite" id="fbCite"></span>
+        </div>
+        <div class="actions">
+          <button class="btn ghost" id="quitBtn">Quit to setup</button>
+          <span class="spacer"></span>
+          <button class="btn primary" id="nextBtn" disabled>Next question →</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-results" hidden>
+      <div class="card">
+        <div class="hero">
+          <div>
+            <div class="pct" id="resPct">0%</div>
+            <div class="sub" id="resSub"></div>
+          </div>
+          <div class="msg" id="resMsg"></div>
+        </div>
+        <div class="meter" aria-hidden="true"><div class="fill" id="resMeter" style="width:0%"></div></div>
+        <h3 style="margin-top:22px">Results by section</h3>
+        <div class="bars" id="resBars"></div>
+        <div class="actions">
+          <button class="btn primary" id="retryMissedBtn">Retry missed questions</button>
+          <button class="btn" id="againBtn">New quiz, same settings</button>
+          <button class="btn ghost" id="settingsBtn">Change settings</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3 id="missedTitle">Review what you missed</h3>
+        <div class="missed" id="missedList"></div>
+        <details style="margin-top:16px"><summary>Show every question from this quiz with its answer</summary><div class="body" id="allList"></div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ FLOWCHART ============================ -->
+  <section id="tab-flow" class="tab" role="tabpanel">
+    <div class="card">
+      <div class="flowbar">
+        <h2 style="margin:0;font-size:20px">Decision flowchart</h2>
+        <span class="spacer" style="flex:1"></span>
+        <button class="btn" id="fitBtn" aria-pressed="true">Fit to width</button>
+        <a class="btn" id="dlSvg" download="Part830_flowchart.svg" href="#">Download SVG</a>
+      </div>
+      <p class="hint" style="margin-bottom:14px">Work down the left column. The first <b>YES</b> sends you into the right column, where every step is mandatory: notify immediately (§ 830.5), give the § 830.6 information, preserve everything (§ 830.10), then file the right report (§ 830.15).</p>
+      <div class="flowwrap" id="flowwrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 2174" data-h="2174" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" role="img" aria-labelledby="ftitle fdesc">
+<title id="ftitle">49 CFR Part 830 decision flowchart</title>
+<desc id="fdesc">Flowchart of NTSB notification, preservation and reporting duties under 49 CFR Part 830.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5b5a55"/></marker></defs>
+<rect x="0" y="0" width="1180" height="2174" fill="#ffffff"/>
+<text x="30" y="38" font-size="21" font-weight="700" fill="#1a1a19">49 CFR Part 830 — what to do after an aircraft accident or incident</text>
+<text x="30" y="60" font-size="12.5" fill="#4a4945">NTSB notification (§ 830.5–830.6), preservation (§ 830.10) and reporting (§ 830.15) — eCFR text current as of Aug. 17, 2026</text>
+<text x="560" y="371" font-size="11" font-weight="700" letter-spacing="0.8" fill="#4a4945">HOW TO READ THIS CHART</text>
+<rect x="560" y="387" width="16" height="16" rx="4" fill="#e2f4e6" stroke="#1f8a3c" stroke-width="1.4"/>
+<text x="582" y="399.5" font-size="11.5" fill="#4a4945">Start</text>
+<rect x="632.08984375" y="387" width="16" height="16" rx="4" fill="#fff3d3" stroke="#c98500" stroke-width="1.4"/>
+<text x="654.08984375" y="399.5" font-size="11.5" fill="#4a4945">Decision</text>
+<rect x="725.05078125" y="387" width="16" height="16" rx="4" fill="#e3eefb" stroke="#2a78d6" stroke-width="1.4"/>
+<text x="747.05078125" y="399.5" font-size="11.5" fill="#4a4945">Required action</text>
+<rect x="859.2890625" y="387" width="16" height="16" rx="4" fill="#ebe8fb" stroke="#4a3aa7" stroke-width="1.4"/>
+<text x="881.2890625" y="399.5" font-size="11.5" fill="#4a4945">Written report</text>
+<rect x="984.21875" y="387" width="16" height="16" rx="4" fill="#f0efec" stroke="#8a8881" stroke-width="1.4"/>
+<text x="1006.21875" y="399.5" font-size="11.5" fill="#4a4945">Stop</text>
+<text x="560.0" y="427.0" font-size="11.5" fill="#4a4945" font-weight="400" text-anchor="start">Work down the left column: the first YES sends you to the right column, where every step is</text>
+<text x="560.0" y="442.9" font-size="11.5" fill="#4a4945" font-weight="400" text-anchor="start">mandatory. The NO path at the bottom means Part 830 asks nothing more (other rules may still</text>
+<text x="560.0" y="458.7" font-size="11.5" fill="#4a4945" font-weight="400" text-anchor="start">apply). Definitions that decide the ACCIDENT question are summarized in the reference box at</text>
+<text x="560.0" y="474.6" font-size="11.5" fill="#4a4945" font-weight="400" text-anchor="start">bottom-left.</text>
+<path d="M 230.0,176.0 L 230.0,220.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 230.0,388.0 L 230.0,432.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="212.4" y="401.5" width="35.3" height="17" rx="8.5" fill="#e2f4e6" stroke="#1f8a3c" stroke-width="1.2"/><text x="230.0" y="413.6" font-size="10" font-weight="700" fill="#155f2a" text-anchor="middle" letter-spacing="0.6">YES</text>
+<path d="M 430.0,304.0 L 560.0,303.5" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="448.6" y="295.5" width="30.9" height="17" rx="8.5" fill="#fbe6e6" stroke="#c93a3a" stroke-width="1.2"/><text x="464.0" y="307.6" font-size="10" font-weight="700" fill="#8b1e1e" text-anchor="middle" letter-spacing="0.6">NO</text>
+<path d="M 230.0,629.0 L 230.0,673.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="214.6" y="642.5" width="30.9" height="17" rx="8.5" fill="#fbe6e6" stroke="#c93a3a" stroke-width="1.2"/><text x="230.0" y="654.6" font-size="10" font-weight="700" fill="#8b1e1e" text-anchor="middle" letter-spacing="0.6">NO</text>
+<path d="M 230.0,1243.0 L 230.0,1287.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="214.6" y="1256.5" width="30.9" height="17" rx="8.5" fill="#fbe6e6" stroke="#c93a3a" stroke-width="1.2"/><text x="230.0" y="1268.6" font-size="10" font-weight="700" fill="#8b1e1e" text-anchor="middle" letter-spacing="0.6">NO</text>
+<path d="M 230.0,1360.0 L 230.0,1404.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="214.6" y="1373.5" width="30.9" height="17" rx="8.5" fill="#fbe6e6" stroke="#c93a3a" stroke-width="1.2"/><text x="230.0" y="1385.6" font-size="10" font-weight="700" fill="#8b1e1e" text-anchor="middle" letter-spacing="0.6">NO</text>
+<path d="M 430.0,530.5 L 495.0,530.5 L 495.0,958.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M 430.0,1323.5 L 495.0,1323.5 L 495.0,958.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M 430.0,958.0 L 495.0,958.0 L 495.0,958.0 L 560.0,958.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<circle cx="495.0" cy="958.0" r="3.2" fill="#5b5a55"/>
+<circle cx="495.0" cy="530.5" r="3.2" fill="#5b5a55"/>
+<rect x="446.4" y="522.0" width="35.3" height="17" rx="8.5" fill="#e2f4e6" stroke="#1f8a3c" stroke-width="1.2"/><text x="464.0" y="534.1" font-size="10" font-weight="700" fill="#155f2a" text-anchor="middle" letter-spacing="0.6">YES</text>
+<rect x="446.4" y="949.5" width="35.3" height="17" rx="8.5" fill="#e2f4e6" stroke="#1f8a3c" stroke-width="1.2"/><text x="464.0" y="961.6" font-size="10" font-weight="700" fill="#155f2a" text-anchor="middle" letter-spacing="0.6">YES</text>
+<rect x="446.4" y="1315.0" width="35.3" height="17" rx="8.5" fill="#e2f4e6" stroke="#1f8a3c" stroke-width="1.2"/><text x="464.0" y="1327.1" font-size="10" font-weight="700" fill="#155f2a" text-anchor="middle" letter-spacing="0.6">YES</text>
+<path d="M 855.0,1040.0 L 855.0,1084.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 855.0,1289.0 L 855.0,1333.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 855.0,1555.0 L 855.0,1599.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 855.0,1672.0 L 855.0,1699.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M 651.0,1699.0 L 1059.0,1699.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M 651.0,1699.0 L 651.0,1726.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 855.0,1699.0 L 855.0,1726.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 1059.0,1699.0 L 1059.0,1726.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 651.0,1853.0 L 651.0,1880.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M 855.0,1853.0 L 855.0,1880.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M 1059.0,1853.0 L 1059.0,1880.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M 651.0,1880.0 L 1059.0,1880.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M 855.0,1880.0 L 855.0,1907.0" fill="none" stroke="#5b5a55" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<circle cx="855.0" cy="1699.0" r="3.2" fill="#5b5a55"/>
+<circle cx="855.0" cy="1880.0" r="3.2" fill="#5b5a55"/>
+<g id="start">
+<rect x="30" y="96" width="400" height="80" rx="10" ry="10" fill="#e2f4e6" stroke="#1f8a3c" stroke-width="1.6"/>
+<text x="230.0" y="122.1" font-size="13.5" fill="#155f2a" font-weight="700" text-anchor="middle">Something happens involving an aircraft</text>
+<text x="44.0" y="144.7" font-size="12" fill="#1f3b28" font-weight="400" text-anchor="start">An occurrence in the operation of an aircraft — or an aircraft</text>
+<text x="44.0" y="161.2" font-size="12" fill="#1f3b28" font-weight="400" text-anchor="start">is overdue</text>
+</g>
+<g id="applies">
+<rect x="30" y="220" width="400" height="168" rx="6" ry="6" fill="#fff3d3" stroke="#c98500" stroke-width="1.6"/>
+<polygon points="23,237 30,230 37,237 30,244" fill="#c98500"/>
+<text x="44" y="240.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#c98500">DECISION</text>
+<text x="44.0" y="260.1" font-size="13.5" fill="#6f4a00" font-weight="700" text-anchor="start">Does Part 830 apply?</text>
+<text x="416" y="260.1" font-size="11" font-weight="700" fill="#c98500" text-anchor="end">§ 830.1</text>
+<text x="44.0" y="282.7" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">Civil aircraft of the U.S.</tspan> — wherever the event occurs</text>
+<text x="44.0" y="303.2" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">Certain public aircraft</tspan> — wherever it occurs (the § 830.5</text>
+<text x="44.0" y="319.8" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">notice duty covers public aircraft NOT operated by the Armed</text>
+<text x="44.0" y="336.4" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">Forces or a U.S. intelligence agency)</text>
+<text x="44.0" y="356.9" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">Foreign civil aircraft</tspan> — only for events in the U.S., its</text>
+<text x="44.0" y="373.5" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">territories or possessions</text>
+</g>
+<g id="accident">
+<rect x="30" y="432" width="400" height="197" rx="6" ry="6" fill="#fff3d3" stroke="#c98500" stroke-width="1.6"/>
+<polygon points="23,449 30,442 37,449 30,456" fill="#c98500"/>
+<text x="44" y="452.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#c98500">DECISION</text>
+<text x="44.0" y="472.1" font-size="13.5" fill="#6f4a00" font-weight="700" text-anchor="start">Is it an AIRCRAFT ACCIDENT?</text>
+<text x="416" y="472.1" font-size="11" font-weight="700" fill="#c98500" text-anchor="end">§ 830.2</text>
+<text x="44.0" y="494.7" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">When:</tspan> between the time any person boards with the</text>
+<text x="44.0" y="511.2" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">intention of flight and all such persons have disembarked</text>
+<text x="44.0" y="527.8" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">(UAS: from system activation for flight to deactivation at the</text>
+<text x="44.0" y="544.4" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">end of the mission)</text>
+<text x="44.0" y="564.9" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">And at least one of:</tspan> any person suffers death or serious</text>
+<text x="44.0" y="581.5" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">injury · the aircraft receives substantial damage (UAS:</text>
+<text x="44.0" y="598.0" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">substantial damage counts only if the aircraft holds an</text>
+<text x="44.0" y="614.6" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">airworthiness certificate)</text>
+</g>
+<g id="serious">
+<rect x="30" y="673" width="400" height="570" rx="6" ry="6" fill="#fff3d3" stroke="#c98500" stroke-width="1.6"/>
+<polygon points="23,690 30,683 37,690 30,697" fill="#c98500"/>
+<text x="44" y="693.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#c98500">DECISION</text>
+<text x="44.0" y="713.1" font-size="13.5" fill="#6f4a00" font-weight="700" text-anchor="start">Is it one of the 12 listed SERIOUS</text>
+<text x="416" y="713.1" font-size="11" font-weight="700" fill="#c98500" text-anchor="end">§ 830.5(a)</text>
+<text x="44.0" y="731.8" font-size="13.5" fill="#6f4a00" font-weight="700" text-anchor="start">INCIDENTS?</text>
+<text x="44.0" y="754.3" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">1</tspan> Flight control system malfunction or failure</text>
+<text x="44.0" y="774.9" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">2</tspan> A required flight crewmember unable to perform normal</text>
+<text x="44.0" y="791.4" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">duties because of injury or illness</text>
+<text x="44.0" y="812.0" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">3</tspan> Turbine engine internal failure with debris escaping other</text>
+<text x="44.0" y="828.6" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">than out the exhaust path</text>
+<text x="44.0" y="849.1" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">4</tspan> In-flight fire</text>
+<text x="44.0" y="869.7" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">5</tspan> Aircraft collision in flight</text>
+<text x="44.0" y="890.2" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">6</tspan> Damage to property other than the aircraft estimated to</text>
+<text x="44.0" y="906.8" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">exceed $25,000 (repair cost, or fair market value if a total</text>
+<text x="44.0" y="923.4" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">loss — whichever is less)</text>
+<text x="44.0" y="943.9" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">7</tspan> Large multiengine aircraft (over 12,500 lb MTOW):</text>
+<text x="44.0" y="960.5" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">emergency-bus electrical failure · reliance on the sole</text>
+<text x="44.0" y="977.0" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">remaining hydraulic/mechanical flight-control system ·</text>
+<text x="44.0" y="993.6" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">sustained power loss on two or more engines · evacuation</text>
+<text x="44.0" y="1010.2" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">using an emergency egress system</text>
+<text x="44.0" y="1030.7" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">8</tspan> Propeller blade release (unless caused solely by ground</text>
+<text x="44.0" y="1047.3" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">contact)</text>
+<text x="44.0" y="1067.8" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">9</tspan> Complete loss (not flickering) of more than 50% of cockpit</text>
+<text x="44.0" y="1084.4" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">displays (EFIS, EICAS, ECAM or similar)</text>
+<text x="44.0" y="1105.0" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">10</tspan> ACAS/TCAS resolution advisory on an IFR flight plan where</text>
+<text x="44.0" y="1121.5" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">compliance is needed to avert a substantial risk of collision</text>
+<text x="44.0" y="1142.1" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">11</tspan> Helicopter main or tail rotor blade damage, including</text>
+<text x="44.0" y="1158.6" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">ground damage, that needs major repair or replacement</text>
+<text x="44.0" y="1179.2" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start"><tspan font-weight="700">12</tspan> Air carrier airplane at a public-use airport on land: lands</text>
+<text x="44.0" y="1195.8" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">or departs on a taxiway, wrong runway or non-runway area</text>
+<text x="44.0" y="1212.3" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">— or a runway incursion requiring immediate corrective</text>
+<text x="44.0" y="1228.9" font-size="12" fill="#3d3222" font-weight="400" text-anchor="start">action to avoid a collision</text>
+</g>
+<g id="overdue">
+<rect x="30" y="1287" width="400" height="73" rx="6" ry="6" fill="#fff3d3" stroke="#c98500" stroke-width="1.6"/>
+<polygon points="23,1304 30,1297 37,1304 30,1311" fill="#c98500"/>
+<text x="44" y="1307.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#c98500">DECISION</text>
+<text x="44.0" y="1327.1" font-size="13.5" fill="#6f4a00" font-weight="700" text-anchor="start">Is the aircraft OVERDUE and believed to</text>
+<text x="416" y="1327.1" font-size="11" font-weight="700" fill="#c98500" text-anchor="end">§ 830.5(b)</text>
+<text x="44.0" y="1345.8" font-size="13.5" fill="#6f4a00" font-weight="700" text-anchor="start">have been involved in an accident?</text>
+</g>
+<g id="none">
+<rect x="30" y="1404" width="400" height="127" rx="10" ry="10" fill="#f0efec" stroke="#8a8881" stroke-width="1.6"/>
+<text x="44" y="1424.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#8a8881">STOP</text>
+<text x="44.0" y="1444.1" font-size="13.5" fill="#4c4b47" font-weight="700" text-anchor="start">No NTSB notification required by Part 830</text>
+<text x="44.0" y="1466.7" font-size="12" fill="#3f3e3a" font-weight="400" text-anchor="start">The event may still be an “incident” under § 830.2</text>
+<text x="44.0" y="1483.2" font-size="12" fill="#3f3e3a" font-weight="400" text-anchor="start">(something that affects or could affect safety), but § 830.5</text>
+<text x="44.0" y="1499.8" font-size="12" fill="#3f3e3a" font-weight="400" text-anchor="start">does not require notice and § 830.10 preservation is not</text>
+<text x="44.0" y="1516.4" font-size="12" fill="#3f3e3a" font-weight="400" text-anchor="start">triggered.</text>
+</g>
+<g id="na">
+<rect x="560" y="276" width="300" height="55" rx="10" ry="10" fill="#f0efec" stroke="#8a8881" stroke-width="1.6"/>
+<text x="574" y="296.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#8a8881">STOP</text>
+<text x="574.0" y="316.1" font-size="13.5" fill="#4c4b47" font-weight="700" text-anchor="start">Part 830 does not apply</text>
+</g>
+<g id="notify">
+<rect x="560" y="876" width="590" height="164" rx="10" ry="10" fill="#e3eefb" stroke="#2a78d6" stroke-width="1.6"/>
+<text x="574" y="896.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#2a78d6">REQUIRED ACTION</text>
+<text x="574.0" y="916.1" font-size="13.5" fill="#174b8c" font-weight="700" text-anchor="start">NOTIFY THE NTSB IMMEDIATELY</text>
+<text x="1136" y="916.1" font-size="11" font-weight="700" fill="#2a78d6" text-anchor="end">§ 830.5</text>
+<text x="574.0" y="938.7" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">How:</tspan> by the most expeditious means available, to the nearest NTSB office. NTSB Response</text>
+<text x="574.0" y="955.2" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">Operations Center<tspan font-weight="700"> 844-373-9922</tspan> or<tspan font-weight="700"> 202-314-6290</tspan> (HQ: 490 L'Enfant Plaza SW,</text>
+<text x="574.0" y="971.8" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">Washington, DC 20594).</text>
+<text x="574.0" y="992.4" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">Who:</tspan> the operator — anyone who causes or authorizes the operation (owner, lessee, bailee)</text>
+<text x="574.0" y="1008.9" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">— of a civil aircraft, a public aircraft not operated by the Armed Forces or a U.S. intelligence</text>
+<text x="574.0" y="1025.5" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">agency, or a foreign aircraft.</text>
+</g>
+<g id="info">
+<rect x="560" y="1084" width="590" height="205" rx="10" ry="10" fill="#e3eefb" stroke="#2a78d6" stroke-width="1.6"/>
+<text x="574" y="1104.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#2a78d6">REQUIRED ACTION</text>
+<text x="574.0" y="1124.1" font-size="13.5" fill="#174b8c" font-weight="700" text-anchor="start">GIVE THIS INFORMATION, IF AVAILABLE</text>
+<text x="1136" y="1124.1" font-size="11" font-weight="700" fill="#2a78d6" text-anchor="end">§ 830.6</text>
+<text x="574.0" y="1146.7" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">(a)</tspan> Aircraft type, nationality &amp; registration</text>
+<text x="574.0" y="1163.2" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">marks</text>
+<text x="574.0" y="1183.8" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">(b)</tspan> Name of the owner and of the operator</text>
+<text x="574.0" y="1204.4" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">(c)</tspan> Name of the pilot-in-command</text>
+<text x="574.0" y="1224.9" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">(d)</tspan> Date and time of the accident</text>
+<text x="574.0" y="1245.5" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">(e)</tspan> Last point of departure &amp; point of</text>
+<text x="574.0" y="1262.0" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">intended landing</text>
+<text x="863.0" y="1146.7" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">(f)</tspan> Position, referenced to an easily defined</text>
+<text x="863.0" y="1163.2" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">geographical point</text>
+<text x="863.0" y="1183.8" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">(g)</tspan> Number of persons aboard, killed, and</text>
+<text x="863.0" y="1200.4" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">seriously injured</text>
+<text x="863.0" y="1220.9" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">(h)</tspan> Nature of the accident, weather &amp; extent</text>
+<text x="863.0" y="1237.5" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">of damage, so far as known</text>
+<text x="863.0" y="1258.0" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">(i)</tspan> Any explosives, radioactive materials or</text>
+<text x="863.0" y="1274.6" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">other dangerous articles carried</text>
+</g>
+<g id="preserve">
+<rect x="560" y="1333" width="590" height="222" rx="10" ry="10" fill="#e3eefb" stroke="#2a78d6" stroke-width="1.6"/>
+<text x="574" y="1353.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#2a78d6">REQUIRED ACTION</text>
+<text x="574.0" y="1373.1" font-size="13.5" fill="#174b8c" font-weight="700" text-anchor="start">PRESERVE WRECKAGE, MAIL, CARGO &amp; RECORDS</text>
+<text x="1136" y="1373.1" font-size="11" font-weight="700" fill="#2a78d6" text-anchor="end">§ 830.10</text>
+<text x="574.0" y="1395.7" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">Operator's duty</tspan> — until the Board takes custody or grants a release under § 831.12(b).</text>
+<text x="574.0" y="1412.2" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">Includes all records and the flight, maintenance and voice recorder media.</text>
+<text x="574.0" y="1432.8" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">Do not disturb or move</tspan> wreckage, mail or cargo except as necessary to:<tspan font-weight="700"> (1)</tspan> remove</text>
+<text x="574.0" y="1449.4" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">injured or trapped persons ·<tspan font-weight="700"> (2)</tspan> protect the wreckage from further damage ·<tspan font-weight="700"> (3)</tspan> protect the</text>
+<text x="574.0" y="1465.9" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">public from injury.</text>
+<text x="574.0" y="1486.5" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">If it must be moved:</tspan> make sketches, descriptive notes and photographs of the original</text>
+<text x="574.0" y="1503.0" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">positions, condition and any significant impact marks (if possible).</text>
+<text x="574.0" y="1523.6" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start"><tspan font-weight="700">Retain</tspan> all records, reports, internal documents and memoranda about the event until the</text>
+<text x="574.0" y="1540.2" font-size="12" fill="#1f2c3f" font-weight="400" text-anchor="start">Board authorizes otherwise.</text>
+</g>
+<g id="reportq">
+<rect x="560" y="1599" width="590" height="73" rx="6" ry="6" fill="#fff3d3" stroke="#c98500" stroke-width="1.6"/>
+<polygon points="553,1616 560,1609 567,1616 560,1623" fill="#c98500"/>
+<text x="574" y="1619.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#c98500">DECISION</text>
+<text x="574.0" y="1639.1" font-size="13.5" fill="#6f4a00" font-weight="700" text-anchor="start">Which written report is due? — NTSB Form 6120.1/2 (OMB No.</text>
+<text x="1136" y="1639.1" font-size="11" font-weight="700" fill="#c98500" text-anchor="end">§ 830.15(a)</text>
+<text x="574.0" y="1657.8" font-size="13.5" fill="#6f4a00" font-weight="700" text-anchor="start">3147-0001)</text>
+</g>
+<g id="r5_0">
+<rect x="560" y="1726" width="182" height="127" rx="10" ry="10" fill="#ebe8fb" stroke="#4a3aa7" stroke-width="1.6"/>
+<text x="574" y="1746.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#4a3aa7">REPORT</text>
+<text x="574.0" y="1766.1" font-size="13.5" fill="#32277c" font-weight="700" text-anchor="start">ACCIDENT</text>
+<text x="574.0" y="1788.7" font-size="12" fill="#28243d" font-weight="400" text-anchor="start">File the report<tspan font-weight="700"> within 10</tspan></text>
+<text x="574.0" y="1805.2" font-size="12" fill="#28243d" font-weight="400" text-anchor="start"><tspan font-weight="700">days</tspan> after the accident.</text>
+</g>
+<g id="r5_1">
+<rect x="764" y="1726" width="182" height="127" rx="10" ry="10" fill="#ebe8fb" stroke="#4a3aa7" stroke-width="1.6"/>
+<text x="778" y="1746.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#4a3aa7">REPORT</text>
+<text x="778.0" y="1766.1" font-size="13.5" fill="#32277c" font-weight="700" text-anchor="start">OVERDUE AIRCRAFT</text>
+<text x="778.0" y="1788.7" font-size="12" fill="#28243d" font-weight="400" text-anchor="start">File<tspan font-weight="700"> after 7 days</tspan> if the</text>
+<text x="778.0" y="1805.2" font-size="12" fill="#28243d" font-weight="400" text-anchor="start">aircraft is still missing.</text>
+</g>
+<g id="r5_2">
+<rect x="968" y="1726" width="182" height="127" rx="10" ry="10" fill="#ebe8fb" stroke="#4a3aa7" stroke-width="1.6"/>
+<text x="982" y="1746.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#4a3aa7">REPORT</text>
+<text x="982.0" y="1766.1" font-size="13.5" fill="#32277c" font-weight="700" text-anchor="start">SERIOUS INCIDENT</text>
+<text x="982.0" y="1788.7" font-size="12" fill="#28243d" font-weight="400" text-anchor="start">File<tspan font-weight="700"> only as requested</tspan></text>
+<text x="982.0" y="1805.2" font-size="12" fill="#28243d" font-weight="400" text-anchor="start">by an authorized</text>
+<text x="982.0" y="1821.8" font-size="12" fill="#28243d" font-weight="400" text-anchor="start">representative of the</text>
+<text x="982.0" y="1838.4" font-size="12" fill="#28243d" font-weight="400" text-anchor="start">Board.</text>
+</g>
+<g id="file">
+<rect x="560" y="1907" width="590" height="147" rx="10" ry="10" fill="#ebe8fb" stroke="#4a3aa7" stroke-width="1.6"/>
+<text x="574" y="1927.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#4a3aa7">REPORT</text>
+<text x="574.0" y="1947.1" font-size="13.5" fill="#32277c" font-weight="700" text-anchor="start">HOW AND WHERE TO FILE</text>
+<text x="1136" y="1947.1" font-size="11" font-weight="700" fill="#4a3aa7" text-anchor="end">§ 830.15(b)–(c)</text>
+<text x="574.0" y="1969.7" font-size="12" fill="#28243d" font-weight="400" text-anchor="start"><tspan font-weight="700">Crewmember statements:</tspan> each crewmember, if physically able when the report is</text>
+<text x="574.0" y="1986.2" font-size="12" fill="#28243d" font-weight="400" text-anchor="start">submitted, attaches a statement of the facts, conditions and circumstances as they appear</text>
+<text x="574.0" y="2002.8" font-size="12" fill="#28243d" font-weight="400" text-anchor="start">to him — an incapacitated crewmember submits it as soon as physically able.</text>
+<text x="574.0" y="2023.4" font-size="12" fill="#28243d" font-weight="400" text-anchor="start"><tspan font-weight="700">Where:</tspan> with the NTSB field office nearest the accident or incident. Forms are available from</text>
+<text x="574.0" y="2039.9" font-size="12" fill="#28243d" font-weight="400" text-anchor="start">NTSB field offices, NTSB headquarters, and FAA Flight Standards District Offices.</text>
+</g>
+<g id="defs">
+<rect x="30" y="1581" width="400" height="537" rx="10" ry="10" fill="#fbfbf9" stroke="#d6d4cc" stroke-width="1.6"/>
+<text x="44" y="1601.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#d6d4cc">REFERENCE</text>
+<text x="44.0" y="1621.1" font-size="13.5" fill="#3b3a36" font-weight="700" text-anchor="start">Key definitions</text>
+<text x="416" y="1621.1" font-size="11" font-weight="700" fill="#d6d4cc" text-anchor="end">§ 830.2</text>
+<text x="44.0" y="1643.0" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">Serious injury</tspan> — any injury that (1) requires hospitalization for</text>
+<text x="44.0" y="1658.9" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">more than 48 hours, commencing within 7 days of the injury;</text>
+<text x="44.0" y="1674.7" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">(2) results in a fracture of any bone (except simple fractures of</text>
+<text x="44.0" y="1690.6" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">fingers, toes or nose); (3) causes severe hemorrhages, nerve,</text>
+<text x="44.0" y="1706.5" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">muscle or tendon damage; (4) involves any internal organ; or</text>
+<text x="44.0" y="1722.3" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">(5) involves second- or third-degree burns, or any burns</text>
+<text x="44.0" y="1738.2" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">affecting more than 5% of the body surface.</text>
+<text x="44.0" y="1758.1" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">Fatal injury</tspan> — any injury that results in death within 30 days of</text>
+<text x="44.0" y="1774.0" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">the accident.</text>
+<text x="44.0" y="1793.8" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">Substantial damage</tspan> — damage or failure that adversely</text>
+<text x="44.0" y="1809.7" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">affects the structural strength, performance or flight</text>
+<text x="44.0" y="1825.6" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">characteristics of the aircraft and would normally require major</text>
+<text x="44.0" y="1841.4" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">repair or replacement of the affected component.<tspan font-weight="700"> Not</tspan></text>
+<text x="44.0" y="1857.3" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">substantial damage: engine failure or damage limited to one</text>
+<text x="44.0" y="1873.2" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">engine; bent fairings or cowling; dented skin; small punctured</text>
+<text x="44.0" y="1889.0" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">holes in the skin or fabric; ground damage to rotor or propeller</text>
+<text x="44.0" y="1904.9" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">blades; damage to landing gear, wheels, tires, flaps, engine</text>
+<text x="44.0" y="1920.8" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">accessories, brakes or wingtips.</text>
+<text x="44.0" y="1940.7" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">Public aircraft</tspan> — used only for the U.S. Government, or owned</text>
+<text x="44.0" y="1956.5" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">and operated (not for commercial purposes) or exclusively</text>
+<text x="44.0" y="1972.4" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">leased for at least 90 continuous days by a state, local, DC or</text>
+<text x="44.0" y="1988.3" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">territorial government — with limits on carrying passengers or</text>
+<text x="44.0" y="2004.1" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">property commercially.<tspan font-weight="700"> Civil aircraft</tspan> — any aircraft other than</text>
+<text x="44.0" y="2020.0" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">a public aircraft.</text>
+<text x="44.0" y="2039.9" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">Operator</tspan> — any person who causes or authorizes the</text>
+<text x="44.0" y="2055.7" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">operation of an aircraft (owner, lessee, bailee).<tspan font-weight="700"> Incident</tspan> — an</text>
+<text x="44.0" y="2071.6" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">occurrence other than an accident, associated with the</text>
+<text x="44.0" y="2087.5" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">operation of an aircraft, that affects or could affect the safety of</text>
+<text x="44.0" y="2103.4" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">operations.</text>
+</g>
+<g id="nums">
+<rect x="560" y="514" width="590" height="235" rx="10" ry="10" fill="#fbfbf9" stroke="#d6d4cc" stroke-width="1.6"/>
+<text x="574" y="534.0" font-size="10" font-weight="700" letter-spacing="0.8" fill="#d6d4cc">REFERENCE</text>
+<text x="574.0" y="554.1" font-size="13.5" fill="#3b3a36" font-weight="700" text-anchor="start">Numbers to remember</text>
+<text x="574.0" y="576.0" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">30 days</tspan> — death within 30 days of the</text>
+<text x="574.0" y="591.9" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">accident = fatal injury</text>
+<text x="574.0" y="611.7" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">&gt; 48 hours</tspan> in hospital, starting within<tspan font-weight="700"> 7 days</tspan></text>
+<text x="574.0" y="627.6" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">= serious injury</text>
+<text x="574.0" y="647.5" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">&gt; 5 %</tspan> of body surface burned (or any</text>
+<text x="574.0" y="663.4" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">2nd/3rd-degree burn) = serious injury</text>
+<text x="574.0" y="683.2" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">$25,000</tspan> — property damage other than the</text>
+<text x="574.0" y="699.1" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">aircraft that triggers notice</text>
+<text x="574.0" y="719.0" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">12,500 lb</tspan> MTOW — “large multiengine</text>
+<text x="574.0" y="734.8" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">aircraft” threshold for item 7</text>
+<text x="863.0" y="576.0" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">&gt; 50 %</tspan> of cockpit displays lost (not flickering)</text>
+<text x="863.0" y="591.9" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">= serious incident</text>
+<text x="863.0" y="611.7" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">90 continuous days</tspan> — minimum exclusive</text>
+<text x="863.0" y="627.6" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">lease for a state/local public aircraft</text>
+<text x="863.0" y="647.5" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">10 days</tspan> — Form 6120.1/2 due after an</text>
+<text x="863.0" y="663.4" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">accident</text>
+<text x="863.0" y="683.2" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">7 days</tspan> — Form 6120.1/2 due if an overdue</text>
+<text x="863.0" y="699.1" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">aircraft is still missing</text>
+<text x="863.0" y="719.0" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start"><tspan font-weight="700">Immediately</tspan> — notification, by the most</text>
+<text x="863.0" y="734.8" font-size="11.5" fill="#3f3e3a" font-weight="400" text-anchor="start">expeditious means available</text>
+</g>
+<text x="30" y="2156" font-size="11" fill="#7a7872">Study aid summarizing 49 CFR Part 830 (eCFR, current as of Aug. 17, 2026). Not legal advice — always check the current regulation and NTSB guidance.</text>
+</svg></div>
+    </div>
+  </section>
+
+  <!-- ============================ QUICK REFERENCE ============================ -->
+  <section id="tab-ref" class="tab ref" role="tabpanel">
+    <div class="card">
+      <h2>Quick reference — 49 CFR Part 830</h2>
+      <p class="note">Condensed from <a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-VIII/part-830" target="_blank" rel="noopener">the eCFR text</a> (current as of Aug. 17, 2026). Section numbers are given so you can check the source language.</p>
+
+      <h3>§ 830.1 Applicability</h3>
+      <ul>
+        <li><b>Notification and reporting</b> (Subparts B &amp; D) apply to: civil aircraft of the United States <i>wherever they occur</i>; certain public aircraft <i>wherever they occur</i>; and foreign civil aircraft when the events occur in the United States, its territories or possessions.</li>
+        <li><b>Preservation</b> (Subpart C) applies to all civil and certain public aircraft accidents in the United States and its territories or possessions.</li>
+      </ul>
+
+      <h3>§ 830.2 Definitions</h3>
+      <table>
+        <tr><th>Aircraft accident</th><td>An occurrence associated with the operation of an aircraft that takes place between the time any person boards with the intention of flight and all such persons have disembarked, in which any person suffers death or serious injury, or the aircraft receives substantial damage. Includes "unmanned aircraft accident."</td></tr>
+        <tr><th>Unmanned aircraft accident</th><td>Occurrence associated with any public or civil UAS between system activation with the purpose of flight and deactivation at the conclusion of the mission, in which (1) any person suffers death or serious injury, or (2) the aircraft holds an airworthiness certificate and sustains substantial damage.</td></tr>
+        <tr><th>Incident</th><td>An occurrence other than an accident, associated with the operation of an aircraft, which affects or could affect the safety of operations.</td></tr>
+        <tr><th>Civil aircraft</th><td>Any aircraft other than a public aircraft.</td></tr>
+        <tr><th>Public aircraft</th><td>Aircraft used only for the U.S. Government, or owned and operated (except for commercial purposes) or exclusively leased for at least 90 continuous days by a state, D.C., territorial or local government. Not a public aircraft if government-owned and transporting property for commercial purposes, or transporting passengers other than (non-commercially) crewmembers or persons whose presence is required for a governmental function (firefighting, search and rescue, law enforcement, aeronautical research, biological or geological resource management), or persons aboard Armed Forces / intelligence agency aircraft. Cost-reimbursement operations for another government unit still count as public aircraft if certified to the FAA Administrator as necessary to meet a significant and imminent threat to life or property with no private operator reasonably available.</td></tr>
+        <tr><th>Operator</th><td>Any person who causes or authorizes the operation of an aircraft, such as the owner, lessee or bailee.</td></tr>
+        <tr><th>Fatal injury</th><td>Any injury which results in death within 30 days of the accident.</td></tr>
+        <tr><th>Serious injury</th><td>Any injury which (1) requires hospitalization for more than 48 hours, commencing within 7 days from the date the injury was received; (2) results in a fracture of any bone (except simple fractures of fingers, toes or nose); (3) causes severe hemorrhages, nerve, muscle or tendon damage; (4) involves any internal organ; or (5) involves second- or third-degree burns, or any burns affecting more than 5 percent of the body surface.</td></tr>
+        <tr><th>Substantial damage</th><td>Damage or failure which adversely affects the structural strength, performance or flight characteristics of the aircraft, and which would normally require major repair or replacement of the affected component. <b>Not</b> substantial damage: engine failure or damage limited to an engine if only one engine fails or is damaged; bent fairings or cowling; dented skin; small punctured holes in the skin or fabric; ground damage to rotor or propeller blades; damage to landing gear, wheels, tires, flaps, engine accessories, brakes or wingtips.</td></tr>
+      </table>
+
+      <h3>§ 830.5 Immediate notification</h3>
+      <div class="callout">The operator of any civil aircraft, any public aircraft <i>not</i> operated by the Armed Forces or a U.S. intelligence agency, or any foreign aircraft must <b>immediately, and by the most expeditious means available</b>, notify the nearest NTSB office when an aircraft accident or any of the listed serious incidents occurs, or when an aircraft is overdue and believed to have been involved in an accident. NTSB Response Operations Center: <b>844-373-9922</b> or <b>202-314-6290</b>. HQ: 490 L'Enfant Plaza SW, Washington, DC 20594.</div>
+      <p><b>The listed serious incidents — § 830.5(a):</b></p>
+      <ol>
+        <li>Flight control system malfunction or failure.</li>
+        <li>Inability of any required flight crewmember to perform normal flight duties as a result of injury or illness.</li>
+        <li>Failure of any internal turbine engine component that results in the escape of debris other than out the exhaust path.</li>
+        <li>In-flight fire.</li>
+        <li>Aircraft collision in flight.</li>
+        <li>Damage to property, other than the aircraft, estimated to exceed $25,000 for repair (including materials and labor) or fair market value in the event of total loss, whichever is less.</li>
+        <li>For large multiengine aircraft (more than 12,500 lb maximum certificated takeoff weight): (i) in-flight failure of electrical systems requiring sustained use of an emergency bus powered by a back-up source (battery, APU, air-driven generator) to retain flight control or essential instruments; (ii) in-flight failure of hydraulic systems resulting in sustained reliance on the sole remaining hydraulic or mechanical system for movement of flight control surfaces; (iii) sustained loss of the power or thrust produced by two or more engines; (iv) an evacuation in which an emergency egress system is utilized.</li>
+        <li>Release of all or a portion of a propeller blade, excluding release caused solely by ground contact.</li>
+        <li>A complete loss of information, excluding flickering, from more than 50 percent of the cockpit displays (EFIS, EICAS, ECAM, or other displays of this type such as PFD/PND and other integrated displays).</li>
+        <li>ACAS resolution advisories issued when the aircraft is on an IFR flight plan and compliance is necessary to avert a substantial risk of collision between two or more aircraft.</li>
+        <li>Damage to helicopter tail or main rotor blades, including ground damage, that requires major repair or replacement of the blade(s).</li>
+        <li>An operator operating an airplane as an air carrier at a public-use airport on land: (i) lands or departs on a taxiway, incorrect runway, or other area not designed as a runway; or (ii) experiences a runway incursion that requires the operator or the crew of another aircraft or vehicle to take immediate corrective action to avoid a collision.</li>
+      </ol>
+      <p><b>§ 830.5(b):</b> an aircraft is overdue and is believed to have been involved in an accident.</p>
+
+      <h3>§ 830.6 Information to give in the notification (if available)</h3>
+      <ol type="a">
+        <li>Type, nationality, and registration marks of the aircraft;</li>
+        <li>Name of owner, and operator of the aircraft;</li>
+        <li>Name of the pilot-in-command;</li>
+        <li>Date and time of the accident;</li>
+        <li>Last point of departure and point of intended landing;</li>
+        <li>Position of the aircraft with reference to some easily defined geographical point;</li>
+        <li>Number of persons aboard, number killed, and number seriously injured;</li>
+        <li>Nature of the accident, the weather and the extent of damage to the aircraft, so far as is known;</li>
+        <li>A description of any explosives, radioactive materials, or other dangerous articles carried.</li>
+      </ol>
+
+      <h3>§ 830.10 Preservation of wreckage, mail, cargo and records</h3>
+      <ul>
+        <li><b>(a)</b> The operator of an aircraft involved in an accident or incident for which notification must be given is responsible for preserving, to the extent possible, wreckage, cargo and mail aboard, and all records (including flight, maintenance and voice recorder media) pertaining to the operation and maintenance of the aircraft and to the airmen — until the Board takes custody or a release is granted under § 831.12(b).</li>
+        <li><b>(b)</b> Before the Board takes custody, wreckage, mail or cargo may not be disturbed or moved except to the extent necessary to (1) remove persons injured or trapped, (2) protect the wreckage from further damage, or (3) protect the public from injury.</li>
+        <li><b>(c)</b> Where it is necessary to move wreckage, mail or cargo, sketches, descriptive notes and photographs shall be made, if possible, of the original positions and condition of the wreckage and any significant impact marks.</li>
+        <li><b>(d)</b> The operator shall retain all records, reports, internal documents and memoranda dealing with the accident or incident until authorized by the Board to the contrary.</li>
+      </ul>
+
+      <h3>§ 830.15 Reports and statements to be filed</h3>
+      <table>
+        <tr><th>Form</th><td>NTSB Form 6120.1/2 (OMB No. 3147-0001) — available from NTSB field offices, NTSB headquarters, and FAA Flight Standards District Offices.</td></tr>
+        <tr><th>Who files</th><td>The operator of a civil, public (as specified in § 830.5), or foreign aircraft.</td></tr>
+        <tr><th>Accident</th><td>Within <b>10 days</b> after the accident.</td></tr>
+        <tr><th>Overdue aircraft</th><td>After <b>7 days</b> if the aircraft is still missing.</td></tr>
+        <tr><th>Serious incident (§ 830.5(a))</th><td>Only as requested by an authorized representative of the Board.</td></tr>
+        <tr><th>Crewmember statement</th><td>Each crewmember, if physically able when the report is submitted, attaches a statement of the facts, conditions and circumstances as they appear to him; if incapacitated, he submits it as soon as physically able.</td></tr>
+        <tr><th>Where</th><td>With the field office of the Board nearest the accident or incident.</td></tr>
+      </table>
+      <div class="callout warn" style="margin-top:16px"><b>Two easy mix-ups:</b> (1) The <b>$25,000</b> figure is about damage to property <i>other than</i> the aircraft (§ 830.5(a)(6)) — it is not part of the "substantial damage" definition. (2) Ground damage to rotor blades is <i>not</i> "substantial damage" (§ 830.2), but helicopter rotor blade damage needing major repair or replacement — including ground damage — <i>is</i> a listed serious incident (§ 830.5(a)(11)).</div>
+    </div>
+  </section>
+
+  <!-- ============================ ANSWER KEY ============================ -->
+  <section id="tab-bank" class="tab" role="tabpanel">
+    <div class="card">
+      <h2 style="font-size:20px">Answer key — all 95 questions</h2>
+      <p class="hint">Grouped by section. The correct answer is highlighted, followed by the explanation and citation. Use this as a study sheet before or after a quiz.</p>
+      <div id="bank"></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><div class="source"><b>References:</b>
+<ul class="source-list">
+<li>Source of truth: <a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-VIII/part-830" target="_blank" rel="noopener">49 CFR Part 830, eCFR (continuously updated)</a> &mdash; every section number on this page links back to this text</li>
+<li>Official annual edition: <a href="https://www.govinfo.gov/link/cfr/49/830?link-type=pdf&amp;year=mostrecent" target="_blank" rel="noopener">49 CFR Part 830 (PDF), govinfo.gov</a></li>
+<li>To notify the NTSB: Response Operations Center, 844-373-9922 or 202-314-6290 (per the &sect; 830.5 footnote); <a href="https://www.ntsb.gov/" target="_blank" rel="noopener">ntsb.gov</a></li>
+</ul>
+</div>
+<p class="disclaimer"><b>Disclaimer:</b> Educational study aid only, not legal advice. This page summarizes 49 CFR Part 830 as of the date shown; regulations change &mdash; always work from the current eCFR text and NTSB guidance. The operator and Pilot in Command remain responsible for compliance.</p></div><div class="copyright"><div class="wrap"><span>&copy; <span id="yr"></span> PilotDECODER</span><a class="totop" href="#top">BACK TO TOP &uarr;</a></div></div></footer>
+
+<script>
+const SECTIONS = [{"key": "app", "name": "Applicability", "cite": "§ 830.1"}, {"key": "def", "name": "Definitions", "cite": "§ 830.2"}, {"key": "notify", "name": "Immediate notification", "cite": "§ 830.5"}, {"key": "info", "name": "Notification contents", "cite": "§ 830.6"}, {"key": "preserve", "name": "Preservation", "cite": "§ 830.10"}, {"key": "report", "name": "Reports", "cite": "§ 830.15"}];
+const QUESTIONS = [{"s": "app", "q": "Under § 830.1, Part 830's notification and reporting rules apply to events involving civil aircraft of the United States…", "o": ["only when the event occurs inside the United States", "wherever they occur", "only when the event occurs in U.S. territories or possessions", "only when the FAA requests NTSB involvement"], "a": 1, "e": "§ 830.1(a) covers civil aircraft of the United States \"wherever they occur.\" Foreign civil aircraft, by contrast, are covered only when the events occur in the United States, its territories, or its possessions.", "c": "§ 830.1(a)", "sc": false}, {"s": "app", "q": "A foreign-registered civil aircraft has an accident. Part 830's notification and reporting rules apply if the accident occurs…", "o": ["anywhere in the world", "in the United States, its territories, or its possessions", "only over international waters", "only when the aircraft's country of registry asks the NTSB to investigate"], "a": 1, "e": "§ 830.1(a): the part applies to foreign civil aircraft \"where the events occur in the United States, its territories, or its possessions.\"", "c": "§ 830.1(a)", "sc": false}, {"s": "app", "q": "§ 830.1(b) says the rules on preserving wreckage, mail, cargo, and records apply to accidents involving…", "o": ["all civil and certain public aircraft, in the United States and its territories or possessions", "only foreign civil aircraft", "only aircraft operated by the Armed Forces", "civil aircraft anywhere in the world"], "a": 0, "e": "§ 830.1(b): \"Preservation of aircraft wreckage, mail, cargo, and records involving all civil and certain public aircraft accidents, as specified in this part, in the United States and its territories or possessions.\"", "c": "§ 830.1(b)", "sc": false}, {"s": "app", "q": "Part 830 is organized into four subparts. Which pairing is correct?", "o": ["Subpart A General; Subpart B Initial Notification; Subpart C Preservation of wreckage, mail, cargo, and records; Subpart D Reporting", "Subpart A Definitions; Subpart B Preservation; Subpart C Notification; Subpart D Penalties", "Subpart A Notification; Subpart B Reporting; Subpart C Investigation; Subpart D Enforcement", "Subpart A General; Subpart B Reporting; Subpart C Notification; Subpart D Preservation"], "a": 0, "e": "Subpart A (§§ 830.1–830.2 applicability and definitions), Subpart B Initial Notification (§§ 830.5–830.6), Subpart C Preservation (§ 830.10), and Subpart D Reporting (§ 830.15).", "c": "Part 830 table of contents", "sc": false}, {"s": "app", "q": "Which agency issues Part 830, and where does it sit in the Code of Federal Regulations?", "o": ["The National Transportation Safety Board — Title 49 (Transportation), Chapter VIII", "The Federal Aviation Administration — Title 14 (Aeronautics and Space)", "The Department of Homeland Security — Title 6", "The Federal Aviation Administration — Title 49, Chapter I"], "a": 0, "e": "Part 830 is in Title 49, Subtitle B, Chapter VIII — National Transportation Safety Board. (The FAA's aviation rules are in Title 14.)", "c": "49 CFR Chapter VIII", "sc": false}, {"s": "def", "q": "For a manned aircraft, the \"aircraft accident\" definition covers occurrences that take place between…", "o": ["engine start and engine shutdown", "the time any person boards the aircraft with the intention of flight and the time all such persons have disembarked", "takeoff and landing", "the time the aircraft is pushed back and the time it is parked at the gate"], "a": 1, "e": "§ 830.2 \"Aircraft accident\": an occurrence \"which takes place between the time any person boards the aircraft with the intention of flight and all such persons have disembarked.\"", "c": "§ 830.2 (Aircraft accident)", "sc": false}, {"s": "def", "q": "To be an \"aircraft accident\" involving a manned aircraft, the occurrence must involve which outcome?", "o": ["Any injury requiring first aid", "Any damage to the aircraft, however minor", "Death or serious injury to any person, or substantial damage to the aircraft", "A violation of an FAA regulation"], "a": 2, "e": "§ 830.2: an aircraft accident is one \"in which any person suffers death or serious injury, or in which the aircraft receives substantial damage.\"", "c": "§ 830.2 (Aircraft accident)", "sc": false}, {"s": "def", "q": "\"Civil aircraft\" is defined in § 830.2 as…", "o": ["any aircraft other than a public aircraft", "any aircraft registered in the United States", "any aircraft weighing 12,500 pounds or less", "any aircraft operated for compensation or hire"], "a": 0, "e": "§ 830.2: \"Civil aircraft means any aircraft other than a public aircraft.\"", "c": "§ 830.2 (Civil aircraft)", "sc": false}, {"s": "def", "q": "A \"fatal injury\" is an injury that results in death within how long after the accident?", "o": ["7 days", "48 hours", "30 days", "1 year"], "a": 2, "e": "§ 830.2: \"Fatal injury means any injury which results in death within 30 days of the accident.\"", "c": "§ 830.2 (Fatal injury)", "sc": false}, {"s": "def", "q": "Which statement matches the § 830.2 definition of \"incident\"?", "o": ["An occurrence other than an accident, associated with the operation of an aircraft, which affects or could affect the safety of operations", "Any occurrence in which the aircraft receives substantial damage", "Any occurrence in which a person is seriously injured", "Any occurrence that the FAA elects to investigate"], "a": 0, "e": "§ 830.2: \"Incident means an occurrence other than an accident, associated with the operation of an aircraft, which affects or could affect the safety of operations.\"", "c": "§ 830.2 (Incident)", "sc": false}, {"s": "def", "q": "Under § 830.2, the \"operator\" of an aircraft is…", "o": ["only the pilot-in-command", "only the person named on the registration certificate", "any person who causes or authorizes the operation of an aircraft, such as the owner, lessee, or bailee", "only the holder of an air carrier certificate"], "a": 2, "e": "§ 830.2: \"Operator means any person who causes or authorizes the operation of an aircraft, such as the owner, lessee, or bailee of an aircraft.\"", "c": "§ 830.2 (Operator)", "sc": false}, {"s": "def", "q": "For an aircraft leased by a state government to qualify as a \"public aircraft,\" the lease must be exclusive and last at least…", "o": ["30 continuous days", "90 continuous days", "180 continuous days", "12 months"], "a": 1, "e": "§ 830.2 \"Public aircraft\": an aircraft \"owned and operated (except for commercial purposes) or exclusively leased for at least 90 continuous days by a government other than the United States Government…\"", "c": "§ 830.2 (Public aircraft)", "sc": false}, {"s": "def", "q": "A state-owned aircraft is used to haul freight for paying customers. Under § 830.2 it is…", "o": ["a public aircraft, because a government owns it", "not a public aircraft, because it is transporting property for commercial purposes", "a public aircraft only if it weighs more than 12,500 pounds", "exempt from Part 830 entirely"], "a": 1, "e": "§ 830.2: \"'Public aircraft' does not include a government-owned aircraft transporting property for commercial purposes…\" As a non-public aircraft it is a civil aircraft.", "c": "§ 830.2 (Public aircraft)", "sc": true}, {"s": "def", "q": "A county-owned helicopter carries (not for commercial purposes) a search-and-rescue team whose presence is required to perform the mission. Under § 830.2 the aircraft…", "o": ["remains a public aircraft, because those persons are associated with performing a governmental function", "loses public-aircraft status because it is carrying passengers", "is a civil aircraft because the county is not the U.S. Government", "is a public aircraft only if the FAA issues a waiver"], "a": 0, "e": "§ 830.2 allows a public aircraft to transport (for other than commercial purposes) \"crewmembers or other persons aboard the aircraft whose presence is required to perform, or is associated with the performance of, a governmental function such as firefighting, search and rescue, law enforcement, aeronautical research, or biological or geological resource management.\"", "c": "§ 830.2 (Public aircraft)", "sc": true}, {"s": "def", "q": "One unit of government operates an aircraft on behalf of another under a cost-reimbursement agreement. Despite the commercial-purpose limits, the aircraft is treated as a public aircraft if the benefiting unit of government certifies to the FAA Administrator that…", "o": ["the flight was pre-approved by the NTSB", "the operation was necessary to respond to a significant and imminent threat to life or property (including natural resources) and no service by a private operator was reasonably available", "the aircraft weighs less than 12,500 pounds", "the crew holds commercial pilot certificates"], "a": 1, "e": "§ 830.2 \"Public aircraft\" (last sentence): the certification is \"that the operation was necessary to respond to a significant and imminent threat to life or property (including natural resources) and that no service by a private operator was reasonably available to meet the threat.\"", "c": "§ 830.2 (Public aircraft)", "sc": false}, {"s": "def", "q": "For a \"serious injury\" based on hospitalization, the injury must require hospitalization for…", "o": ["more than 24 hours, commencing within 7 days of the injury", "more than 48 hours, commencing within 7 days from the date the injury was received", "more than 48 hours, commencing within 30 days of the injury", "any length of time, as long as the person is admitted"], "a": 1, "e": "§ 830.2 \"Serious injury\" (1): \"Requires hospitalization for more than 48 hours, commencing within 7 days from the date of the injury was received.\"", "c": "§ 830.2 (Serious injury)", "sc": false}, {"s": "def", "q": "Which fracture does NOT by itself qualify as a \"serious injury\"?", "o": ["A fractured femur", "A fractured rib", "A simple fracture of a finger", "A fractured collarbone"], "a": 2, "e": "§ 830.2 \"Serious injury\" (2): a fracture of any bone counts \"except simple fractures of fingers, toes, or nose.\"", "c": "§ 830.2 (Serious injury)", "sc": false}, {"s": "def", "q": "Which burn injury meets the \"serious injury\" definition?", "o": ["Any first-degree burn", "Second- or third-degree burns, or any burns affecting more than 5 percent of the body surface", "Only third-degree burns covering more than 10 percent of the body", "Only burns that require skin grafts"], "a": 1, "e": "§ 830.2 \"Serious injury\" (5): \"involves second- or third-degree burns, or any burns affecting more than 5 percent of the body surface.\"", "c": "§ 830.2 (Serious injury)", "sc": false}, {"s": "def", "q": "Which of the following is listed as a \"serious injury\" in § 830.2?", "o": ["A sprained wrist", "Any injury involving an internal organ", "A bruise treated with an ice pack", "A simple fracture of the nose"], "a": 1, "e": "§ 830.2 \"Serious injury\" (4): \"involves any internal organ.\" Sprains and bruises are not listed, and simple fractures of the nose are expressly excluded.", "c": "§ 830.2 (Serious injury)", "sc": false}, {"s": "def", "q": "Besides hospitalization, fractures, internal-organ involvement, and burns, § 830.2 counts which of these as a serious injury?", "o": ["Severe hemorrhages, nerve, muscle, or tendon damage", "Any laceration requiring stitches", "A brief loss of consciousness", "Any injury requiring an ambulance ride"], "a": 0, "e": "§ 830.2 \"Serious injury\" (3): \"causes severe hemorrhages, nerve, muscle, or tendon damage.\"", "c": "§ 830.2 (Serious injury)", "sc": false}, {"s": "def", "q": "\"Substantial damage\" means damage or failure that…", "o": ["costs more than $25,000 to repair", "adversely affects the structural strength, performance, or flight characteristics of the aircraft, and would normally require major repair or replacement of the affected component", "grounds the aircraft for more than 48 hours", "is visible from outside the aircraft"], "a": 1, "e": "§ 830.2 \"Substantial damage.\" The $25,000 figure belongs to § 830.5(a)(6) (damage to property other than the aircraft), not to this definition.", "c": "§ 830.2 (Substantial damage)", "sc": false}, {"s": "def", "q": "Which of the following IS \"substantial damage\" under § 830.2?", "o": ["Dented skin", "Bent fairings or cowling", "Damage to a wing spar that adversely affects structural strength and normally requires major repair", "Damage limited to the landing gear, wheels, and tires"], "a": 2, "e": "§ 830.2 expressly excludes dented skin, bent fairings or cowling, and landing gear/wheel/tire damage. Damage that adversely affects structural strength and would normally require major repair meets the definition.", "c": "§ 830.2 (Substantial damage)", "sc": false}, {"s": "def", "q": "On a twin-engine airplane, one engine suffers an internal failure. All damage is confined to that engine. Under § 830.2 this is…", "o": ["substantial damage, because an engine is a major component", "not substantial damage, because engine failure or damage limited to an engine when only one engine fails is expressly excluded", "substantial damage only if the engine must be replaced", "substantial damage only if the aircraft is over 12,500 pounds"], "a": 1, "e": "§ 830.2: \"Engine failure or damage limited to an engine if only one engine fails or is damaged … are not considered 'substantial damage' for the purpose of this part.\"", "c": "§ 830.2 (Substantial damage)", "sc": true}, {"s": "def", "q": "Which list contains ONLY items that § 830.2 says are NOT substantial damage?", "o": ["Bent fairings, dented skin, small punctured holes in the skin or fabric, damage to wingtips", "Wing spar failure, dented skin, bent cowling", "Damage to flaps, brakes, and the main fuselage frames", "Ground damage to propeller blades and a collapsed fuselage"], "a": 0, "e": "§ 830.2 excludes: engine failure/damage limited to one engine; bent fairings or cowling; dented skin; small punctured holes in the skin or fabric; ground damage to rotor or propeller blades; and damage to landing gear, wheels, tires, flaps, engine accessories, brakes, or wingtips.", "c": "§ 830.2 (Substantial damage)", "sc": false}, {"s": "def", "q": "For an unmanned aircraft system, the \"unmanned aircraft accident\" definition covers the period between…", "o": ["takeoff and landing", "the time the system is activated with the purpose of flight and the time it is deactivated at the conclusion of its mission", "the time the remote pilot arrives at the launch site and the time the pilot leaves", "battery installation and battery removal"], "a": 1, "e": "§ 830.2 \"Unmanned aircraft accident\": \"…takes place between the time that the system is activated with the purpose of flight and the time that the system is deactivated at the conclusion of its mission…\"", "c": "§ 830.2 (Unmanned aircraft accident)", "sc": false}, {"s": "def", "q": "An unmanned aircraft accident based on substantial damage (with no death or serious injury) requires that the aircraft…", "o": ["weigh more than 55 pounds", "hold an airworthiness certificate", "be operated for commercial purposes", "be operated beyond visual line of sight"], "a": 1, "e": "§ 830.2 \"Unmanned aircraft accident\" (2): \"The aircraft holds an airworthiness certificate and sustains substantial damage.\"", "c": "§ 830.2 (Unmanned aircraft accident)", "sc": false}, {"s": "def", "q": "The \"unmanned aircraft accident\" definition applies to…", "o": ["civil unmanned aircraft systems only", "public unmanned aircraft systems only", "any public or civil unmanned aircraft system", "only unmanned aircraft with a maximum takeoff weight over 55 pounds"], "a": 2, "e": "§ 830.2: \"…an occurrence associated with the operation of any public or civil unmanned aircraft system…\"", "c": "§ 830.2 (Unmanned aircraft accident)", "sc": false}, {"s": "def", "q": "A passenger is hospitalized for 36 hours for observation after a hard landing and is then released; the aircraft is undamaged. Based on § 830.2, was this an \"aircraft accident\"?", "o": ["Yes — any hospitalization is a serious injury", "No — hospitalization must exceed 48 hours to be a serious injury, and there was no substantial damage", "Yes — a hard landing is always an accident", "No — only crewmember injuries count"], "a": 1, "e": "§ 830.2 \"Serious injury\" (1) requires hospitalization for more than 48 hours (commencing within 7 days). With no serious injury, death, or substantial damage, the accident definition is not met.", "c": "§ 830.2 (Serious injury / Aircraft accident)", "sc": true}, {"s": "def", "q": "A person seriously injured in an accident dies 45 days later from those injuries. Under § 830.2, is that a \"fatal injury\"?", "o": ["Yes — any death caused by the accident is a fatal injury", "No — a fatal injury is one resulting in death within 30 days of the accident", "Yes — but only if the NTSB has not yet closed the investigation", "No — a fatal injury requires death at the scene"], "a": 1, "e": "§ 830.2: \"Fatal injury means any injury which results in death within 30 days of the accident.\" (The injuries would still be serious injuries.)", "c": "§ 830.2 (Fatal injury)", "sc": true}, {"s": "def", "q": "A parked, unoccupied airplane — no one has boarded with the intention of flight — is struck by a fuel truck, buckling a wing spar. Judged against the § 830.2 \"aircraft accident\" definition alone, this is…", "o": ["an aircraft accident, because there is substantial damage", "not an \"aircraft accident,\" because the occurrence is outside the boarding-to-disembarking window", "an aircraft accident only if the truck driver is injured", "an aircraft accident because it happened on an airport"], "a": 1, "e": "The definition requires the occurrence to take place between the time any person boards with the intention of flight and all such persons have disembarked. Ground damage with no one aboard for flight falls outside that window, so it does not meet the Part 830 accident definition (whatever other reporting your insurer or the FAA may want).", "c": "§ 830.2 (Aircraft accident)", "sc": true}, {"s": "def", "q": "A hobbyist's quadcopter (no airworthiness certificate) flies into a tree and is destroyed; nobody is hurt. Under § 830.2, is this an \"unmanned aircraft accident\"?", "o": ["Yes — the aircraft was destroyed", "No — with no death or serious injury, substantial damage counts only if the aircraft holds an airworthiness certificate", "Yes — every drone crash is an unmanned aircraft accident", "No — unmanned aircraft are never covered by Part 830"], "a": 1, "e": "§ 830.2 \"Unmanned aircraft accident\" requires either (1) death or serious injury, or (2) an aircraft that holds an airworthiness certificate and sustains substantial damage.", "c": "§ 830.2 (Unmanned aircraft accident)", "sc": true}, {"s": "notify", "q": "Which operators does § 830.5 require to notify the NTSB immediately?", "o": ["Operators of civil aircraft only", "Operators of any civil aircraft, any public aircraft not operated by the Armed Forces or an intelligence agency of the United States, or any foreign aircraft", "Operators of air carrier aircraft only", "Any pilot who witnesses an accident"], "a": 1, "e": "§ 830.5: \"The operator of any civil aircraft, or any public aircraft not operated by the Armed Forces or an intelligence agency of the United States, or any foreign aircraft shall immediately … notify the nearest NTSB office…\"", "c": "§ 830.5", "sc": false}, {"s": "notify", "q": "When a notifiable event occurs, § 830.5 requires notification…", "o": ["within 24 hours, in writing", "within 10 days, on NTSB Form 6120.1/2", "immediately, and by the most expeditious means available, to the nearest NTSB office", "within 72 hours, by certified mail to NTSB headquarters"], "a": 2, "e": "§ 830.5: \"…shall immediately, and by the most expeditious means available, notify the nearest National Transportation Safety Board (NTSB) office…\" The written 10-day report is a separate requirement in § 830.15.", "c": "§ 830.5", "sc": false}, {"s": "notify", "q": "Which of the following is NOT one of the serious incidents listed in § 830.5(a)?", "o": ["Flight control system malfunction or failure", "In-flight fire", "Aircraft collision in flight", "A hard landing with damage limited to the landing gear"], "a": 3, "e": "Flight control malfunction (a)(1), in-flight fire (a)(4), and aircraft collision in flight (a)(5) are all listed. Landing-gear damage is neither a listed serious incident nor \"substantial damage\" under § 830.2.", "c": "§ 830.5(a)", "sc": false}, {"s": "notify", "q": "§ 830.5(a)(2) requires notification when a required flight crewmember…", "o": ["is late reporting for duty", "is unable to perform normal flight duties as a result of injury or illness", "exceeds flight-time limits", "makes a navigation error"], "a": 1, "e": "§ 830.5(a)(2): \"Inability of any required flight crewmember to perform normal flight duties as a result of injury or illness.\"", "c": "§ 830.5(a)(2)", "sc": false}, {"s": "notify", "q": "A turbine engine event is a listed serious incident under § 830.5(a)(3) when an internal engine component fails and…", "o": ["the engine must be shut down in flight", "debris escapes other than out the exhaust path", "the engine exceeds a temperature limit", "the aircraft diverts to an alternate airport"], "a": 1, "e": "§ 830.5(a)(3): \"Failure of any internal turbine engine component that results in the escape of debris other than out the exhaust path.\"", "c": "§ 830.5(a)(3)", "sc": false}, {"s": "notify", "q": "Under § 830.5(a)(6), damage to property OTHER than the aircraft triggers immediate notification when the estimated damage exceeds…", "o": ["$10,000", "$25,000 for repair (including materials and labor) or fair market value in the event of total loss, whichever is less", "$50,000", "$25,000 in damage to the aircraft itself"], "a": 1, "e": "§ 830.5(a)(6): \"Damage to property, other than the aircraft, estimated to exceed $25,000 for repair (including materials and labor) or fair market value in the event of total loss, whichever is less.\"", "c": "§ 830.5(a)(6)", "sc": false}, {"s": "notify", "q": "For the serious incidents in § 830.5(a)(7), a \"large multiengine aircraft\" is one with a maximum certificated takeoff weight of…", "o": ["more than 6,000 pounds", "more than 12,500 pounds", "more than 19,000 pounds", "more than 41,000 pounds"], "a": 1, "e": "§ 830.5(a)(7): \"For large multiengine aircraft (more than 12,500 pounds maximum certificated takeoff weight)…\"", "c": "§ 830.5(a)(7)", "sc": false}, {"s": "notify", "q": "On a large multiengine aircraft, which electrical event is a listed serious incident?", "o": ["Any generator failure", "In-flight failure of electrical systems that requires the sustained use of an emergency bus powered by a back-up source (battery, APU, or air-driven generator) to retain flight control or essential instruments", "Loss of cabin lighting", "A tripped circuit breaker that resets normally"], "a": 1, "e": "§ 830.5(a)(7)(i).", "c": "§ 830.5(a)(7)(i)", "sc": false}, {"s": "notify", "q": "On a large multiengine aircraft, which hydraulic event is a listed serious incident?", "o": ["Any hydraulic leak discovered after landing", "In-flight failure of hydraulic systems that results in sustained reliance on the sole remaining hydraulic or mechanical system for movement of flight control surfaces", "Slow landing-gear retraction", "Loss of nosewheel steering on the ground"], "a": 1, "e": "§ 830.5(a)(7)(ii).", "c": "§ 830.5(a)(7)(ii)", "sc": false}, {"s": "notify", "q": "For large multiengine aircraft, § 830.5(a)(7)(iii) requires notification for…", "o": ["sustained loss of the power or thrust produced by two or more engines", "any single-engine shutdown", "a momentary compressor stall", "an engine exceeding its N1 limit"], "a": 0, "e": "§ 830.5(a)(7)(iii): \"Sustained loss of the power or thrust produced by two or more engines.\"", "c": "§ 830.5(a)(7)(iii)", "sc": false}, {"s": "notify", "q": "For large multiengine aircraft, an evacuation is a listed serious incident when…", "o": ["passengers deplane by airstairs after a smoke report", "an emergency egress system (for example, the slides) is utilized", "the evacuation takes more than 90 seconds", "more than 50 passengers are aboard"], "a": 1, "e": "§ 830.5(a)(7)(iv): \"An evacuation of an aircraft in which an emergency egress system is utilized.\"", "c": "§ 830.5(a)(7)(iv)", "sc": false}, {"s": "notify", "q": "Release of all or a portion of a propeller blade is a listed serious incident under § 830.5(a)(8) EXCEPT when…", "o": ["it happens at night", "the release is caused solely by ground contact", "the blade is composite rather than metal", "the aircraft is single-engine"], "a": 1, "e": "§ 830.5(a)(8): \"Release of all or a portion of a propeller blade from an aircraft, excluding release caused solely by ground contact.\"", "c": "§ 830.5(a)(8)", "sc": false}, {"s": "notify", "q": "A cockpit-display event is a listed serious incident under § 830.5(a)(9) when there is…", "o": ["flickering of any primary flight display", "a complete loss of information (excluding flickering) from more than 50 percent of the aircraft's cockpit displays such as EFIS, EICAS, or ECAM displays", "loss of a single standby instrument", "a failed cabin entertainment system"], "a": 1, "e": "§ 830.5(a)(9): \"A complete loss of information, excluding flickering, from more than 50 percent of an aircraft's cockpit displays known as: (i) EFIS displays; (ii) EICAS displays; (iii) ECAM displays; or (iv) other displays of this type…\"", "c": "§ 830.5(a)(9)", "sc": false}, {"s": "notify", "q": "An ACAS (TCAS) resolution advisory is a listed serious incident under § 830.5(a)(10) when the aircraft is…", "o": ["operating under visual flight rules in Class B airspace", "operating on an instrument flight rules flight plan and compliance with the advisory is necessary to avert a substantial risk of collision between two or more aircraft", "operating at any time, because all resolution advisories must be reported", "within 5 miles of an airport"], "a": 1, "e": "§ 830.5(a)(10).", "c": "§ 830.5(a)(10)", "sc": false}, {"s": "notify", "q": "§ 830.5(a)(11) requires notification for damage to helicopter tail or main rotor blades…", "o": ["only if the damage occurs in flight", "including ground damage, when it requires major repair or replacement of the blade(s)", "only if the helicopter weighs more than 12,500 pounds", "only when a passenger is injured"], "a": 1, "e": "§ 830.5(a)(11): \"Damage to helicopter tail or main rotor blades, including ground damage, that requires major repair or replacement of the blade(s).\" Compare § 830.2, where ground damage to rotor blades is not \"substantial damage\" — it can still be a listed serious incident.", "c": "§ 830.5(a)(11)", "sc": false}, {"s": "notify", "q": "§ 830.5(a)(12) (taxiway/wrong-runway operations and runway incursions) applies to which operations?", "o": ["Any operator at any airport", "An operator operating an airplane as an air carrier at a public-use airport on land", "Only helicopter operators at heliports", "Only military operators"], "a": 1, "e": "§ 830.5(a)(12): \"Any event in which an operator, when operating an airplane as an air carrier at a public-use airport on land…\"", "c": "§ 830.5(a)(12)", "sc": false}, {"s": "notify", "q": "Under § 830.5(a)(12)(i), an air carrier at a public-use airport on land must notify the NTSB when the airplane…", "o": ["lands or departs on a taxiway, incorrect runway, or other area not designed as a runway", "lands long but on the assigned runway", "taxis onto the wrong taxiway", "is delayed on the ground for more than three hours"], "a": 0, "e": "§ 830.5(a)(12)(i): \"Lands or departs on a taxiway, incorrect runway, or other area not designed as a runway.\"", "c": "§ 830.5(a)(12)(i)", "sc": false}, {"s": "notify", "q": "Under § 830.5(a)(12)(ii), a runway incursion is a listed serious incident when it…", "o": ["occurs at night", "requires the operator or the crew of another aircraft or vehicle to take immediate corrective action to avoid a collision", "is reported by air traffic control", "involves a ground vehicle"], "a": 1, "e": "§ 830.5(a)(12)(ii): \"Experiences a runway incursion that requires the operator or the crew of another aircraft or vehicle to take immediate corrective action to avoid a collision.\"", "c": "§ 830.5(a)(12)(ii)", "sc": false}, {"s": "notify", "q": "§ 830.5(b) requires immediate notification when an aircraft is…", "o": ["more than 30 minutes late", "overdue and is believed to have been involved in an accident", "out of radio contact for any reason", "diverted to an alternate airport"], "a": 1, "e": "§ 830.5(b): \"An aircraft is overdue and is believed to have been involved in an accident.\"", "c": "§ 830.5(b)", "sc": false}, {"s": "notify", "q": "According to footnote 1 to § 830.5, an accident or incident may be reported by calling the NTSB Response Operations Center at…", "o": ["844-373-9922 or 202-314-6290", "911", "the nearest FAA Flight Standards District Office", "1-800-FAA-SAFE"], "a": 0, "e": "Footnote 1: NTSB headquarters is at 490 L'Enfant Plaza SW, Washington, DC 20594; regional office contacts are at ntsb.gov; and the Response Operations Center can be reached at 844-373-9922 or 202-314-6290.", "c": "§ 830.5, footnote 1", "sc": false}, {"s": "notify", "q": "A single-engine airplane's engine fails in cruise; the pilot lands safely on a road with no injuries, no property damage, and no damage other than to the engine. Under Part 830, is immediate NTSB notification required?", "o": ["Yes — any engine failure must be reported", "No — engine damage limited to one engine is not substantial damage, and an engine failure is not one of the listed serious incidents", "Yes — off-airport landings must always be reported", "Yes — but the notification may wait 10 days"], "a": 1, "e": "§ 830.2 excludes damage limited to a single engine from \"substantial damage,\" so it is not an accident, and engine failure by itself is not in the § 830.5(a) list. (Had the landing caused more than $25,000 in damage to property other than the aircraft, § 830.5(a)(6) would apply.)", "c": "§ 830.2 / § 830.5(a)", "sc": true}, {"s": "notify", "q": "A Cessna 172 (single-engine, well under 12,500 lb) loses its alternator in flight and continues on battery power to an uneventful landing. Is this a § 830.5 serious incident?", "o": ["Yes — under § 830.5(a)(7)(i)", "No — the emergency-bus electrical criterion applies only to large multiengine aircraft over 12,500 pounds, and the event is not otherwise listed", "Yes — any electrical failure is reportable", "No — but a report on Form 6120.1/2 is still due within 10 days"], "a": 1, "e": "§ 830.5(a)(7) is limited to \"large multiengine aircraft (more than 12,500 pounds maximum certificated takeoff weight).\"", "c": "§ 830.5(a)(7)", "sc": true}, {"s": "notify", "q": "During taxi, a propeller tip strikes a runway light and a piece of the blade separates. Under § 830.5(a)(8), is immediate notification required on that basis?", "o": ["Yes — any propeller blade release is reportable", "No — release caused solely by ground contact is excluded", "Yes — but only if the aircraft is multiengine", "No — propeller events are never reportable"], "a": 1, "e": "§ 830.5(a)(8) excludes \"release caused solely by ground contact.\" (Other criteria — for example more than $25,000 in damage to property other than the aircraft — would still have to be considered separately.)", "c": "§ 830.5(a)(8)", "sc": true}, {"s": "notify", "q": "A VFR pilot (no IFR flight plan) receives a TCAS resolution advisory and follows it. Is this a listed serious incident under § 830.5(a)(10)?", "o": ["Yes — all resolution advisories are reportable", "No — (a)(10) applies only when the aircraft is on an IFR flight plan and compliance is necessary to avert a substantial risk of collision", "Yes — if the other aircraft was on an IFR flight plan", "No — TCAS events are reported only to the FAA"], "a": 1, "e": "§ 830.5(a)(10) is limited to advisories \"issued when an aircraft is being operated on an instrument flight rules flight plan and compliance with the advisory is necessary to avert a substantial risk of collision.\"", "c": "§ 830.5(a)(10)", "sc": true}, {"s": "notify", "q": "A private (non-air-carrier) pilot mistakenly lands on a taxiway at a public-use airport; there is no damage or injury. Is this a listed serious incident under § 830.5(a)(12)?", "o": ["Yes — any taxiway landing is reportable", "No — (a)(12) applies to an operator operating an airplane as an air carrier", "Yes — but only if ATC files a report", "No — taxiway landings are reportable only at private airports"], "a": 1, "e": "§ 830.5(a)(12) applies to \"an operator, when operating an airplane as an air carrier at a public-use airport on land.\"", "c": "§ 830.5(a)(12)", "sc": true}, {"s": "notify", "q": "A helicopter's main rotor blade is struck by a tow bar during ground handling and must be replaced. Under Part 830, must the operator notify the NTSB immediately?", "o": ["No — ground damage to rotor blades is not substantial damage, so nothing is required", "Yes — § 830.5(a)(11) covers damage to main or tail rotor blades, including ground damage, that requires major repair or replacement", "Only if the helicopter's engines were running at the time", "Only if the helicopter is operated as an air carrier"], "a": 1, "e": "Although § 830.2 excludes ground damage to rotor blades from \"substantial damage,\" § 830.5(a)(11) separately lists rotor blade damage — \"including ground damage\" — that requires major repair or replacement as a serious incident.", "c": "§ 830.5(a)(11)", "sc": true}, {"s": "notify", "q": "A U.S. Air Force transport has a serious incident. Does § 830.5 require its operator to notify the NTSB?", "o": ["Yes — all public aircraft are covered", "No — § 830.5 excludes public aircraft operated by the Armed Forces or an intelligence agency of the United States", "Yes — but only if the event occurs at a civilian airport", "No — because military aircraft are civil aircraft"], "a": 1, "e": "§ 830.5 applies to \"any public aircraft not operated by the Armed Forces or an intelligence agency of the United States.\"", "c": "§ 830.5", "sc": true}, {"s": "notify", "q": "A student pilot on a solo flight sees a small in-flight fire behind the instrument panel; it goes out on its own and the flight lands normally with nothing but scorched wiring. Under § 830.5(a)(4)…", "o": ["no notification is required because there was no substantial damage", "immediate notification is required because an in-flight fire is a listed serious incident regardless of the damage", "notification is required only if the fire occurred above 10,000 feet", "notification is optional for training flights"], "a": 1, "e": "§ 830.5(a)(4) simply lists \"In-flight fire\" — there is no damage or injury threshold attached.", "c": "§ 830.5(a)(4)", "sc": true}, {"s": "notify", "q": "The crew of a large multiengine air carrier jet deploys the emergency slides to evacuate after cabin smoke; no one is hurt and the airplane is undamaged. Under § 830.5(a)(7)(iv)…", "o": ["immediate notification is required because an emergency egress system was used", "nothing is required because there was no injury or damage", "notification is required only if more than 50 people evacuated", "notification is required only if the aircraft was airborne"], "a": 0, "e": "§ 830.5(a)(7)(iv): \"An evacuation of an aircraft in which an emergency egress system is utilized.\"", "c": "§ 830.5(a)(7)(iv)", "sc": true}, {"s": "notify", "q": "A large multiengine airplane loses power on two of its four engines during climb and returns to land. Which § 830.5 criterion is met?", "o": ["None — the airplane still had two operating engines", "§ 830.5(a)(7)(iii): sustained loss of the power or thrust produced by two or more engines", "§ 830.5(a)(3): escape of turbine engine debris", "§ 830.5(a)(6): property damage exceeding $25,000"], "a": 1, "e": "§ 830.5(a)(7)(iii) applies to large multiengine aircraft (over 12,500 lb) that sustain a loss of power or thrust on two or more engines.", "c": "§ 830.5(a)(7)(iii)", "sc": true}, {"s": "notify", "q": "A light airplane on approach clips a power line, causing an estimated $40,000 in damage to the utility's equipment; the airplane itself has only a small dent in a wingtip and lands safely. Under Part 830, must the operator notify the NTSB immediately?", "o": ["No — wingtip damage is not substantial damage", "Yes — damage to property other than the aircraft estimated to exceed $25,000 is a listed serious incident under § 830.5(a)(6)", "No — property damage is only reportable if it exceeds $50,000", "Only if the utility company complains"], "a": 1, "e": "The aircraft damage is excluded from \"substantial damage\" (wingtips), but § 830.5(a)(6) separately requires notification for damage to property other than the aircraft estimated to exceed $25,000 (repair cost or fair market value, whichever is less).", "c": "§ 830.5(a)(6)", "sc": true}, {"s": "info", "q": "§ 830.6 says the notification must contain the listed information…", "o": ["in every case, without exception", "\"if available\"", "only for accidents, not incidents", "only if the NTSB asks for it"], "a": 1, "e": "§ 830.6: \"The notification required in § 830.5 shall contain the following information, if available.\" You do not delay notification until every item is known.", "c": "§ 830.6", "sc": false}, {"s": "info", "q": "Which of the following is one of the items § 830.6 says to include in the notification?", "o": ["Type, nationality, and registration marks of the aircraft", "The aircraft's insurance policy number", "The pilot's medical certificate class", "The aircraft's total time in service"], "a": 0, "e": "§ 830.6(a): \"Type, nationality, and registration marks of the aircraft.\"", "c": "§ 830.6(a)", "sc": false}, {"s": "info", "q": "Which of these is NOT among the items listed in § 830.6?", "o": ["Name of the pilot-in-command", "Number of persons aboard, number killed, and number seriously injured", "A description of any explosives, radioactive materials, or other dangerous articles carried", "The name of the aircraft's insurer"], "a": 3, "e": "§ 830.6 lists (a) aircraft type, nationality, registration marks; (b) owner and operator; (c) pilot-in-command; (d) date and time; (e) last departure point and intended landing point; (f) position; (g) persons aboard, killed, seriously injured; (h) nature of the accident, weather, extent of damage; (i) dangerous articles carried.", "c": "§ 830.6", "sc": false}, {"s": "info", "q": "How does § 830.6(f) say the aircraft's position should be described?", "o": ["By latitude and longitude only", "With reference to some easily defined geographical point", "By the nearest VOR radial and distance only", "By runway number only"], "a": 1, "e": "§ 830.6(f): \"Position of the aircraft with reference to some easily defined geographical point.\"", "c": "§ 830.6(f)", "sc": false}, {"s": "info", "q": "§ 830.6(e) asks for which two points about the flight?", "o": ["Cruise altitude and route", "Last point of departure and point of intended landing", "Alternate airport and fuel on board", "Home base and maintenance base"], "a": 1, "e": "§ 830.6(e): \"Last point of departure and point of intended landing of the aircraft.\"", "c": "§ 830.6(e)", "sc": false}, {"s": "info", "q": "§ 830.6(h) asks the notifier to describe…", "o": ["the probable cause of the accident", "the nature of the accident, the weather, and the extent of damage to the aircraft, so far as is known", "the pilot's total flight time", "the aircraft's maintenance history"], "a": 1, "e": "§ 830.6(h): \"Nature of the accident, the weather and the extent of damage to the aircraft, so far as is known.\" Probable cause is determined later by the Board, not asserted in the notification.", "c": "§ 830.6(h)", "sc": false}, {"s": "info", "q": "§ 830.6(g) asks for the number of persons…", "o": ["aboard, killed, and seriously injured", "aboard and their seat assignments", "aboard and their nationalities", "who were crewmembers versus passengers"], "a": 0, "e": "§ 830.6(g): \"Number of persons aboard, number killed, and number seriously injured.\"", "c": "§ 830.6(g)", "sc": false}, {"s": "info", "q": "§ 830.6(b) and (c) ask for the names of…", "o": ["the owner, the operator, and the pilot-in-command", "the mechanic and the dispatcher", "the air traffic controller on duty", "all passengers aboard"], "a": 0, "e": "§ 830.6(b): \"Name of owner, and operator of the aircraft\"; § 830.6(c): \"Name of the pilot-in-command.\"", "c": "§ 830.6(b)–(c)", "sc": false}, {"s": "info", "q": "You are phoning in a notification but do not yet know the exact time of the accident or the extent of damage. Under § 830.6, you should…", "o": ["wait until every item in § 830.6 is known before calling", "notify immediately with what you have — the items are required only \"if available\"", "skip the notification and file Form 6120.1/2 instead", "ask the FAA to notify the NTSB on your behalf"], "a": 1, "e": "§ 830.5 requires immediate notification, and § 830.6 qualifies its list with \"if available.\"", "c": "§ 830.5 / § 830.6", "sc": true}, {"s": "preserve", "q": "Under § 830.10(a), who is responsible for preserving wreckage, cargo, mail, and records after a notifiable accident or incident?", "o": ["The airport manager", "Local law enforcement", "The operator of the aircraft", "The first FAA inspector to arrive"], "a": 2, "e": "§ 830.10(a): \"The operator of an aircraft involved in an accident or incident for which notification must be given is responsible for preserving to the extent possible any aircraft wreckage, cargo, and mail aboard the aircraft, and all records…\"", "c": "§ 830.10(a)", "sc": false}, {"s": "preserve", "q": "The § 830.10 preservation duty applies to accidents and incidents…", "o": ["of any kind, whether or not notification is required", "for which notification must be given under § 830.5", "only when a fatality occurred", "only in air carrier operations"], "a": 1, "e": "§ 830.10(a) applies to \"an accident or incident for which notification must be given.\"", "c": "§ 830.10(a)", "sc": false}, {"s": "preserve", "q": "Wreckage, cargo, mail, and records must be preserved until…", "o": ["the insurance adjuster has inspected them", "30 days have passed", "the Board takes custody or a release is granted pursuant to § 831.12(b)", "the operator files Form 6120.1/2"], "a": 2, "e": "§ 830.10(a): \"…until the Board takes custody thereof or a release is granted pursuant to § 831.12(b) of this chapter.\"", "c": "§ 830.10(a)", "sc": false}, {"s": "preserve", "q": "Which records does § 830.10(a) specifically say to preserve?", "o": ["Only the pilot's logbook", "All records, including all recording mediums of flight, maintenance, and voice recorders, pertaining to the operation and maintenance of the aircraft and to the airmen", "Only the registration and airworthiness certificates", "Only the weather briefing"], "a": 1, "e": "§ 830.10(a).", "c": "§ 830.10(a)", "sc": false}, {"s": "preserve", "q": "Before the NTSB takes custody, wreckage, mail, or cargo may be disturbed or moved only to the extent necessary to…", "o": ["reopen the runway for scheduled traffic", "remove injured or trapped persons, protect the wreckage from further damage, or protect the public from injury", "let the insurer inspect it", "return the aircraft to the hangar overnight"], "a": 1, "e": "§ 830.10(b)(1)–(3).", "c": "§ 830.10(b)", "sc": false}, {"s": "preserve", "q": "Which reason is NOT one of the three permitted reasons in § 830.10(b) for moving wreckage before the NTSB takes custody?", "o": ["To remove persons injured or trapped", "To protect the wreckage from further damage", "To protect the public from injury", "To recover the operator's cargo for delivery"], "a": 3, "e": "§ 830.10(b) permits disturbing or moving wreckage only to (1) remove persons injured or trapped, (2) protect the wreckage from further damage, or (3) protect the public from injury.", "c": "§ 830.10(b)", "sc": false}, {"s": "preserve", "q": "When it is necessary to move wreckage, mail, or cargo, § 830.10(c) requires that — if possible — the original positions and condition be documented by…", "o": ["a written statement from the pilot only", "sketches, descriptive notes, and photographs, including any significant impact marks", "a video interview with witnesses", "a police report"], "a": 1, "e": "§ 830.10(c): \"…sketches, descriptive notes, and photographs shall be made, if possible, of the original positions and condition of the wreckage and any significant impact marks.\"", "c": "§ 830.10(c)", "sc": false}, {"s": "preserve", "q": "Under § 830.10(d), the operator must retain all records, reports, internal documents, and memoranda dealing with the accident or incident…", "o": ["for 90 days", "until the insurance claim is settled", "until authorized by the Board to the contrary", "until Form 6120.1/2 is filed"], "a": 2, "e": "§ 830.10(d): \"…shall retain all records, reports, internal documents, and memoranda dealing with the accident or incident, until authorized by the Board to the contrary.\"", "c": "§ 830.10(d)", "sc": false}, {"s": "preserve", "q": "After a notifiable accident the aircraft comes to rest on an active taxiway. The injured have been removed. The airport wants the wreckage dragged clear immediately so operations can resume. Under § 830.10, what is the correct approach?", "o": ["Move it immediately without further action — reopening the airport is a listed exception", "Wreckage may be disturbed only for the § 830.10(b) reasons; if it must be moved (for example, to protect the public), make sketches, notes, and photographs of the original positions first, if possible", "Wait for the insurance adjuster before touching anything", "The operator may move it freely once the injured are removed"], "a": 1, "e": "§ 830.10(b) limits moving wreckage to three purposes; reopening for operations is not itself listed. When moving is necessary, § 830.10(c) requires sketches, descriptive notes, and photographs of the original positions and impact marks, if possible.", "c": "§ 830.10(b)–(c)", "sc": true}, {"s": "preserve", "q": "An operator's safety office wants to shred its internal memos about a notifiable incident once its own review is finished. Under § 830.10(d)…", "o": ["that is allowed once the internal review is closed", "the memos must be retained until the Board authorizes otherwise", "the memos may be destroyed after 30 days", "only flight recorder data must be kept"], "a": 1, "e": "§ 830.10(d) requires retention of all records, reports, internal documents, and memoranda dealing with the accident or incident until the Board authorizes otherwise.", "c": "§ 830.10(d)", "sc": true}, {"s": "report", "q": "Which form is used for the report required by § 830.15(a)?", "o": ["NASA ARC Form 277 (ASRS)", "FAA Form 8710-1", "NTSB Form 6120.1/2 (OMB No. 3147-0001)", "ICAO ADREP form"], "a": 2, "e": "§ 830.15(a): \"…shall file a report on Board Form 6120.1/2 (OMB No. 3147-0001)…\"", "c": "§ 830.15(a)", "sc": false}, {"s": "report", "q": "After an accident, the operator must file the report within…", "o": ["24 hours", "7 days", "10 days", "30 days"], "a": 2, "e": "§ 830.15(a): \"…within 10 days after an accident…\"", "c": "§ 830.15(a)", "sc": false}, {"s": "report", "q": "If an overdue aircraft is still missing, the report must be filed…", "o": ["after 7 days", "after 10 days", "after 30 days", "only once the wreckage is found"], "a": 0, "e": "§ 830.15(a): \"…or after 7 days if an overdue aircraft is still missing.\"", "c": "§ 830.15(a)", "sc": false}, {"s": "report", "q": "For a serious incident that required immediate notification under § 830.5(a), when is a report on Form 6120.1/2 required?", "o": ["Always, within 10 days", "Always, within 7 days", "Only as requested by an authorized representative of the Board", "Never"], "a": 2, "e": "§ 830.15(a): \"A report on an incident for which immediate notification is required by § 830.5(a) shall be filed only as requested by an authorized representative of the Board.\"", "c": "§ 830.15(a)", "sc": false}, {"s": "report", "q": "Under § 830.15(b), what must each crewmember do when the report is submitted?", "o": ["Sign the operator's report as a witness", "Attach a statement setting forth the facts, conditions, and circumstances relating to the accident or incident as they appear to him, if physically able", "Submit a copy of his pilot certificate", "Provide a drug and alcohol test result"], "a": 1, "e": "§ 830.15(b): \"Each crewmember, if physically able at the time the report is submitted, shall attach a statement setting forth the facts, conditions, and circumstances relating to the accident or incident as they appear to him.\"", "c": "§ 830.15(b)", "sc": false}, {"s": "report", "q": "If a crewmember is incapacitated when the report is submitted, § 830.15(b) says the crewmember's statement…", "o": ["is waived permanently", "must be written by the operator on the crewmember's behalf", "shall be submitted as soon as he is physically able", "is due within 30 days regardless"], "a": 2, "e": "§ 830.15(b): \"If the crewmember is incapacitated, he shall submit the statement as soon as he is physically able.\"", "c": "§ 830.15(b)", "sc": false}, {"s": "report", "q": "Under § 830.15(c), where must the operator file the report?", "o": ["With NTSB headquarters in Washington, DC only", "With the field office of the Board nearest the accident or incident", "With the nearest FAA Flight Standards District Office", "At the operator's principal base of operations"], "a": 1, "e": "§ 830.15(c): \"The operator of an aircraft shall file any report with the field office of the Board nearest the accident or incident.\"", "c": "§ 830.15(c)", "sc": false}, {"s": "report", "q": "According to footnote 2 to § 830.15, Form 6120.1/2 is available from…", "o": ["the Board's field offices, Board headquarters in Washington, DC, and FAA Flight Standards District Offices", "airport managers only", "the aircraft manufacturer", "the operator's insurance company"], "a": 0, "e": "Footnote 2: \"Forms are available from the Board field offices (see footnote 1), from Board headquarters in Washington, DC, and from the Federal Aviation Administration Flight Standards District Offices.\"", "c": "§ 830.15, footnote 2", "sc": false}, {"s": "report", "q": "Which statement correctly distinguishes the \"notification\" (§ 830.5) from the \"report\" (§ 830.15)?", "o": ["The notification is a written form due in 10 days; the report is a phone call", "The notification is immediate, by the most expeditious means; the report is a written Form 6120.1/2 filed within 10 days of an accident (or after 7 days if an overdue aircraft is still missing)", "Both are due within 10 days", "The notification is optional; the report is mandatory"], "a": 1, "e": "§ 830.5 (immediate notification, most expeditious means) versus § 830.15(a) (Form 6120.1/2 within 10 days after an accident, or after 7 days if an overdue aircraft is still missing).", "c": "§ 830.5 / § 830.15(a)", "sc": false}, {"s": "report", "q": "§ 830.15(a) applies to the operator of which aircraft?", "o": ["Civil aircraft only", "Civil, public (as specified in § 830.5), or foreign aircraft", "Air carrier aircraft only", "Aircraft over 12,500 pounds only"], "a": 1, "e": "§ 830.15(a): \"The operator of a civil, public (as specified in § 830.5), or foreign aircraft shall file a report…\"", "c": "§ 830.15(a)", "sc": false}, {"s": "report", "q": "An air carrier has a listed serious incident (an IFR TCAS resolution advisory needed to avert a collision) and immediately notifies the NTSB. No NTSB representative asks for a written report. Under § 830.15(a), what must the operator file?", "o": ["Form 6120.1/2 within 10 days anyway", "Nothing further, unless an authorized representative of the Board requests a report", "A report within 7 days", "A crewmember statement only"], "a": 1, "e": "§ 830.15(a): incident reports are filed \"only as requested by an authorized representative of the Board.\"", "c": "§ 830.15(a)", "sc": true}, {"s": "report", "q": "An aircraft goes missing on a cross-country flight and is believed to have crashed. The operator immediately notifies the NTSB under § 830.5(b). A week later it is still missing. When must the operator file Form 6120.1/2?", "o": ["Within 10 days of the notification", "After 7 days, if the aircraft is still missing", "Only after the wreckage is located", "Within 30 days"], "a": 1, "e": "§ 830.15(a): the report is due \"after 7 days if an overdue aircraft is still missing.\"", "c": "§ 830.15(a)", "sc": true}, {"s": "report", "q": "Put the Part 830 obligations in the correct order after an accident.", "o": ["Preserve the wreckage → file the report → notify the NTSB", "Notify the NTSB immediately → preserve wreckage, mail, cargo, and records → file Form 6120.1/2 within 10 days", "File Form 6120.1/2 → notify the NTSB → preserve the wreckage", "Notify within 10 days → report immediately → preserve the wreckage"], "a": 1, "e": "§ 830.5 (immediate notification), § 830.10 (preserve until the Board takes custody or grants a release), § 830.15 (Form 6120.1/2 within 10 days after an accident).", "c": "§§ 830.5, 830.10, 830.15", "sc": false}, {"s": "report", "q": "The pilot-in-command of an aircraft involved in an accident is hospitalized and cannot write a statement when the operator files Form 6120.1/2 on day 9. Under § 830.15…", "o": ["the report must be held until the pilot recovers", "the operator files the report on time, and the pilot submits the crewmember statement as soon as physically able", "the pilot's statement is no longer required", "the operator writes the statement in the pilot's name"], "a": 1, "e": "§ 830.15(a) sets the 10-day deadline for the operator's report; § 830.15(b) says an incapacitated crewmember \"shall submit the statement as soon as he is physically able.\"", "c": "§ 830.15(a)–(b)", "sc": true}];
+QUESTIONS.forEach((q, i) => q.id = i);
+const SEC = Object.fromEntries(SECTIONS.map(s => [s.key, s]));
+
+// ---------- helpers ----------
+const $ = sel => document.querySelector(sel);
+const el = (tag, attrs = {}, ...children) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') n.className = v;
+    else if (k === 'html') n.innerHTML = v;
+    else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
+    else if (v === false || v == null) continue;
+    else n.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of children) if (c != null) n.append(c);
+  return n;
+};
+const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const LETTERS = ['A', 'B', 'C', 'D'];
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+
+// ---------- tabs ----------
+document.querySelectorAll('nav.tabs [role=tab]').forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.tab)));
+function showTab(name) {
+  document.querySelectorAll('nav.tabs [role=tab]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === 'tab-' + name));
+  window.scrollTo({ top: 0 });
+}
+
+// ---------- settings ----------
+const settings = { count: 25, sections: new Set(SECTIONS.map(s => s.key)), order: 'grouped' };
+
+function renderSectionChecks() {
+  const box = $('#sectionChecks');
+  box.innerHTML = '';
+  for (const s of SECTIONS) {
+    const n = QUESTIONS.filter(q => q.s === s.key).length;
+    const cb = el('input', { type: 'checkbox', value: s.key, checked: settings.sections.has(s.key) ? true : null,
+      onchange: e => { e.target.checked ? settings.sections.add(s.key) : settings.sections.delete(s.key); updatePoolNote(); } });
+    box.append(el('label', {}, cb, el('span', {}, el('span', { class: 'nm' }, s.name), el('span', { class: 'sub' }, `${s.cite} · ${plural(n, 'question')}`))));
+  }
+}
+function poolFor(sections) { return QUESTIONS.filter(q => sections.has(q.s)); }
+function updatePoolNote() {
+  const pool = poolFor(settings.sections).length;
+  const n = settings.count === 'all' ? pool : Math.min(settings.count, pool);
+  $('#poolNote').textContent = pool === 0 ? 'Select at least one section.' : `${n} of ${pool} available questions will be asked.`;
+  $('#startBtn').disabled = pool === 0;
+}
+document.querySelectorAll('#countPills .pill').forEach(p => p.addEventListener('click', () => {
+  document.querySelectorAll('#countPills .pill').forEach(x => x.setAttribute('aria-pressed', 'false'));
+  p.setAttribute('aria-pressed', 'true');
+  settings.count = p.dataset.count === 'all' ? 'all' : Number(p.dataset.count);
+  updatePoolNote();
+}));
+document.querySelectorAll('#orderPills .pill').forEach(p => p.addEventListener('click', () => {
+  document.querySelectorAll('#orderPills .pill').forEach(x => x.setAttribute('aria-pressed', 'false'));
+  p.setAttribute('aria-pressed', 'true');
+  settings.order = p.dataset.order;
+}));
+$('#selAll').addEventListener('click', () => { SECTIONS.forEach(s => settings.sections.add(s.key)); renderSectionChecks(); updatePoolNote(); });
+$('#selNone').addEventListener('click', () => { settings.sections.clear(); renderSectionChecks(); updatePoolNote(); });
+
+// ---------- quiz construction (stratified sample so every chosen section is represented) ----------
+function buildItems(pool, count, order) {
+  const groups = SECTIONS.map(s => shuffle(pool.filter(q => q.s === s.key))).filter(g => g.length);
+  const total = groups.reduce((a, g) => a + g.length, 0);
+  const n = count === 'all' ? total : Math.min(count, total);
+  const quota = groups.map(g => Math.floor(n * g.length / total));
+  let left = n - quota.reduce((a, b) => a + b, 0);
+  const frac = groups.map((g, i) => ({ i, f: n * g.length / total - quota[i] })).sort((a, b) => b.f - a.f);
+  for (const { i } of frac) { if (left <= 0) break; if (quota[i] < groups[i].length) { quota[i]++; left--; } }
+  let picked = [];
+  groups.forEach((g, i) => picked.push(...g.slice(0, quota[i])));
+  // safety: if rounding left us short, top up from remaining
+  if (picked.length < n) {
+    const rest = shuffle(pool.filter(q => !picked.includes(q)));
+    picked.push(...rest.slice(0, n - picked.length));
+  }
+  if (order === 'shuffled') picked = shuffle(picked);
+  else picked.sort((a, b) => a.id - b.id);
+  return picked.map(q => ({ q, perm: shuffle([0, 1, 2, 3]), chosen: null }));
+}
+
+// ---------- quiz state ----------
+let quiz = null;   // {items, idx, correct, done}
+function startQuiz(items) {
+  quiz = { items, idx: 0, correct: 0 };
+  $('#view-setup').hidden = true;
+  $('#view-results').hidden = true;
+  $('#view-question').hidden = false;
+  renderQuestion();
+}
+function renderQuestion() {
+  const { items, idx } = quiz;
+  const it = items[idx], q = it.q;
+  $('#progBar').style.width = (idx / items.length * 100) + '%';
+  $('#qCounter').textContent = `Question ${idx + 1} of ${items.length}`;
+  $('#qSection').textContent = `${SEC[q.s].name} · ${SEC[q.s].cite}`;
+  $('#qScen').hidden = !q.sc;
+  const answered = items.slice(0, idx).filter(x => x.chosen != null).length;
+  const missed = answered - quiz.correct;
+  $('#qScore').textContent = answered ? `${quiz.correct} correct · ${missed} missed` : '';
+  $('#qText').textContent = q.q;
+  const box = $('#qOptions');
+  box.innerHTML = '';
+  it.perm.forEach((oi, pos) => {
+    box.append(el('button', { class: 'opt', 'data-pos': pos, onclick: () => choose(pos) },
+      el('span', { class: 'letter' }, LETTERS[pos]), el('span', {}, q.o[oi]), el('span', { class: 'mark' })));
+  });
+  $('#qFeedback').hidden = true;
+  $('#qFeedback').className = 'feedback';
+  const next = $('#nextBtn');
+  next.disabled = true;
+  next.textContent = idx === items.length - 1 ? 'See results →' : 'Next question →';
+  $('#qText').focus({ preventScroll: true });
+  window.scrollTo({ top: 0 });
+}
+function choose(pos) {
+  const it = quiz.items[quiz.idx];
+  if (it.chosen != null) return;
+  it.chosen = it.perm[pos];
+  const ok = it.chosen === it.q.a;
+  if (ok) quiz.correct++;
+  document.querySelectorAll('#qOptions .opt').forEach((b, p) => {
+    b.disabled = true;
+    const oi = it.perm[p];
+    if (oi === it.q.a) { b.classList.add('correct'); b.querySelector('.mark').textContent = ok ? '✓ Correct' : '✓ Correct answer'; }
+    else if (oi === it.chosen) { b.classList.add('wrong'); b.querySelector('.mark').textContent = '✗ Your answer'; }
+    else b.classList.add('dim');
+  });
+  const fb = $('#qFeedback');
+  fb.hidden = false;
+  fb.className = 'feedback ' + (ok ? 'ok' : 'no');
+  $('#fbVerdict').textContent = ok ? '✓ Correct' : '✗ Not quite';
+  $('#fbExpl').textContent = it.q.e;
+  $('#fbCite').textContent = it.q.c;
+  const answered = quiz.items.slice(0, quiz.idx + 1).filter(x => x.chosen != null).length;
+  $('#qScore').textContent = `${quiz.correct} correct · ${answered - quiz.correct} missed`;
+  const next = $('#nextBtn');
+  next.disabled = false;
+  next.focus({ preventScroll: true });
+}
+$('#nextBtn').addEventListener('click', () => {
+  if (quiz.idx < quiz.items.length - 1) { quiz.idx++; renderQuestion(); }
+  else showResults();
+});
+$('#quitBtn').addEventListener('click', () => { quiz = null; $('#view-question').hidden = true; $('#view-setup').hidden = false; window.scrollTo({ top: 0 }); });
+document.addEventListener('keydown', e => {
+  if (!quiz || $('#view-question').hidden) return;
+  if (e.target.tagName === 'INPUT') return;
+  const k = e.key.toLowerCase();
+  const it = quiz.items[quiz.idx];
+  if (it.chosen == null) {
+    let pos = -1;
+    if (k >= '1' && k <= '4') pos = Number(k) - 1;
+    else if (k >= 'a' && k <= 'd') pos = k.charCodeAt(0) - 97;
+    if (pos >= 0) { e.preventDefault(); choose(pos); }
+  } else if (k === 'enter' || k === 'arrowright') {
+    if (document.activeElement && document.activeElement.id === 'nextBtn' && k === 'enter') return; // button handles it
+    e.preventDefault(); $('#nextBtn').click();
+  }
+});
+
+// ---------- results ----------
+function showResults() {
+  const { items, correct } = quiz;
+  const n = items.length, pct = Math.round(correct / n * 100);
+  $('#view-question').hidden = true;
+  $('#view-results').hidden = false;
+  $('#resPct').textContent = pct + '%';
+  $('#resSub').textContent = `${correct} of ${n} correct`;
+  $('#resMeter').style.width = pct + '%';
+  $('#resMsg').textContent =
+    pct === 100 ? 'Perfect. You know Part 830 cold — try a shuffled 50 to make sure it sticks.' :
+    pct >= 90 ? 'Excellent command of the regulation. Review the few you missed and you are there.' :
+    pct >= 75 ? 'Solid. The missed questions below point to the sections worth one more read.' :
+    pct >= 50 ? 'Getting there. Work through the missed questions, then re-read those sections in the Quick reference tab.' :
+    'A good diagnostic. Read the Quick reference and trace the Flowchart, then retry the missed questions.';
+  // by section
+  const bars = $('#resBars');
+  bars.innerHTML = '';
+  for (const s of SECTIONS) {
+    const its = items.filter(x => x.q.s === s.key);
+    if (!its.length) continue;
+    const c = its.filter(x => x.chosen === x.q.a).length;
+    bars.append(el('div', { class: 'lab' }, `${s.name} `, el('span', { style: 'color:var(--muted)' }, s.cite)));
+    bars.append(el('div', { class: 'track' }, el('div', { class: 'fill', style: `width:${c / its.length * 100}%` })));
+    bars.append(el('div', { class: 'val' }, `${c} / ${its.length}`));
+  }
+  const missed = items.filter(x => x.chosen !== x.q.a);
+  $('#retryMissedBtn').disabled = missed.length === 0;
+  $('#retryMissedBtn').textContent = missed.length ? `Retry the ${plural(missed.length, 'question')} you missed` : 'Nothing to retry';
+  $('#missedTitle').textContent = missed.length ? `Review what you missed (${missed.length})` : 'You missed nothing — nicely done';
+  const ml = $('#missedList');
+  ml.innerHTML = '';
+  for (const it of missed) {
+    ml.append(el('div', { class: 'mcard' },
+      el('div', { class: 'q' }, it.q.q),
+      el('div', { class: 'row you' }, 'Your answer: ', el('b', {}, it.q.o[it.chosen])),
+      el('div', { class: 'row ans' }, 'Correct answer: ', el('b', {}, it.q.o[it.q.a])),
+      el('div', { class: 'expl' }, it.q.e + ' '),
+      el('span', { class: 'chip cite' }, it.q.c)));
+  }
+  const al = $('#allList');
+  al.innerHTML = '';
+  items.forEach((it, i) => al.append(renderKeyItem(it.q, i + 1, it.chosen)));
+  window.scrollTo({ top: 0 });
+}
+$('#retryMissedBtn').addEventListener('click', () => {
+  const missed = quiz.items.filter(x => x.chosen !== x.q.a).map(x => x.q);
+  startQuiz(buildItems(missed, 'all', settings.order));
+});
+$('#againBtn').addEventListener('click', () => startQuiz(buildItems(poolFor(settings.sections), settings.count, settings.order)));
+$('#settingsBtn').addEventListener('click', () => { quiz = null; $('#view-results').hidden = true; $('#view-setup').hidden = false; window.scrollTo({ top: 0 }); });
+$('#startBtn').addEventListener('click', () => startQuiz(buildItems(poolFor(settings.sections), settings.count, settings.order)));
+
+// ---------- answer key ----------
+function renderKeyItem(q, num, chosen) {
+  const ol = el('ol');
+  q.o.forEach((o, i) => {
+    const li = el('li', { class: i === q.a ? 'ans' : '' }, el('span', { class: 'l' }, LETTERS[i]), o);
+    if (chosen != null && chosen !== q.a && i === chosen) { li.style.background = 'var(--bad-soft)'; li.append(el('span', { class: 'chip no', style: 'margin-left:8px' }, 'your answer')); }
+    if (i === q.a) li.append(el('span', { class: 'chip ok', style: 'margin-left:8px' }, 'correct'));
+    ol.append(li);
+  });
+  return el('div', { class: 'kq' },
+    el('div', { class: 'q' }, el('span', { class: 'num' }, num + '.'), q.q, q.sc ? el('span', { class: 'chip scen', style: 'margin-left:8px' }, 'Scenario') : null),
+    ol,
+    el('div', { class: 'expl' }, q.e + ' ', el('span', { class: 'chip cite' }, q.c)));
+}
+(function renderBank() {
+  const bank = $('#bank');
+  for (const s of SECTIONS) {
+    const qs = QUESTIONS.filter(q => q.s === s.key);
+    const d = el('details', {}, el('summary', {}, `${s.name} `, el('span', { class: 'chip sec' }, s.cite), el('span', { class: 'hint', style: 'margin-left:auto;font-weight:500' }, plural(qs.length, 'question'))));
+    const body = el('div', { class: 'body' });
+    qs.forEach((q, i) => body.append(renderKeyItem(q, i + 1, null)));
+    d.append(body);
+    bank.append(d);
+  }
+})();
+
+// ---------- flowchart controls ----------
+(function flowControls() {
+  const wrap = $('#flowwrap');
+  const fit = $('#fitBtn');
+  fit.addEventListener('click', () => {
+    const on = fit.getAttribute('aria-pressed') !== 'true';
+    fit.setAttribute('aria-pressed', String(on));
+    fit.textContent = on ? 'Fit to width' : 'Actual size';
+    wrap.classList.toggle('actual', !on);
+  });
+  const svg = wrap.querySelector('svg');
+  if (svg) {
+    const clone = svg.cloneNode(true);
+    clone.setAttribute('width', '1180'); clone.setAttribute('height', clone.getAttribute('data-h') || clone.viewBox.baseVal.height);
+    const blob = new Blob(['<?xml version="1.0" encoding="UTF-8"?>\n' + clone.outerHTML], { type: 'image/svg+xml' });
+    $('#dlSvg').href = URL.createObjectURL(blob);
+  }
+})();
+
+// ---------- init ----------
+renderSectionChecks();
+updatePoolNote();
+</script>
+<script src="../assets/site.js?v=2"></script>
+</body>
+</html>
