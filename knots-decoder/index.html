@@ -55,11 +55,13 @@
   .sec .line { flex: 1; height: 1px; background: var(--rule); }
   .lead { font-size: 15px; color: var(--ink); max-width: 72ch; margin: 0 0 6px; }
 
-  /* pre-training: define the words before the math uses them */
-  .defs { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin: 14px 0 0; }
-  .def { border: 1px solid var(--rule); border-radius: 10px; background: color-mix(in srgb, var(--wash) 45%, var(--surface)); padding: 11px 13px; }
-  .def b { display: block; font-size: 13.5px; color: var(--brand); margin-bottom: 3px; }
-  .def p { margin: 0; font-size: 13px; color: var(--ink); line-height: 1.5; }
+  /* Pre-training: define the words before the math uses them. Deliberately a
+     plain bulleted list, not cards — bordered rounded boxes read as buttons and
+     testers kept tapping them. Nothing here is interactive, so nothing here
+     should look like it is. */
+  .defs { margin: 14px 0 0; padding-left: 22px; list-style: disc outside; max-width: 78ch; }
+  .defs li { margin: 9px 0; font-size: 14.5px; line-height: 1.6; color: var(--ink); }
+  .defs li b { color: var(--brand); }
 
   /* ---------- the instrument board ---------- */
   /* No chart grid behind the panel. Ruled lines running under the equations and
@@ -182,12 +184,12 @@
 
     <div class="sec"><span class="n">01</span><h2>The words, before the math</h2><span class="line" aria-hidden="true"></span></div>
     <p class="lead">Your METAR reports visibility in statute miles while your airspeed indicator reads knots. These two converters bridge the systems &mdash; and show the arithmetic instead of hiding it.</p>
-    <div class="defs">
-      <div class="def"><b>Knot (kt)</b><p>A speed: 1 nautical mile traveled in 1 hour. Never a distance.</p></div>
-      <div class="def"><b>Nautical mile (NM)</b><p>Exactly 1,852 meters &mdash; close to one minute of latitude, which is why charts and navigation use it.</p></div>
-      <div class="def"><b>Statute mile (mi)</b><p>Exactly 1,609.344 meters (5,280 ft) &mdash; the everyday land mile of road signs and METAR visibility.</p></div>
-      <div class="def"><b>Conversion factor</b><p>1,852 &divide; 1,609.344 = 1.150779448. One number converts both speed and distance, because a knot is just a nautical mile with a clock attached.</p></div>
-    </div>
+    <ul class="defs">
+      <li><b>Knot (kt)</b> &mdash; a speed: 1 nautical mile traveled in 1 hour. Never a distance.</li>
+      <li><b>Nautical mile (NM)</b> &mdash; exactly 1,852 meters, close to one minute of latitude, which is why charts and navigation use it.</li>
+      <li><b>Statute mile (mi)</b> &mdash; exactly 1,609.344 meters (5,280 ft), the everyday land mile of road signs and METAR visibility.</li>
+      <li><b>Conversion factor</b> &mdash; 1,852 &divide; 1,609.344 = 1.150779448. One number converts both speed and distance, because a knot is just a nautical mile with a clock attached.</li>
+    </ul>
 
     <div class="sec"><span class="n">02</span><h2>Knots and miles per hour</h2><span class="line" aria-hidden="true"></span></div>
     <div class="board" id="board-k">
