@@ -62,11 +62,15 @@
   .def p { margin: 0; font-size: 13px; color: var(--ink); line-height: 1.5; }
 
   /* ---------- the instrument board ---------- */
+  /* No chart grid behind the panel. Ruled lines running under the equations and
+     the prose put vertical strokes between letters, which read as false word
+     breaks and cost more legibility than the navigation-chart styling was worth.
+     The instrument character comes from the panel color, the bezel, and the
+     monospaced numerals instead. */
   .board { --bd-bg: #0d1930; --bd-ink: #e8edf7; --bd-soft: #9fb0cc; --bd-line: #24365c;
     --c-src: #8fe0ef; --c-fac: #eec27f; --c-res: #8fd07a; --c-err: #f4a6b0;
-    background: var(--bd-bg); color: var(--bd-ink); border-radius: 12px; padding: 18px;
-    background-image: linear-gradient(var(--bd-line) 1px, transparent 1px), linear-gradient(90deg, var(--bd-line) 1px, transparent 1px);
-    background-size: 44px 44px; background-position: -1px -1px; margin: 14px 0 0; }
+    background: var(--bd-bg); color: var(--bd-ink);
+    border: 1px solid var(--bd-line); border-radius: 12px; padding: 18px; margin: 14px 0 0; }
   .board * { box-sizing: border-box; }
   .b-caption { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--bd-soft); margin: 0 0 12px; }
   .fields { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
