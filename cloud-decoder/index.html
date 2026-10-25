@@ -81,7 +81,8 @@
   .matrix-label { font-family: var(--sans); font-size: 12.5px; font-weight: 700; color: var(--mid); margin: 10px 0 0; }
   .matrix-list { list-style: disc outside; margin: 4px 0 0; padding-left: 20px; font-size: 13.5px; line-height: 1.55; color: var(--ink); }
   .matrix-list li { margin: 2px 0; padding: 0; background: none; border: none; border-radius: 0; }
-  .pdf-row { margin: 14px 16px 0; }
+  .pdf-row { margin: 14px 16px 0; display: flex; gap: 8px; flex-wrap: wrap; }
+  .share-hint { margin: 8px 16px 0; font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; }
   /* expandable chain-of-thought from the Worker; renders only if reasoning is sent */
   /* Special feature: a highlight that sits apart from the genus list. A
      fallstreak hole is a hole punched through a layer, not a cloud type, so it
@@ -639,12 +640,16 @@ identifyBtn.addEventListener("click", function () {
         '<h2 class="sec-label result-head">Result</h2>' + body +
         featureHtml(lastFeature) +
         reasoningHtml(lastReasoning, false) +
-        '<p class="pdf-row"><button id="pdf-btn" class="btn-secondary" type="button">Download PDF</button> ' +
-        '<button id="email-btn" class="btn-secondary" type="button">Email / share&hellip;</button></p>';
+        '<p class="pdf-row"><button id="pdf-btn" class="btn-secondary" type="button">Download</button> ' +
+        '<button id="email-btn" class="btn-secondary" type="button">Email</button> ' +
+        '<button id="text-btn" class="btn-secondary" type="button">Text</button></p>' +
+        '<p class="share-hint">Email and Text open your phone&rsquo;s share sheet with the photo attached &mdash; pick Mail or Messages there. Download saves a PDF.</p>';
       var pdfBtn = document.getElementById("pdf-btn");
       if (pdfBtn) pdfBtn.addEventListener("click", downloadPdf);
       var emailBtn = document.getElementById("email-btn");
-      if (emailBtn) emailBtn.addEventListener("click", emailReport);
+      if (emailBtn) emailBtn.addEventListener("click", function () { shareReport("email"); });
+      var textBtn = document.getElementById("text-btn");
+      if (textBtn) textBtn.addEventListener("click", function () { shareReport("text"); });
       identifyBtn.disabled = false;
     })
     .catch(function () {
@@ -723,11 +728,32 @@ function summaryText() {
     reasoningText(lastReasoning) +
     "\n\npilotdecoder.com/cloud-decoder \u00b7 Educational only.";
 }
-function emailReport() {
+/* A compact version of the report for a text bubble: the dated subject line,
+   the result, any special feature, the stamp, and the link. The full reasoning
+   stays in the email and PDF where there is room for it. */
+function textMessageBody() {
+  var names = lastTypes && lastTypes.length
+    ? lastTypes.map(function (t) { var c = lastConfidence[t]; return t + (c ? " (" + c + ")" : ""); }).join(", ")
+    : "Clear sky, no cloud types identified";
+  var st = stampLines();
+  var fe = "";
+  if (lastFeature && lastFeature.type) {
+    fe = "\nSpecial feature: " + (FEATURE_LABEL[lastFeature.type] || String(lastFeature.type).replace(/_/g, " ")) +
+      (lastFeature.confidence ? " (" + lastFeature.confidence + ")" : "");
+  }
+  return subjectLine() + "\n" + names + fe + "\n" + st.text.split("\n")[0] + "\npilotdecoder.com/cloud-decoder";
+}
+
+/* "Email" and "Text" both hand the photo to the share sheet — that is the only
+   way a web page can attach a file to a message; mailto: and sms: links carry
+   text only. The two buttons differ in the message they compose and in what
+   happens where file sharing is unavailable: Email falls back to a mail draft,
+   Text to a Messages draft, each with the report as text and no attachment. */
+function shareReport(mode) {
   if (lastTypes === null) return;
   var st = stampLines();
   var subject = subjectLine();
-  var body = summaryText();
+  var body = mode === "text" ? textMessageBody() : summaryText();
   var shared = false;
   try {
     if (navigator.canShare && previewImg.src && previewImg.src.indexOf("data:") === 0) {
@@ -746,8 +772,9 @@ function emailReport() {
     }
   } catch (e) { shared = false; }
   if (!shared) {
-    location.href = "mailto:?subject=" + encodeURIComponent(subject) +
-      "&body=" + encodeURIComponent(body);
+    location.href = mode === "text"
+      ? "sms:?&body=" + encodeURIComponent(body)
+      : "mailto:?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
   }
 }
 
