@@ -83,6 +83,16 @@
   .matrix-list li { margin: 2px 0; padding: 0; background: none; border: none; border-radius: 0; }
   .pdf-row { margin: 14px 16px 0; }
   /* expandable chain-of-thought from the Worker; renders only if reasoning is sent */
+  /* Special feature: a highlight that sits apart from the genus list. A
+     fallstreak hole is a hole punched through a layer, not a cloud type, so it
+     gets its own card with the accent colour rather than another type pill. */
+  .feature-card { margin: 14px 16px 0; border: 1px solid var(--ifr); border-left: 4px solid var(--ifr);
+    border-radius: 8px; background: color-mix(in srgb, var(--ifr) 7%, var(--surface)); padding: 14px 16px; }
+  .feature-head { font-family: var(--sans); font-size: 11.5px; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--ifr); margin: 0; }
+  .feature-name { font-family: var(--sans); font-size: 18px; font-weight: 700; color: var(--ink); margin: 3px 0 0; }
+  .feature-note { font-size: 14.5px; color: var(--ink); margin: 9px 0 0; line-height: 1.55; }
+
   .why-panel { margin: 14px 16px 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); }
   .why-panel summary { cursor: pointer; padding: 12px 14px; font-family: var(--sans); font-weight: 700; font-size: 13.5px; color: var(--brand); }
   .why-panel[open] summary { border-bottom: 1px solid var(--rule); }
@@ -296,6 +306,7 @@ function cloudCardsHtml(types) {
    looks exactly as before. */
 var lastConfidence = {};
 var lastReasoning = null;
+var lastFeature = null;
 
 /* Chain-of-thought the Worker returns. Absent = render nothing at all.
    forPrint drops the <details> wrapper so it prints expanded. */
@@ -334,6 +345,28 @@ function reasoningText(r) {
     out += "\n\u2022 " + rows[i][0] + ": " + rows[i][1];
   }
   return out ? "\n\nHow this was identified:" + out : "";
+}
+/* Optional special-feature block from the worker. Absent on nearly every
+   response, so this returns "" and the result renders exactly as before.
+   Guarded on the field rather than assuming the one known type: today only
+   fallstreak_hole exists, but an unknown type still renders with its raw name
+   rather than vanishing. */
+var FEATURE_LABEL = { fallstreak_hole: "Fallstreak hole (hole punch cloud)" };
+function featureHtml(fe) {
+  if (!fe || !fe.type) return "";
+  var name = FEATURE_LABEL[fe.type] || String(fe.type).replace(/_/g, " ");
+  return '<section class="feature-card">' +
+    '<p class="feature-head">Special feature</p>' +
+    '<p class="feature-name">' + escapeHtml(name) + '</p>' +
+    confPillHtml(fe.confidence) +
+    (fe.note ? '<p class="feature-note">' + escapeHtml(fe.note) + '</p>' : '') +
+    '</section>';
+}
+function featureText(fe) {
+  if (!fe || !fe.type) return "";
+  var name = FEATURE_LABEL[fe.type] || String(fe.type).replace(/_/g, " ");
+  return "\n\nSpecial feature: " + name + (fe.confidence ? " (" + fe.confidence + " confidence)" : "") +
+    (fe.note ? "\n" + fe.note : "");
 }
 function confPillHtml(level) {
   var L = { high: ["conf-high", 3, "high confidence"], medium: ["conf-med", 2, "medium confidence"], low: ["conf-low", 1, "low confidence"] }[level];
@@ -471,6 +504,7 @@ function resetAll() {
   lastTypes = null;
   lastConfidence = {};
   lastReasoning = null;
+  lastFeature = null;
   output.innerHTML = "";
   markTypes([]);
 }
@@ -493,6 +527,7 @@ function onPick(e) {
   lastTypes = null;
   lastConfidence = {};
   lastReasoning = null;
+  lastFeature = null;
   markTypes([]);
 
   photoAt = file.lastModified ? new Date(file.lastModified) : null;
@@ -596,11 +631,13 @@ identifyBtn.addEventListener("click", function () {
       lastTypes = types;
       lastConfidence = (result.data && result.data.confidence) || {};
       lastReasoning = (result.data && result.data.reasoning) || null;
+      lastFeature = (result.data && result.data.feature) || null;
       markTypes(types);
       var body = types.length === 0 ? clearCardHtml() : cloudCardsHtml(types);
       resultAt = new Date();
       output.innerHTML =
         '<h2 class="sec-label result-head">Result</h2>' + body +
+        featureHtml(lastFeature) +
         reasoningHtml(lastReasoning, false) +
         '<p class="pdf-row"><button id="pdf-btn" class="btn-secondary" type="button">Download PDF</button> ' +
         '<button id="email-btn" class="btn-secondary" type="button">Email / share&hellip;</button></p>';
@@ -652,6 +689,7 @@ function downloadPdf() {
     (previewImg.src ? '<img class="pr-img" src="' + previewImg.src + '" alt="Sky photo" />' : "") +
     '<h2 class="pr-head">Result</h2>' +
     (lastTypes.length === 0 ? clearCardHtml() : cloudCardsHtml(lastTypes)) +
+    featureHtml(lastFeature) +
     reasoningHtml(lastReasoning, true) +
     PRINT_REFS +
     '<p class="pr-foot">pilotdecoder.com/cloud-decoder &middot; Educational only. Not for operational decisions.</p>';
@@ -681,6 +719,7 @@ function summaryText() {
     selectedFileName.toLowerCase() !== "image.jpeg";
   return subjectLine() + "\n\n" + st.text + "\nResult: " + names +
     (keepName ? "\nPhoto: " + selectedFileName : "") +
+    featureText(lastFeature) +
     reasoningText(lastReasoning) +
     "\n\npilotdecoder.com/cloud-decoder \u00b7 Educational only.";
 }
