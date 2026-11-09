@@ -18,7 +18,6 @@ accounts, no clutter: open a page and use it.
 | **[Wind Tunnel Decoder](https://pilotdecoder.com/wind-tunnel-decoder/)** | An interactive 2D wind tunnel: watch air flow over a NACA airfoil, change the angle of attack, and see lift, drag, buffet, and stall happen in real time. |
 | **[Flight Pattern Decoder](https://pilotdecoder.com/flight-pattern-decoder/)** | Watch the VFR traffic pattern fly itself — closed-traffic circuits, the 45, midfield crosswind, teardrop, and straight-in entries — with AC 90-66 radio calls, live wind, and runway selection. |
 | **[Zulu Decoder](https://pilotdecoder.com/zulu-decoder/)** | Convert between Zulu (Coordinated Universal Time) and the four U.S. time zones, in 24- and 12-hour formats, with daylight saving handled automatically. |
-| **[Cloud Decoder](https://pilotdecoder.com/cloud-decoder/)** | Upload a photo of the sky and get the cloud type(s) identified from a pilot's perspective, each with a confidence rating and a short plain-English explanation. |
 
 ## About
 
@@ -27,8 +26,8 @@ JavaScript, with no build step and no frameworks — served by GitHub Pages at
 the custom domain **[pilotdecoder.com](https://pilotdecoder.com)**. Each tool
 lives on its own page and runs entirely in the browser.
 
-The one exception is **Cloud Decoder**, which sends the uploaded photo to a
-small private backend (a Cloudflare Worker) that runs the image recognition
-and returns the result — so no image-recognition keys ever ship in the page.
+The Cloud Decoder that used to live here moved to its own site,
+**[decodeclouds.com](https://decodeclouds.com)**, in November 2026; the old
+address redirects there.
 
 Built for student pilots, flight instructors, and anyone learning to fly.
