@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Final Approach Calculator | PilotDECODER</title>
+<meta name="description" content="Approach triangle drawn to scale: the slant distance, the approach angle and the difference from a 3° glide path, each worked step by step from height, distance to the runway and aiming point." />
+<meta name="keywords" content="final approach calculator, approach angle calculator, 3 degree glide path, glide path height, 300 feet per nautical mile, 318 feet per nautical mile, slant distance, aiming point, stabilized approach, Pythagorean theorem aviation, student pilot, Airplane Flying Handbook" />
+<meta name="author" content="Zane Wubbena" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://pilotdecoder.com/final-approach-calculator/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pilotdecoder.com/final-approach-calculator/" />
+<meta property="og:site_name" content="PilotDECODER" />
+<meta property="og:title" content="Final Approach Calculator | PilotDECODER" />
+<meta property="og:description" content="Height, distance and aiming point drawn to scale, with the approach angle and the 3° glide path worked step by step." />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Final Approach Calculator | PilotDECODER" />
+<meta name="twitter:description" content="Height, distance and aiming point drawn to scale, with the approach angle and the 3° glide path worked step by step." />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PilotDECODER",
+  "alternateName": "Final Approach Calculator",
+  "url": "https://pilotdecoder.com/final-approach-calculator/",
+  "description": "Educational final approach calculator: height above the runway, distance to the runway and aiming point drawn to scale as a triangle, with the slant distance, the approach angle and the difference from a 3° glide path worked step by step.",
+  "applicationCategory": "Aviation utility",
+  "operatingSystem": "Any (web browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": {
+    "@type": "Person",
+    "name": "Zane Wubbena",
+    "url": "https://zanewubbena.com/",
+    "sameAs": [
+      "https://txstate.academia.edu/ZaneWubbena",
+      "https://scholar.google.com/citations?user=qr2mU1oAAAAJ&hl=en",
+      "https://www.researchgate.net/profile/Zane-Wubbena"
+    ]
+  }
+}
+</script>
+<script>try{if(localStorage.getItem("pd-home-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='5'%20fill='%2316294f'/%3E%3Cpath%20d='M12%205%20L17%2018%20L12%2015%20L7%2018%20Z'%20fill='%23ffffff'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="../assets/site.css?v=19" />
+<style>
+  /* ============ PAGE-SPECIFIC: final approach calculator ============ */
+  /* Chrome, tokens and fonts come from /assets/site.css. The approach drawing
+     (#sky) keeps its own sky, grass and runway colours in both themes, like the
+     wind-tunnel instruments; everything around it follows the site theme.
+     Page classes are prefixed fa- so they cannot collide with site.css
+     components of the same name (.panel, .card, .controls). */
+  :root {
+    --approach: #c94235;   /* path to the aiming point */
+    --glide: #0f7d46;      /* 3-degree glide path */
+    --draw-navy: #142a57;  /* chips, arc and labels inside the drawing */
+    --good: #0d6638; --good-bg: #dbf1e4;
+    --warn: #855000; --warn-bg: #fcedcf;
+    --bad: #9b2216;  --bad-bg: #fadfdb;
+  }
+  [data-theme="dark"] {
+    --glide: #3fbf7a;
+    --good: #a8e6c1; --good-bg: #173f2a;
+    --warn: #f3cf86; --warn-bg: #4a3610;
+    --bad: #f5b3ab;  --bad-bg: #4b1c17;
+  }
+  [hidden] { display: none !important; }
+  main.wrap { padding-top: 18px; padding-bottom: 44px; display: grid; gap: 18px; align-content: start; }
+
+  /* boxes */
+  .fa-box { background: var(--surface); border: 1px solid var(--card-bd); border-radius: 12px; }
+  .fa-figure { margin: 0; overflow: hidden; }
+  #sky { display: block; width: 100%; height: auto; }
+  .fa-legend { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 0; padding: 10px 16px 12px; border-top: 1px solid var(--rule); font-size: 13.5px; color: var(--ink-soft); list-style: none; }
+  .fa-legend li { display: flex; align-items: center; gap: 8px; }
+  .fa-swatch { width: 28px; height: 0; border-top: 3px solid var(--approach); }
+  .fa-swatch.glide { border-top: 3px dashed var(--glide); }
+  .fa-swatch.legs { border-top: 2px dashed #8193a8; }
+
+  /* inputs */
+  .fa-controls { padding: 16px 18px; display: grid; gap: 14px; background: var(--wash); }
+  .fa-ctl { display: grid; grid-template-columns: minmax(170px, 280px) minmax(0, 1fr) auto; align-items: center; gap: 8px 16px; }
+  .fa-ctl > label { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .fa-ctl select { justify-self: start; }
+  .fa-ctl input[type="range"] { width: 100%; margin: 0; }
+  .fa-entry { display: flex; align-items: center; gap: 8px; }
+  .fa-controls input[type="number"], .fa-controls select { font-family: var(--mono); font-size: 15px; line-height: 1.4; color: var(--input-ink); background: var(--surface); border: 1px solid var(--card-bd); border-radius: 8px; padding: 7px 10px; }
+  .fa-controls input[type="number"] { width: 7.4em; font-variant-numeric: tabular-nums; text-align: right; }
+  .fa-controls input:focus, .fa-controls select:focus { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px var(--focus-ring); }
+  .fa-controls input:disabled { opacity: 0.55; cursor: not-allowed; }
+  .fa-unit { color: var(--ink-soft); font-size: 14px; min-width: 8.6em; }
+  .fa-note { margin: 0; font-size: 13px; line-height: 1.55; color: var(--ink-soft); }
+  .fa-best { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; align-items: start; padding: 12px 14px; border: 1px solid var(--card-bd); border-radius: 10px; background: var(--surface); }
+  .fa-best input[type="checkbox"] { width: 20px; height: 20px; margin: 3px 0 0; accent-color: var(--glide); cursor: pointer; }
+  .fa-best label { font-size: 14px; font-weight: 600; color: var(--ink); cursor: pointer; }
+  .fa-best .fa-note { grid-column: 2; }
+  .error-note { margin: 0; } /* site component; the grid gap supplies the spacing */
+
+  /* results */
+  .fa-results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .fa-card { padding: 16px 18px 18px; display: grid; gap: 8px; align-content: start; }
+  .fa-card.fa-wide { grid-column: 1 / -1; }
+  .fa-card h2 { margin: 0; font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--ink-soft); }
+  .fa-value { margin: 0; font-family: var(--mono); font-weight: 700; font-size: 28px; line-height: 1.15; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .fa-value .fa-u { font-family: var(--sans); font-size: 15px; font-weight: 400; color: var(--ink-soft); }
+  .fa-pill { justify-self: start; padding: 2px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 700; }
+  .fa-pill.above { background: var(--warn-bg); color: var(--warn); }
+  .fa-pill.below { background: var(--bad-bg); color: var(--bad); }
+  .fa-pill.on { background: var(--good-bg); color: var(--good); }
+  .fa-math { display: grid; gap: 6px; }
+  .fa-words { margin: 0; font-size: 14px; color: var(--ink); }
+  .fa-nums { margin: 0; padding: 8px 10px; border-radius: 8px; background: var(--wash); font-family: var(--mono); font-size: 14px; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .fa-nums span { white-space: nowrap; }
+
+  /* the drawing */
+  #sky .sky-fill { fill: url(#skyFill); }
+  #sky .grass-fill { fill: url(#grassFill); }
+  #sky .leg { stroke: #ffffff; stroke-width: 2.5; stroke-dasharray: 8 6; fill: none; }
+  #sky .leg-d { stroke: #ffffff; stroke-width: 2.5; stroke-dasharray: 4 4; fill: none; }
+  #sky .corner { stroke: #ffffff; stroke-width: 2; fill: none; }
+  #sky .path-c { stroke: var(--approach); stroke-width: 3.5; stroke-linecap: round; }
+  #sky .arrow-head { fill: var(--approach); }
+  #sky .glide-halo { stroke: rgba(255, 255, 255, 0.7); stroke-width: 5.5; }
+  #sky .glide { stroke: var(--glide); stroke-width: 2.5; stroke-dasharray: 10 6; }
+  #sky .glide-dot { fill: var(--glide); stroke: #ffffff; stroke-width: 1.5; }
+  #sky .arc { stroke: var(--draw-navy); stroke-width: 2; fill: none; }
+  #sky .chip rect { fill: var(--draw-navy); }
+  #sky .chip text { fill: #ffffff; font-family: var(--mono); font-size: 13px; font-weight: 700; }
+  #sky .tag { fill: var(--draw-navy); font-family: var(--mono); font-size: 12px; }
+  #sky .angle-tag { fill: var(--draw-navy); font-family: var(--mono); font-size: 12px; font-weight: 700; stroke: #ffffff; stroke-width: 3px; stroke-linejoin: round; paint-order: stroke; }
+  #sky .runway { fill: #4a4f57; }
+  #sky .piano { fill: #ffffff; }
+  #sky .aim-mark { fill: #ffffff; }
+  #sky .plane-body { fill: #ffffff; stroke: var(--draw-navy); stroke-width: 0.9; stroke-linejoin: round; }
+  #sky .plane-glass { fill: #9fc4e8; }
+  #sky .plane-line { stroke: var(--draw-navy); stroke-width: 0.9; fill: none; stroke-linecap: round; }
+
+  @media (max-width: 680px) {
+    .fa-results { grid-template-columns: 1fr; }
+    .fa-ctl { grid-template-columns: minmax(0, 1fr); }
+    .fa-unit { min-width: 0; }
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap"><a class="brand" href="/">Pilot<span>DECODER</span></a><button id="theme-btn" type="button" aria-label="Switch color theme" title="Color theme"><span class="knob"></span></button></div>
+  </header>
+
+  <header class="masthead">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep" aria-hidden="true">&rarr;</span><span aria-current="page">Final Approach Calculator</span></nav>
+      <h1 class="eyebrow"><strong>Final Approach Calculator</strong></h1>
+      <p class="masthead-desc">Set the height above the runway, the distance to the runway, and the aiming point on the runway. The triangle redraws to scale, and each card shows its formula, its numbers, and how the approach compares with a standard 3&deg; glide path.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <figure class="fa-box fa-figure" id="fig">
+        <svg id="sky" role="img" aria-labelledby="skyTitle skyDesc" viewBox="0 0 900 360">
+          <title id="skyTitle">Approach triangle drawn to scale</title>
+          <desc id="skyDesc">Height, horizontal distance and slant distance to the aiming point.</desc>
+          <defs>
+            <linearGradient id="skyFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#4c8bd6"/>
+              <stop offset="1" stop-color="#dcecf7"/>
+            </linearGradient>
+            <linearGradient id="grassFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#7fa95a"/>
+              <stop offset="1" stop-color="#5d8a3c"/>
+            </linearGradient>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path class="arrow-head" d="M0 0 L10 5 L0 10 z"/>
+            </marker>
+          </defs>
+          <rect id="skyRect" class="sky-fill" x="0" y="0" width="900" height="290"/>
+          <rect id="grassRect" class="grass-fill" x="0" y="290" width="900" height="70"/>
+          <rect id="runwayStrip" class="runway" x="720" y="289" width="170" height="9"/>
+          <g id="pianoKeys"></g>
+          <rect id="aimMark" class="aim-mark" x="0" y="0" width="10" height="5"/>
+          <text id="runwayLabel" class="tag" x="805" y="280" text-anchor="middle">Runway</text>
+          <text id="scaleNote" class="tag" x="888" y="24" text-anchor="end">Drawn to scale</text>
+          <line id="legB" class="leg" x1="0" y1="0" x2="0" y2="0"/>
+          <line id="legD" class="leg-d" x1="0" y1="0" x2="0" y2="0"/>
+          <line id="legA" class="leg" x1="0" y1="0" x2="0" y2="0"/>
+          <path id="corner" class="corner" d=""/>
+          <line id="glideHalo" class="glide-halo" x1="0" y1="0" x2="0" y2="0"/>
+          <line id="glideLine" class="glide" x1="0" y1="0" x2="0" y2="0"/>
+          <circle id="glideDot" class="glide-dot" cx="0" cy="0" r="4"/>
+          <line id="pathC" class="path-c" x1="0" y1="0" x2="0" y2="0" marker-end="url(#arrow)"/>
+          <path id="arc" class="arc" d=""/>
+          <text id="angleTag" class="angle-tag" x="0" y="0">0°</text>
+          <g id="plane">
+            <path class="plane-body" d="M-22 -9 L-24 -17 L-19.5 -17 L-13 -10 Z"/>
+            <line class="plane-line" x1="-24" y1="-8.6" x2="-16" y2="-8.6"/>
+            <path class="plane-body" d="M-22 -9 L-6 -11 L-3 -14 L4 -14 L9 -10 L14 -8.6 L15.6 -7.4 L14 -5.6 L6 -4.4 L-6 -5 L-21 -7.8 Z"/>
+            <path class="plane-glass" d="M-4.6 -11.3 L-2.4 -13.2 L3.4 -13.2 L6.8 -10.5 Z"/>
+            <rect class="plane-body" x="-8" y="-15.8" width="15" height="2" rx="1"/>
+            <line class="plane-line" x1="-4" y1="-5.4" x2="1" y2="-13.8"/>
+            <line class="plane-line" x1="-2" y1="-5" x2="0" y2="-2.8"/>
+            <circle class="plane-body" cx="0" cy="-1.5" r="1.5"/>
+            <line class="plane-line" x1="10" y1="-5" x2="10.5" y2="-2.4"/>
+            <circle class="plane-body" cx="10.5" cy="-1.2" r="1.2"/>
+            <line class="plane-line" x1="15.9" y1="-12.6" x2="15.9" y2="-2.6"/>
+          </g>
+          <g id="chipA" class="chip"><rect/><text/></g>
+          <g id="chipB" class="chip"><rect/><text/></g>
+          <g id="chipD" class="chip"><rect/><text/></g>
+          <g id="chipC" class="chip"><rect/><text/></g>
+        </svg>
+        <ul class="fa-legend">
+          <li><span class="fa-swatch"></span>Path to the aiming point (c)</li>
+          <li><span class="fa-swatch glide"></span>3° glide path</li>
+          <li><span class="fa-swatch legs"></span>Height (a), distance to the runway (b), and aiming point past the threshold (d)</li>
+        </ul>
+      </figure>
+
+      <section class="fa-box fa-controls" aria-label="Inputs">
+        <div class="fa-ctl">
+          <label for="units">Units</label>
+          <select id="units">
+            <option value="km" selected>Kilometers</option>
+            <option value="ftnm">Feet and nautical miles</option>
+          </select>
+        </div>
+        <div class="fa-ctl">
+          <label for="aNum">Height above the runway (a)</label>
+          <input type="range" id="aRange" aria-label="Height above the runway (a)" min="0" max="6" step="0.01" value="5.2">
+          <span class="fa-entry"><input type="number" id="aNum" min="0" step="0.001" value="5.2" inputmode="decimal"><span class="fa-unit" id="aUnit">kilometers</span></span>
+        </div>
+        <div class="fa-ctl">
+          <label for="bNum">Horizontal distance to the runway (b)</label>
+          <input type="range" id="bRange" aria-label="Horizontal distance to the runway (b)" min="0.1" max="20" step="0.01" value="10.2">
+          <span class="fa-entry"><input type="number" id="bNum" min="0.1" step="0.01" value="10.2" inputmode="decimal"><span class="fa-unit" id="bUnit">kilometers</span></span>
+        </div>
+        <div class="fa-ctl">
+          <label for="dNum">Aiming point past the threshold (d)</label>
+          <input type="range" id="dRange" aria-label="Aiming point past the threshold (d)" min="0" max="1" step="0.01" value="0.0762">
+          <span class="fa-entry"><input type="number" id="dNum" min="0" step="0.0001" value="0.0762" inputmode="decimal"><span class="fa-unit" id="dUnit">kilometers</span></span>
+        </div>
+        <p class="fa-note">The aiming point starts just past the runway numbers, at 250 feet (0.0762 kilometers). That figure estimates where the numbers end on a runway with threshold stripes: the stripes start 20 feet in and run 150 feet, then come a 20-foot gap and 60-foot numbers. Instrument runways also carry a painted aiming point marking about 1,000 feet past the threshold (Aeronautical Information Manual 2-3-3). Because of the flare, the wheels touch down beyond the aiming point (Airplane Flying Handbook).</p>
+        <div class="fa-best">
+          <input type="checkbox" id="bestApproach">
+          <label for="bestApproach">Best approach according to the FAA</label>
+          <p class="fa-note">When checked, the airplane holds a constant 3° glide path to the aiming point and the height follows the distance. The Airplane Flying Handbook (FAA-H-8083-3C) defines a stabilized approach as a constant-angle glide path to a point on the runway, and Aeronautical Information Manual 2-1-2 shows 3° as the on-glide-path angle for runway glide path lights.</p>
+        </div>
+        <p class="fa-note">Height is above the runway. For an altimeter reading, subtract the runway's elevation first.</p>
+      </section>
+
+      <p id="alert" class="error-note" role="alert" hidden>Enter a height of 0 or more, a distance greater than 0, and an aiming point of 0 or more.</p>
+
+      <section class="fa-results" id="results">
+        <article class="fa-box fa-card fa-wide">
+          <h2>Distance to the aiming point (b + d)</h2>
+          <p class="fa-value"><span id="pValue"></span> <span class="fa-u" id="pUnit"></span></p>
+          <div class="fa-math">
+            <p class="fa-words" id="pWords"></p>
+            <p class="fa-nums" id="pNums"></p>
+          </div>
+        </article>
+        <article class="fa-box fa-card">
+          <h2>Slant distance to the aiming point (c)</h2>
+          <p class="fa-value"><span id="cValue"></span> <span class="fa-u" id="cUnit"></span></p>
+          <div class="fa-math" id="convBlock" hidden>
+            <p class="fa-words">Height in nautical miles = height in feet ÷ 6,076.12 feet per nautical mile</p>
+            <p class="fa-nums" id="convNums"></p>
+          </div>
+          <div class="fa-math">
+            <p class="fa-words" id="cWords"></p>
+            <p class="fa-nums" id="cNums"></p>
+          </div>
+        </article>
+        <article class="fa-box fa-card">
+          <h2>Approach angle</h2>
+          <p class="fa-value"><span id="angValue"></span></p>
+          <div class="fa-math">
+            <p class="fa-words" id="angWords"></p>
+            <p class="fa-nums" id="angNums"></p>
+          </div>
+        </article>
+        <article class="fa-box fa-card">
+          <h2>Height on a 3° glide path at this distance</h2>
+          <p class="fa-value"><span id="h3Value"></span> <span class="fa-u" id="h3Unit"></span></p>
+          <div class="fa-math">
+            <p class="fa-words" id="h3Words"></p>
+            <p class="fa-note" id="h3Note" hidden>318.44 feet per nautical mile = 6,076.12 feet per nautical mile × 0.052408, the tangent of 3°. Pilots round this to about 300 feet per nautical mile.</p>
+            <p class="fa-nums" id="h3Nums"></p>
+          </div>
+        </article>
+        <article class="fa-box fa-card">
+          <h2>Difference from the 3° glide path</h2>
+          <p class="fa-value"><span id="dValue"></span> <span class="fa-u" id="dUnitOut"></span></p>
+          <span class="fa-pill" id="dPill"></span>
+          <div class="fa-math">
+            <p class="fa-words">Difference = height (a) − height on a 3° glide path</p>
+            <p class="fa-nums" id="dNums"></p>
+          </div>
+        </article>
+      </section>
+  </main>
+
+  <footer><div class="wrap"><div class="source"><b>References:</b>
+<ul class="source-list">
+<li>The stabilized approach as a constant-angle glide path to a point on the runway; the aiming point and the flare: <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/10_afh_ch9.pdf" target="_blank" rel="noopener">Airplane Flying Handbook, FAA-H-8083-3C, Chapter 9, Approaches and Landings</a> (PDF)</li>
+<li>3&deg; as the normal visual glide path angle: <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap2_section_1.html" target="_blank" rel="noopener">Aeronautical Information Manual 2-1-2, Visual Glideslope Indicators</a></li>
+<li>The aiming point marking about 1,000 feet past the threshold: <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap2_section_3.html" target="_blank" rel="noopener">Aeronautical Information Manual 2-3-3, Runway Markings</a></li>
+<li>Threshold stripe and runway number dimensions behind the 250-foot starting value: <a href="https://www.faa.gov/airports/resources/advisory_circulars/index.cfm/go/document.current/documentNumber/150_5340-1" target="_blank" rel="noopener">AC 150/5340-1M, Standards for Airport Markings</a></li>
+<li>Unit definitions behind the constants: 1 nautical mile = 1,852 m and 1 foot = 0.3048 m, so 1 NM = 6,076.12 ft &mdash; <a href="https://www.nist.gov/pml/special-publication-811" target="_blank" rel="noopener">NIST Special Publication 811</a>, Appendix B</li>
+</ul>
+</div>
+<p class="disclaimer"><b>Disclaimer:</b> Educational only. Each step is rounded to the precision shown so the arithmetic can be checked by hand; the tangent of 3&deg; is carried as 0.052408 and a nautical mile as 6,076.12 feet. Not for navigation or operational use &mdash; fly the published procedure and the airplane's handbook. The Pilot in Command remains responsible for the approach.</p></div><div class="copyright"><div class="wrap"><span>&copy; <span id="yr"></span> PilotDECODER</span><a class="totop" href="#top">BACK TO TOP &uarr;</a></div></div></footer>
+
+<script>
+// Approach math. Each step rounds to the precision shown on screen, so every line can be checked by hand.
+var TAN3 = 0.052408;            // tangent of 3 degrees, to six decimals
+var FT_PER_NM = 6076.12;        // feet in one nautical mile, to two decimals
+var GLIDE_FT_PER_NM = 318.44;   // 6,076.12 x 0.052408, to two decimals
+var M_PER_FT = 0.3048;          // meters in one foot (exact)
+var KM_PER_NM = 1.852;          // kilometers in one nautical mile (exact)
+
+function roundTo(x, d) {
+  var p = Math.pow(10, d);
+  var v = Math.round(Number((Math.abs(x) * p).toPrecision(15))) / p;
+  return x < 0 ? -v : v;
+}
+
+// Distance from the point under the airplane to the aiming point: b + d, in the unit of b
+function aimDistance(units, b, d) {
+  return units === "km" ? roundTo(b + d, 4) : roundTo(b + roundTo(d / FT_PER_NM, 6), 6);
+}
+
+// units: "km" (a, b and d in kilometers) or "ftnm" (a and d in feet, b in nautical miles)
+function computeApproach(units, a, b, d) {
+  if (!isFinite(a) || !isFinite(b) || !isFinite(d) || a < 0 || b <= 0 || d < 0) return null;
+  var r = { units: units, a: a, b: b, d: d };
+  var h;
+  if (units === "km") {
+    h = a;
+    r.aKm = a;
+    r.bKm = b;
+    r.dKm = d;
+  } else {
+    h = roundTo(a / FT_PER_NM, 6);
+    r.aNm = h;
+    r.dNm = roundTo(d / FT_PER_NM, 6);
+    r.aKm = a * M_PER_FT / 1000;
+    r.bKm = b * KM_PER_NM;
+    r.dKm = d * M_PER_FT / 1000;
+  }
+  r.p = aimDistance(units, b, d);
+  r.a2 = roundTo(h * h, 6);
+  r.p2 = roundTo(r.p * r.p, 6);
+  r.sum = roundTo(r.a2 + r.p2, 6);
+  r.c = roundTo(Math.sqrt(r.sum), 3);
+  r.ratio = roundTo(h / r.p, 4);
+  r.angle = roundTo(Math.atan(r.ratio) * 180 / Math.PI, 1);
+  if (units === "km") {
+    r.h3 = roundTo(r.p * TAN3, 3);
+    r.diff = roundTo(a - r.h3, 3);
+  } else {
+    r.h3 = roundTo(r.p * GLIDE_FT_PER_NM, 0);
+    r.diff = roundTo(a - r.h3, 2);
+  }
+  return r;
+}
+
+(function () {
+  var UNITS = {
+    km: {
+      a: { min: 0, max: 6, step: 0.01, numStep: 0.001, dec: 3, word: "kilometers", short: "km" },
+      b: { min: 0.1, max: 20, step: 0.01, numStep: 0.01, dec: 2, word: "kilometers", short: "km" },
+      d: { min: 0, max: 1, step: 0.01, numStep: 0.0001, dec: 4, word: "kilometers", short: "km" }
+    },
+    ftnm: {
+      a: { min: 0, max: 20000, step: 10, numStep: 10, dec: 0, word: "feet", short: "ft" },
+      b: { min: 0.1, max: 12, step: 0.01, numStep: 0.01, dec: 2, word: "nautical miles", short: "NM" },
+      d: { min: 0, max: 3000, step: 10, numStep: 1, dec: 0, word: "feet", short: "ft" }
+    }
+  };
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function $(id) { return document.getElementById(id); }
+  var el = {
+    units: $("units"),
+    aRange: $("aRange"), aNum: $("aNum"), aUnit: $("aUnit"),
+    bRange: $("bRange"), bNum: $("bNum"), bUnit: $("bUnit"),
+    dRange: $("dRange"), dNum: $("dNum"), dUnit: $("dUnit"),
+    fig: $("fig"), svg: $("sky"), alert: $("alert"), results: $("results")
+  };
+  var current = "km";
+  var last = null;
+  var lastW = 0;
+
+  function fmt(x, maxD, minD) {
+    return x.toLocaleString("en-US", { maximumFractionDigits: maxD, minimumFractionDigits: minD || 0 });
+  }
+  function signed(x, maxD, minD) {
+    return (x < 0 ? "−" : "") + fmt(Math.abs(x), maxD, minD);
+  }
+  function setText(id, t) { $(id).textContent = t; }
+  function setSteps(id, steps) {
+    var node = $(id);
+    node.textContent = "";
+    steps.forEach(function (s, i) {
+      if (i) node.appendChild(document.createTextNode(" "));
+      var sp = document.createElement("span");
+      sp.textContent = s;
+      node.appendChild(sp);
+    });
+  }
+  function attr(node, map) {
+    for (var k in map) node.setAttribute(k, map[k]);
+  }
+
+  function applyUnits(u) {
+    ["a", "b", "d"].forEach(function (k) {
+      var cfg = UNITS[u][k];
+      attr(el[k + "Range"], { min: cfg.min, max: cfg.max, step: cfg.step });
+      attr(el[k + "Num"], { min: cfg.min, step: cfg.numStep });
+      el[k + "Unit"].textContent = cfg.word;
+    });
+  }
+  function readRaw(k) { return el[k + "Num"].valueAsNumber; }
+  function read(k) {
+    var v = readRaw(k);
+    return isFinite(v) ? roundTo(v, UNITS[current][k].dec) : NaN;
+  }
+  function setVal(k, v) {
+    el[k + "Range"].value = String(v);
+    el[k + "Num"].value = String(v);
+  }
+
+  // Best approach according to the FAA: the height follows the distance on a constant 3° glide path to the aiming point
+  var best = $("bestApproach");
+  function syncBest() {
+    var on = best.checked;
+    el.aRange.disabled = on;
+    el.aNum.disabled = on;
+    if (!on) return;
+    var b = read("b");
+    var d = read("d");
+    if (!isFinite(b) || b <= 0 || !isFinite(d) || d < 0) return;
+    var p = aimDistance(current, b, d);
+    setVal("a", current === "km" ? roundTo(p * TAN3, 3) : roundTo(p * GLIDE_FT_PER_NM, 0));
+  }
+  best.addEventListener("change", function () {
+    syncBest();
+    render();
+  });
+
+  function render() {
+    var r = computeApproach(current, read("a"), read("b"), read("d"));
+    el.alert.hidden = !!r;
+    el.results.hidden = !r;
+    if (!r) return;
+    last = r;
+    var km = current === "km";
+    var cfg = UNITS[current];
+    var aTxt = fmt(r.a, cfg.a.dec);
+    var bTxt = fmt(r.b, cfg.b.dec);
+    var dTxt = fmt(r.d, cfg.d.dec);
+    var pTxt = fmt(r.p, km ? 4 : 6);
+    var hTxt = km ? aTxt : fmt(r.aNm, 6);
+    var both = km ? "" : ", both in nautical miles";
+
+    // Distance to the aiming point (b + d)
+    setText("pValue", fmt(r.p, 3, 3));
+    setText("pUnit", cfg.b.word);
+    if (km) {
+      setText("pWords", "Distance to the aiming point = distance to the runway (b) + aiming point past the threshold (d)");
+      setSteps("pNums", [bTxt + " + " + dTxt, "= " + pTxt]);
+    } else {
+      setText("pWords", "Distance to the aiming point = distance to the runway (b) + aiming point past the threshold (d) ÷ 6,076.12 feet per nautical mile");
+      setSteps("pNums", [bTxt + " + " + dTxt + " ÷ 6,076.12", "= " + bTxt + " + " + fmt(r.dNm, 6), "= " + pTxt]);
+    }
+
+    // Slant distance (c)
+    setText("cValue", fmt(r.c, 3, 3));
+    setText("cUnit", cfg.b.word);
+    $("convBlock").hidden = km;
+    if (!km) setSteps("convNums", [aTxt + " ÷ 6,076.12", "= " + fmt(r.aNm, 6)]);
+    setText("cWords", "Slant distance (c) = square root of (height (a) squared + distance to the aiming point squared)" + both);
+    setSteps("cNums", [
+      "c = √(" + hTxt + "² + " + pTxt + "²)",
+      "= √(" + fmt(r.a2, 6) + " + " + fmt(r.p2, 6) + ")",
+      "= √" + fmt(r.sum, 6),
+      "= " + fmt(r.c, 3, 3)
+    ]);
+
+    // Approach angle
+    setText("angValue", fmt(r.angle, 1, 1) + "°");
+    setText("angWords", "Approach angle = arctangent of (height ÷ distance to the aiming point), with height (a) as the numerator and the distance to the aiming point as the denominator" + both);
+    setSteps("angNums", [
+      "arctan(" + hTxt + " ÷ " + pTxt + ")",
+      "= arctan(" + fmt(r.ratio, 4, 4) + ")",
+      "= " + fmt(r.angle, 1, 1) + "°"
+    ]);
+
+    // Height on a 3° glide path
+    var h3Txt = km ? fmt(r.h3, 3, 3) : fmt(r.h3, 0);
+    setText("h3Value", h3Txt);
+    setText("h3Unit", cfg.a.word);
+    $("h3Note").hidden = km;
+    if (km) {
+      setText("h3Words", "Height on a 3° glide path = distance to the aiming point × 0.052408, the tangent of 3°");
+      setSteps("h3Nums", [pTxt + " × 0.052408", "= " + h3Txt]);
+    } else {
+      setText("h3Words", "Height on a 3° glide path = distance to the aiming point × 318.44 feet per nautical mile");
+      setSteps("h3Nums", [pTxt + " × 318.44", "= " + h3Txt]);
+    }
+
+    // Difference from the 3° glide path
+    var dMax = km ? 3 : 2;
+    var dMin = km ? 3 : 0;
+    var pill = $("dPill");
+    setText("dValue", fmt(Math.abs(r.diff), dMax, dMin));
+    if (r.diff > 0) {
+      setText("dUnitOut", cfg.a.word + " above");
+      pill.className = "fa-pill above";
+      pill.textContent = "Above the 3° glide path";
+    } else if (r.diff < 0) {
+      setText("dUnitOut", cfg.a.word + " below");
+      pill.className = "fa-pill below";
+      pill.textContent = "Below the 3° glide path";
+    } else {
+      setText("dUnitOut", cfg.a.word);
+      pill.className = "fa-pill on";
+      pill.textContent = "On the 3° glide path";
+    }
+    setSteps("dNums", [aTxt + " − " + h3Txt, "= " + signed(r.diff, dMax, dMin)]);
+
+    draw(r);
+  }
+
+  function chip(id, text) {
+    var g = $(id);
+    var t = g.querySelector("text");
+    var rc = g.querySelector("rect");
+    t.textContent = text;
+    var w = Math.ceil(t.getComputedTextLength());
+    attr(rc, { x: -(w / 2 + 8), y: -11, width: w + 16, height: 22, rx: 6 });
+    attr(t, { x: 0, y: 4.5, "text-anchor": "middle" });
+    return { g: g, w: w + 16, h: 22, cx: 0, cy: 0 };
+  }
+  function place(c, cx, cy, minY, maxX, maxY) {
+    c.cx = Math.min(Math.max(cx, 6 + c.w / 2), maxX - 6 - c.w / 2);
+    c.cy = Math.min(Math.max(cy, minY + c.h / 2), maxY - c.h / 2);
+    c.g.setAttribute("transform", "translate(" + c.cx.toFixed(1) + " " + c.cy.toFixed(1) + ")");
+  }
+
+  function draw(r) {
+    var W = Math.max(320, Math.round(el.fig.clientWidth || 900));
+    var H = W < 560 ? 300 : 360;
+    lastW = W;
+    attr(el.svg, { viewBox: "0 0 " + W + " " + H });
+    var gy = H - 70;
+    var top = 58;
+    var runTail = Math.max(56, Math.round(W * 0.12));
+    var xp = W - runTail;
+    var cfg = UNITS[r.units];
+
+    var cA = chip("chipA", "a = " + fmt(r.a, cfg.a.dec) + " " + cfg.a.short);
+    var cB = chip("chipB", "b = " + fmt(r.b, cfg.b.dec) + " " + cfg.b.short);
+    var cD = chip("chipD", "d = " + fmt(r.d, cfg.d.dec) + " " + cfg.d.short);
+    var cC = chip("chipC", "c = " + fmt(r.c, 3, 3) + " " + cfg.b.short);
+
+    var left = 12 + cA.w + 38;
+    var plotW = xp - left;
+    var plotH = gy - top;
+    var baseKm = r.bKm + r.dKm;
+    var s = r.aKm > 0 ? Math.min(plotW / baseKm, plotH / r.aKm) : plotW / baseKm;
+    var dpx = r.dKm * s;
+    var bpx = r.bKm * s;
+    var apx = r.aKm * s;
+    var xt = xp - dpx;
+    var xg = xt - bpx;
+    var ya = gy - apx;
+    var theta = Math.atan2(apx, bpx + dpx);
+    var g3 = gy - (bpx + dpx) * Math.tan(3 * Math.PI / 180);
+
+    attr($("skyRect"), { width: W, height: gy });
+    attr($("grassRect"), { y: gy, width: W, height: H - gy });
+    attr($("runwayStrip"), { x: xt, y: gy - 1, width: Math.max(0, W - 10 - xt) });
+    var keys = $("pianoKeys");
+    keys.textContent = "";
+    for (var i = 0; i < 6; i++) {
+      var k = document.createElementNS(SVGNS, "rect");
+      attr(k, { x: xt + 5 + i * 6, y: gy + 1, width: 3, height: 5, "class": "piano" });
+      keys.appendChild(k);
+    }
+    attr($("aimMark"), { x: xp - 5, y: gy + 1 });
+    attr($("runwayLabel"), { x: (Math.max(xt, xp - 40) + W - 10) / 2, y: gy - 10 });
+    attr($("scaleNote"), { x: W - 12, y: 24 });
+
+    attr($("legB"), { x1: xg, y1: gy, x2: xt, y2: gy });
+    attr($("legD"), { x1: xt, y1: gy, x2: xp, y2: gy });
+    attr($("legA"), { x1: xg, y1: gy, x2: xg, y2: ya });
+    var corner = $("corner");
+    if (apx > 14 && bpx > 14) {
+      corner.setAttribute("d", "M" + (xg + 10).toFixed(1) + " " + gy + " V" + (gy - 10) + " H" + xg.toFixed(1));
+      corner.style.display = "";
+    } else {
+      corner.style.display = "none";
+    }
+    attr($("glideHalo"), { x1: xp, y1: gy, x2: xg, y2: g3 });
+    attr($("glideLine"), { x1: xp, y1: gy, x2: xg, y2: g3 });
+    attr($("glideDot"), { cx: xg, cy: g3 });
+    attr($("pathC"), { x1: xg, y1: ya, x2: xp, y2: gy });
+
+    var arcR = 34;
+    var arc = $("arc");
+    if (theta > 0.002) {
+      arc.setAttribute("d", "M" + (xp - arcR) + " " + gy + " A" + arcR + " " + arcR + " 0 0 1 " +
+        (xp - arcR * Math.cos(theta)).toFixed(2) + " " + (gy - arcR * Math.sin(theta)).toFixed(2));
+      arc.style.display = "";
+    } else {
+      arc.style.display = "none";
+    }
+    $("plane").setAttribute("transform", "translate(" + xg.toFixed(1) + " " + ya.toFixed(1) + ") scale(1.35)");
+
+    // Labels: a to the left of the height line, b and d under the ground line, c beside the path to the aiming point
+    var gapA = apx < 60 ? 38 : 12;
+    place(cA, xg - gapA - cA.w / 2, Math.min((gy + ya) / 2, gy - 15), 6, W, H - 6);
+    place(cB, (xg + xt) / 2, gy + 30, 6, W, H - 6);
+    place(cD, Math.max((xt + xp) / 2, cB.cx + cB.w / 2 + 6 + cD.w / 2), gy + 30, 6, W, H - 6);
+    var dx = xp - xg;
+    var dy = gy - ya;
+    var len = Math.sqrt(dx * dx + dy * dy);
+    var nx = dy / len;
+    var ny = -dx / len;
+    var off = 12 + Math.abs(nx) * cC.w / 2 + Math.abs(ny) * cC.h / 2;
+    var ccx = (xg + xp) / 2 + nx * off;
+    var ccy = (ya + gy) / 2 + ny * off;
+    // Keep the c label clear of the airplane drawing (about 34 px behind and 23 px ahead of the wheels, 25 px tall)
+    if (ccx - cC.w / 2 < xg + 23 && ccx + cC.w / 2 > xg - 34 && ccy - cC.h / 2 < ya + 2 && ccy + cC.h / 2 > ya - 25) {
+      ccy = ya - 29 - cC.h / 2;
+    }
+    place(cC, ccx, ccy, 34, W, gy - 4);
+
+    // Angle label: inside the angle when it fits near the aiming point, otherwise just under the ground line beside it
+    var tag = $("angleTag");
+    tag.textContent = fmt(r.angle, 1, 1) + "°";
+    var tw = tag.getComputedTextLength();
+    var fitRight = theta > 0 ? Math.min(xp - arcR - 5, xp - 20 / Math.tan(theta)) : -Infinity;
+    var tx = fitRight - tw;
+    var ty = gy - 5;
+    var hitsC = tx < cC.cx + cC.w / 2 && tx + tw > cC.cx - cC.w / 2 && ty - 12 < cC.cy + cC.h / 2 && ty + 2 > cC.cy - cC.h / 2;
+    if (!(tx >= xg + 6) || fitRight < xp - 150 || hitsC) {
+      tx = xp - 8 - tw;
+      ty = gy + 16;
+    }
+    attr(tag, { x: tx.toFixed(1), y: ty });
+
+    setText("skyDesc", "Triangle drawn to scale. Height (a) is " + fmt(r.a, cfg.a.dec) + " " + cfg.a.word +
+      ", distance to the runway (b) is " + fmt(r.b, cfg.b.dec) + " " + cfg.b.word +
+      ", the aiming point is " + fmt(r.d, cfg.d.dec) + " " + cfg.d.word + " past the threshold (d), slant distance (c) is " +
+      fmt(r.c, 3, 3) + " " + cfg.b.word + ", and the approach angle is " + fmt(r.angle, 1, 1) + "°.");
+  }
+
+  ["a", "b", "d"].forEach(function (k) {
+    el[k + "Range"].addEventListener("input", function () {
+      el[k + "Num"].value = el[k + "Range"].value;
+      if (k !== "a") syncBest();
+      render();
+    });
+    el[k + "Num"].addEventListener("input", function () {
+      var v = read(k);
+      if (isFinite(v)) el[k + "Range"].value = String(v);
+      if (k !== "a") syncBest();
+      render();
+    });
+    el[k + "Num"].addEventListener("change", function () {
+      var v = read(k);
+      if (isFinite(v)) el[k + "Num"].value = String(v);
+    });
+  });
+
+  el.units.addEventListener("change", function () {
+    var next = el.units.value;
+    if (next === current) return;
+    var a = readRaw("a");
+    var b = readRaw("b");
+    var d = readRaw("d");
+    var na;
+    var nb;
+    var nd;
+    if (next === "ftnm") {
+      na = isFinite(a) ? roundTo(a * 1000 / M_PER_FT, 0) : 17060;
+      nb = isFinite(b) ? roundTo(b / KM_PER_NM, 2) : 5.51;
+      nd = isFinite(d) ? roundTo(d * 1000 / M_PER_FT, 0) : 250;
+    } else {
+      na = isFinite(a) ? roundTo(a * M_PER_FT / 1000, 3) : 5.2;
+      nb = isFinite(b) ? roundTo(b * KM_PER_NM, 2) : 10.2;
+      nd = isFinite(d) ? roundTo(d * M_PER_FT / 1000, 4) : 0.0762;
+    }
+    current = next;
+    applyUnits(next);
+    setVal("a", na);
+    setVal("b", nb);
+    setVal("d", nd);
+    syncBest();
+    render();
+  });
+
+  applyUnits("km");
+  setVal("a", 5.2);
+  setVal("b", 10.2);
+  setVal("d", 0.0762);
+  render();
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { if (last) draw(last); });
+  }
+  if (window.ResizeObserver) {
+    new ResizeObserver(function () {
+      var w = Math.round(el.fig.clientWidth);
+      if (last && w && w !== lastW) draw(last);
+    }).observe(el.fig);
+  }
+})();
+</script>
+<script src="../assets/site.js?v=2"></script>
+</body>
+</html>

@@ -23,6 +23,8 @@ Copy the block below into Claude Cowork as context before working on the site.
 ├── flight-pattern-decoder/index.html → Flight Pattern Decoder (standard site chrome; the animated
 │                               sheet inside keeps its own poster palette, scoped to .sheet)
 ├── zulu-decoder/index.html           → Zulu Decoder (site chrome; dark board scoped to .board)
+├── final-approach-calculator/index.html → Final Approach Calculator (site chrome; the approach drawing
+│                               keeps its own sky/grass palette inside #sky)
 ├── cloud-decoder/index.html          → redirect to decodeclouds.com (the Cloud Decoder moved there, Nov 2026)
 └── metar/, density-altitude/,        → redirect stubs at the old slugs (meta refresh +
     windtunnel/, pattern/, zulu/        canonical to the renamed pages; do not delete)
