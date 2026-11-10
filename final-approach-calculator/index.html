@@ -622,6 +622,8 @@ function computeApproach(units, a, b, d) {
     place(cA, xg - gapA - cA.w / 2, Math.min((gy + ya) / 2, gy - 15), 6, W, H - 6);
     place(cB, (xg + xt) / 2, gy + 30, 6, W, H - 6);
     place(cD, Math.max((xt + xp) / 2, cB.cx + cB.w / 2 + 6 + cD.w / 2), gy + 30, 6, W, H - 6);
+    // On narrow screens the right edge pushes the d chip back onto the b chip; drop it to a second row instead
+    if (cD.cx - cD.w / 2 < cB.cx + cB.w / 2 + 4) place(cD, Math.max((xt + xp) / 2, 6 + cD.w / 2), gy + 54, 6, W, H - 6);
     var dx = xp - xg;
     var dy = gy - ya;
     var len = Math.sqrt(dx * dx + dy * dy);
